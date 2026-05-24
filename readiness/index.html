@@ -899,6 +899,222 @@
     .btn:hover{ transform: none; }
     .btn:active{ transform: scale(0.97); }
   }
+
+  /* ============================================================
+   * DESIGN-POLISH PASS — sits at end of cascade. Overrides earlier
+   * rules to enforce a single button system, optical alignment, and
+   * one set of transition curves. No business logic touched.
+   *
+   * Audit found:
+   *   - 20+ unique padding values across components
+   *   - 17 font-size variants in 10–17 px range (4 too many)
+   *   - mixed transition durations (.12 / .15 / .2 / .3 / .5)
+   *   - btn-primary min-height 54 vs btn-ghost min-height 48 in nav-row
+   *     → visible vertical misalignment between Cancel + Continue
+   *
+   * Strategy: keep all the earlier rules, append a final layer that
+   * normalizes the elements that show up next to each other in the
+   * UI (buttons + inputs + opt rows + nav rows + focus rings).
+   * ============================================================ */
+
+  /* --- Unified motion curve token. Use everywhere for consistency. */
+  /* (Inlined per rule because CSS vars in transition values work,
+   *  but defining --ease here for readability.) */
+  :root{
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --t-fast: 160ms;
+    --t-base: 220ms;
+    --t-slow: 380ms;
+  }
+
+  /* --- SINGLE BUTTON SYSTEM ---------------------------------------
+   * .btn base sets size; variants only set color/background/border.
+   * All variants in any flex row share min-height → align-items:center
+   * resolves to a real baseline instead of "floating ghost text".
+   */
+  .btn{
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-weight: 500; font-size: 14.5px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    border: 1px solid transparent;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    transition:
+      transform var(--t-base) var(--ease),
+      background var(--t-base) var(--ease),
+      border-color var(--t-base) var(--ease),
+      color var(--t-base) var(--ease),
+      box-shadow var(--t-base) var(--ease);
+  }
+  .btn-primary{
+    background: var(--accent); color: var(--bg);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.18),
+      0 1px 2px rgba(20,16,26,0.4);
+  }
+  .btn-primary:hover{
+    background: #94d8d3;
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.25),
+      0 10px 26px -8px rgba(123,201,196,0.36);
+  }
+  .btn-primary:active{ transform: translateY(0) scale(0.985); }
+  .btn-secondary{
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--rule-strong);
+  }
+  .btn-secondary:hover{
+    border-color: var(--ink-dim);
+    background: rgba(232,228,220,0.025);
+    transform: translateY(-1px);
+  }
+  .btn-secondary:active{ transform: translateY(0) scale(0.985); }
+  .btn-ghost{
+    background: transparent;
+    color: var(--ink-dim);
+    padding: 12px 18px;      /* symmetric — was 14px 8px (visibly off) */
+  }
+  .btn-ghost:hover{
+    color: var(--ink);
+    background: rgba(232,228,220,0.045);
+  }
+  .btn-ghost:active{ transform: scale(0.985); }
+  .btn:disabled, .btn[disabled]{
+    opacity: 0.35; pointer-events: none;
+  }
+  .btn .arr{
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    transition: transform var(--t-base) var(--ease);
+  }
+  .btn:hover .arr{ transform: translateX(3px); }
+  .btn.btn-back .arr{ transform: rotate(180deg); }
+  .btn.btn-back:hover .arr{ transform: rotate(180deg) translateX(3px); }
+
+  /* --- NAV ROW LAYOUT NORMALIZATION ------------------------------ */
+  .nav-row{
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .nav-row .nav-left,
+  .nav-row .nav-right{
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  /* Disambiguate: when nav-left is empty, the right cluster should
+     still sit to the right (default flex behavior — verified) */
+
+  /* --- FORM INPUT HEIGHT MATCHES BUTTON SYSTEM ------------------- *
+   * Inputs feel like the same family as buttons. Same 48px desktop,
+   * same focus motion curve.
+   */
+  .field input[type="text"],
+  .field input[type="email"]{
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--rule-strong);
+    background: rgba(20,16,26,0.6);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.4;
+    transition:
+      border-color var(--t-base) var(--ease),
+      background var(--t-base) var(--ease),
+      box-shadow var(--t-base) var(--ease);
+  }
+  .field input[type="text"]:hover,
+  .field input[type="email"]:hover{
+    border-color: rgba(123,201,196,0.32);
+  }
+  .field input[type="text"]:focus,
+  .field input[type="email"]:focus{
+    border-color: var(--accent);
+    background: rgba(20,16,26,0.85);
+    box-shadow: 0 0 0 4px rgba(123,201,196,0.10);
+  }
+  .field input::placeholder{ color: var(--ink-mute); opacity: 1; }
+
+  /* --- OPTION ROW NORMALIZATION ---------------------------------- */
+  .opt-row .opt{
+    min-height: 52px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 14.5px; line-height: 1.4;
+    transition:
+      border-color var(--t-base) var(--ease),
+      background var(--t-base) var(--ease),
+      transform 120ms ease;
+  }
+  .opt-row .opt:active{ transform: scale(0.99); }
+
+  /* --- BACKDROP BLUR NORMALIZATION ------------------------------- */
+  .topbar,
+  .progress-wrap{
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+  }
+
+  /* --- FOCUS RING — single token ---------------------------------- */
+  :focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  /* Suppress double-ring on inputs (focus state already styles border + glow) */
+  .field input:focus-visible{ outline: none; }
+  /* Same for buttons — primary already has its own visible focus via shadow */
+  .btn:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  /* --- SCORE-BAR TICK LABELS SAFETY ------------------------------- */
+  .score-bar-tick{ white-space: nowrap; font-size: 9.5px; }
+
+  /* --- TOAST RAISED ABOVE STICKY NAV ON MOBILE -------------------- */
+  @media (max-width: 720px){
+    .toast{
+      bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+
+  /* --- MOBILE HEIGHT BUMPS (overrides via cascade order) ---------- */
+  @media (max-width: 720px){
+    .btn{
+      min-height: 54px;
+      padding: 14px 22px;
+      font-size: 15px;
+    }
+    .btn-ghost{ padding: 14px 18px; }
+    .field input[type="text"],
+    .field input[type="email"]{
+      min-height: 52px;
+      padding: 14px 16px;
+      font-size: 16px;     /* 16px is the iOS-no-zoom threshold */
+    }
+    .opt-row .opt{
+      min-height: 58px;
+      padding: 16px 18px;
+      font-size: 15.5px;
+    }
+    /* Sticky bottom action bar primary keeps the bar's vertical breathing
+       without overflowing the iOS safe area */
+    .screen[data-screen="question"] .nav-row .btn{ min-height: 50px; }
+  }
 </style>
 </head>
 <body>
