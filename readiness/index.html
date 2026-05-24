@@ -689,6 +689,216 @@
     z-index: 80;
   }
   .toast.show{ opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ============================================================
+   * MOBILE PASS — diagnostic-focused improvements
+   * Targets the friction points specific to filling out a 20-question
+   * form on a phone: thumb-reach, scroll cost per question, tap-target
+   * comfort, narrow-viewport overflow safety.
+   * ============================================================ */
+
+  @media (max-width: 720px){
+
+    /* -- TOP-OF-VIEWPORT BREATHING ROOM ------------------------------ */
+    main{ padding: 32px 0 96px; }
+
+    /* -- SCREEN-IN ANIMATION SOFTER ON PHONES (perceived speed) ------ */
+    .screen{ animation-duration: .4s; }
+
+    /* -- TYPE CALIBRATION FOR NARROW VIEWPORTS ----------------------- */
+    h1.headline{ font-size: clamp(28px, 8.5vw, 38px); margin-bottom: 18px; }
+    h2.subhead{ font-size: clamp(20px, 6.2vw, 26px); margin-bottom: 16px; }
+    p.lede{ font-size: 15.5px; line-height: 1.6; margin-bottom: 22px; }
+    .q-text{ font-size: clamp(22px, 6.5vw, 28px); margin-bottom: 28px; line-height: 1.25; }
+
+    /* -- TAP-TARGET COMFORT (Apple HIG / Material 48px+) ------------- */
+    .opt-row .opt{
+      min-height: 58px;
+      padding: 16px 18px;
+      font-size: 15.5px;
+      line-height: 1.4;
+      gap: 14px;
+      /* Larger active feedback so a thumb tap feels acknowledged */
+      transition: transform .12s ease, border-color .2s ease, background .2s ease;
+    }
+    .opt-row .opt:active{ transform: scale(0.985); }
+    .opt-row .opt .opt-dot{ width: 18px; height: 18px; }
+    .opt-row .opt .opt-key{ display: none; }   /* keyboard hints irrelevant on touch */
+
+    /* Profile/value 2-col grid collapses to 1 col — already there, but force */
+    .opt-row.opt-row-grid{ grid-template-columns: 1fr; gap: 10px; }
+
+    /* -- FORM INPUT HEIGHT — thumb-friendly, room for visible focus -- */
+    .field input[type="text"],
+    .field input[type="email"]{
+      padding: 16px 16px;
+      font-size: 16px;          /* 16px disables iOS auto-zoom-in on focus */
+      min-height: 52px;
+    }
+    .field label,
+    .field .field-q{ font-size: 15.5px; }
+
+    /* -- WELCOME CTAs FULL-WIDTH, STACKED ---------------------------- */
+    .welcome-cta-row{ flex-direction: column; gap: 12px; }
+    .welcome-cta-row .btn{
+      width: 100%; justify-content: center;
+      min-height: 54px; padding: 16px 22px;
+      font-size: 15.5px;
+    }
+    .welcome-meta{
+      gap: 6px 12px; font-size: 11.5px;
+    }
+
+    /* -- PROGRESS BAR — sticky to top so it never scrolls away ------ */
+    .progress-wrap{
+      position: sticky; top: 0;
+      z-index: 30;
+      margin: 0 -20px 28px;
+      padding: 14px 20px 14px;
+      background: linear-gradient(180deg, rgba(20,16,26,0.95), rgba(20,16,26,0.85));
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    /* -- STICKY ACTION BAR on question screen ----------------------- *
+     * Single biggest mobile UX win: no scrolling-to-find-Next between
+     * each of the 20 questions. Bar sits at the viewport bottom and
+     * respects the iOS safe-area inset for notched/dynamic-island phones.
+     */
+    .screen[data-screen="question"]{ padding-bottom: 110px; }
+    .screen[data-screen="question"] .nav-row{
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 35;
+      margin: 0;
+      padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
+      background: linear-gradient(180deg, rgba(20,16,26,0.0), rgba(20,16,26,0.96) 30%);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-top: 1px solid var(--rule);
+      display: flex; gap: 12px; align-items: stretch;
+    }
+    .screen[data-screen="question"] .nav-row .nav-left{
+      flex: 0 0 auto;
+    }
+    .screen[data-screen="question"] .nav-row .nav-right{
+      flex: 1; justify-content: stretch;
+    }
+    .screen[data-screen="question"] .nav-row .btn-primary{
+      flex: 1; justify-content: center;
+      min-height: 54px; font-size: 15.5px;
+    }
+    .screen[data-screen="question"] .nav-row .btn-back{
+      min-height: 54px; padding: 14px 16px;
+    }
+
+    /* -- VALUE / GATE / WELCOME / PROFILE NAV ROWS — bigger CTA ----- */
+    .nav-row{ gap: 12px; padding-top: 22px; }
+    .nav-row .btn-primary,
+    .nav-row .nav-right .btn-primary{
+      min-height: 54px; padding: 16px 22px; font-size: 15.5px;
+    }
+    .nav-row .btn-ghost{
+      min-height: 48px;
+    }
+
+    /* -- GATE FIELD STACKING IS DEFAULT; just widen padding ---------- */
+    .gate-card{ padding: 24px 20px; }
+    .gate-card .nav-row{ padding-top: 12px; }
+
+    /* -- REPORT — score hero ---------------------------------------- */
+    .score-hero{ padding: 26px 22px; }
+    .score-num{ font-size: clamp(56px, 16vw, 80px); letter-spacing: -0.034em; }
+    .score-num .of{ font-size: 0.4em; vertical-align: 0.3em; }
+    .score-phase-block{ padding: 16px 18px; }
+    .score-phase-val{ font-size: 20px; }
+
+    /* -- REPORT — dim-chart layout that actually reads on a phone --- *
+     * Was: 1fr / 1fr (name+label on top, bar below) — but the label
+     * landed on the right with awkward spacing. This regroups so each
+     * row is: NAME above, BAR + LABEL inline below.
+     */
+    .dim-row{
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .dim-row-name{ font-size: 14px; }
+    .dim-row-bar{ height: 8px; }
+    .dim-row-label{
+      text-align: left;
+      font-size: 10.5px;
+      letter-spacing: 0.04em;
+    }
+    .dim-row[data-lowest="1"] .dim-row-name .fix-flag{
+      display: block;
+      margin: 6px 0 0 0;
+      width: max-content;
+      vertical-align: baseline;
+    }
+
+    /* -- REPORT — engagement steps stack with breathing room --------- */
+    .engagement-steps{ gap: 10px; }
+    .engagement-step{ padding: 16px 16px; }
+
+    /* -- REPORT — CTA cluster: stacked, full-width, scarcity last ---- */
+    .report-cta{ padding: 26px 22px; }
+    .report-cta h3{ font-size: clamp(22px, 6vw, 28px); }
+    .report-cta-row{ flex-direction: column; align-items: stretch; gap: 10px; }
+    .report-cta-row .btn{
+      width: 100%; justify-content: center;
+      min-height: 54px; padding: 16px 22px;
+      font-size: 15.5px;
+    }
+    .report-cta-row .scarcity{
+      order: 99; text-align: center; margin: 8px 0 0;
+      flex-basis: auto;
+    }
+
+    /* -- REPORT — foot reflow ---------------------------------------- */
+    .report-foot{
+      flex-direction: column; align-items: flex-start; gap: 12px;
+      text-align: left;
+    }
+
+    /* -- VALUE FRAME / OPP CARDS narrower padding -------------------- */
+    .value-frame{ padding: 22px 20px; }
+    .opp-card{ padding: 22px 20px; }
+    .opp-headline{ font-size: 17px; }
+
+    /* -- TOPBAR shrink + back link readable -------------------------- */
+    .topbar-inner{ padding: 12px 16px; gap: 12px; }
+    .wordmark{ font-size: 15px; }
+    .topbar-meta{ font-size: 11px; letter-spacing: 0.08em; }
+
+    /* -- KEYBOARD HINT HIDDEN ON TOUCH ------------------------------- */
+    .keyboard-hint{ display: none !important; }
+  }
+
+  /* Even narrower (iPhone SE / mini, <380px) — extra-careful */
+  @media (max-width: 380px){
+    .page{ padding: 0 16px; }
+    h1.headline{ font-size: clamp(26px, 8vw, 32px); }
+    .q-text{ font-size: 20px; }
+    .score-num{ font-size: 52px; }
+    .topbar-meta{ font-size: 10.5px; }
+    /* Hide the long "← Back to site" wording on tiny screens, keep arrow */
+    .topbar-meta a::after{ content: ""; }
+  }
+
+  /* Touch-device universals (any pointer:coarse, any size) — kills hover
+   * sticky states that make taps feel laggy and bumps the active-press
+   * feedback so a tap registers visibly even on slow phones. */
+  @media (hover: none) and (pointer: coarse){
+    .opt-row .opt:hover{
+      border-color: var(--rule-strong);
+      background: rgba(20,16,26,0.5);
+    }
+    .opt-row .opt[aria-checked="true"]:hover{
+      border-color: var(--accent);
+      background: linear-gradient(160deg, rgba(123,201,196,0.10), rgba(20,16,26,0.6) 80%);
+    }
+    .btn:hover{ transform: none; }
+    .btn:active{ transform: scale(0.97); }
+  }
 </style>
 </head>
 <body>
