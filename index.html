@@ -1675,25 +1675,72 @@
     letter-spacing: -0.012em; max-width: 36ch;
   }
   .ic-head em{ font-style: italic; color: var(--accent); font-weight: 400; }
-  .ic-list{ display: grid; gap: 10px; margin: 0 0 22px; padding: 0; list-style: none; max-width: 64ch; }
+  .ic-list{ display: grid; gap: 2px; margin: 0 0 22px; padding: 0; list-style: none; max-width: 66ch; }
   .ic-list li{
-    position: relative; padding-left: 32px;
+    position: relative;
     font-size: 15px; color: var(--ink); line-height: 1.55;
     letter-spacing: -0.005em;
   }
-  .ic-list li::before{
-    content: ""; position: absolute; left: 0; top: 4px;
-    width: 18px; height: 18px;
+  /* Whole row is the tap target — meets 44px iOS minimum via padding */
+  .ic-list label{
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 12px 14px 12px 8px; margin: 0 -14px 0 -8px;
+    border-radius: 8px; cursor: pointer;
+    transition: background .2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ic-list label:hover{ background: rgba(123,201,196,0.05); }
+  .ic-list label:active{ background: rgba(123,201,196,0.10); }
+  /* Hide native checkbox but keep accessible — keyboard focus shows on .box */
+  .ic-list input[type="checkbox"]{
+    position: absolute; opacity: 0; pointer-events: none;
+    width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); clip-path: inset(50%);
+    margin: -1px;
+  }
+  /* Custom visual checkbox */
+  .ic-list .box{
+    flex: 0 0 20px; width: 20px; height: 20px; margin-top: 2px;
     border: 1.5px solid var(--accent);
-    border-radius: 4px;
+    border-radius: 5px;
     background: rgba(123,201,196,0.06);
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: background .2s ease, box-shadow .25s ease, transform .15s ease;
+    position: relative;
   }
-  .ic-list li::after{
-    content: "✓"; position: absolute; left: 4px; top: 2px;
-    color: var(--accent); font-size: 14px; font-weight: 500;
-    opacity: 0; transition: opacity .3s ease;
+  .ic-list .box::after{
+    content: ""; width: 11px; height: 6px;
+    border-left: 2px solid var(--bg);
+    border-bottom: 2px solid var(--bg);
+    transform: translateY(-2px) rotate(-45deg) scale(0);
+    transform-origin: center;
+    transition: transform .28s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .ic-list li:hover::after{ opacity: 1; }
+  .ic-list label:hover .box{ background: rgba(123,201,196,0.18); }
+  .ic-list input[type="checkbox"]:checked + .box{
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(123,201,196,0.18);
+  }
+  .ic-list input[type="checkbox"]:checked + .box::after{
+    transform: translateY(-2px) rotate(-45deg) scale(1);
+  }
+  .ic-list input[type="checkbox"]:focus-visible + .box{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .ic-list .row-text{
+    flex: 1; transition: color .25s ease, opacity .25s ease;
+  }
+  .ic-list label:has(input[type="checkbox"]:checked) .row-text{
+    color: var(--ink-dim);
+  }
+  /* Mobile — bigger tap target, slightly larger checkbox */
+  @media (max-width: 640px){
+    .ic-list label{ padding: 14px 14px 14px 8px; gap: 14px; }
+    .ic-list .box{ width: 22px; height: 22px; flex-basis: 22px; }
+    .ic-list .row-text{ font-size: 14.5px; }
+  }
   .ic-foot{
     font-size: 14px; color: var(--ink-dim); line-height: 1.55;
     font-style: italic; max-width: 56ch;
@@ -1701,6 +1748,21 @@
     margin: 0;
   }
   .ic-foot strong{ color: var(--accent); font-style: normal; font-weight: 500; }
+  /* Live tally — appears after first tick */
+  .ic-tally{
+    display: inline-block; margin-left: 10px;
+    font-family: 'DM Mono', monospace; font-size: 11.5px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-mute); font-style: normal;
+    transition: color .25s ease, opacity .25s ease;
+    opacity: 0;
+  }
+  .ic-tally[data-count]:not([data-count="0"]){ opacity: 1; }
+  .ic-tally[data-count="3"], .ic-tally[data-count="4"]{ color: var(--accent); }
+  .ic-tally[data-count="5"]{ color: var(--accent); font-weight: 500; }
+  @media (max-width: 640px){
+    .ic-tally{ display: block; margin: 8px 0 0; }
+  }
 
   /* BEFORE / AFTER SCENE — inside Problem section */
   .scene-grid{
@@ -2498,15 +2560,36 @@
     <div class="identity-check reveal" aria-label="Self-diagnostic">
       <div class="ic-lbl">Are you here?</div>
       <h3 class="ic-head">If three or more of these are true, <em>you are the integration layer.</em></h3>
-      <ul class="ic-list">
-        <li>You've cancelled a personal commitment "for one more week" more than once this quarter.</li>
-        <li>Your team consults you for decisions you've told them they own.</li>
-        <li>There is no dashboard you trust enough to look at first thing Monday.</li>
-        <li>You've added an AI tool in the last 90 days and you're not sure whether it's earning its monthly bill.</li>
-        <li>You're a few years older than the version of you that started the company — and you wonder if there's a version of this that doesn't require you on a Sunday.</li>
+      <ul class="ic-list" id="icList">
+        <li><label>
+          <input type="checkbox" />
+          <span class="box" aria-hidden="true"></span>
+          <span class="row-text">You've cancelled a personal commitment "for one more week" more than once this quarter.</span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" />
+          <span class="box" aria-hidden="true"></span>
+          <span class="row-text">Your team consults you for decisions you've told them they own.</span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" />
+          <span class="box" aria-hidden="true"></span>
+          <span class="row-text">There is no dashboard you trust enough to look at first thing Monday.</span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" />
+          <span class="box" aria-hidden="true"></span>
+          <span class="row-text">You've added an AI tool in the last 90 days and you're not sure whether it's earning its monthly bill.</span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" />
+          <span class="box" aria-hidden="true"></span>
+          <span class="row-text">You're a few years older than the version of you that started the company — and you wonder if there's a version of this that doesn't require you on a Sunday.</span>
+        </label></li>
       </ul>
       <p class="ic-foot">
         If you ticked three: <strong>the diagnostic will name what's burning the time.</strong> If you ticked all five: you're who we built this for.
+        <span class="ic-tally" id="icTally" data-count="0" aria-live="polite"></span>
       </p>
     </div>
 
@@ -3554,6 +3637,24 @@
         sticky.setAttribute('aria-label', 'Take the 5-minute Readiness Score');
       }
     }
+  })();
+
+  // Identity-check live tally + analytics-friendly count update
+  (function(){
+    const list = document.getElementById('icList');
+    const tally = document.getElementById('icTally');
+    if (!list || !tally) return;
+    const inputs = list.querySelectorAll('input[type="checkbox"]');
+    const total = inputs.length;
+
+    const update = () => {
+      const count = Array.from(inputs).filter(i => i.checked).length;
+      tally.setAttribute('data-count', String(count));
+      tally.textContent = count === 0 ? '' : count + ' of ' + total + ' ticked';
+    };
+
+    inputs.forEach(i => i.addEventListener('change', update));
+    update();
   })();
 </script>
 
