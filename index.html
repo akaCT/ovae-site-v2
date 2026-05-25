@@ -149,37 +149,11 @@
 
   /* Magnetic CTA wrapper — JS translates inner span */
   .btn-magnetic{ display: inline-block; will-change: transform; transition: transform .4s cubic-bezier(0.16, 1, 0.3, 1); }
-
-  /* KINETIC MARQUEE — between hero and results-strip */
-  .marquee{
-    overflow: hidden;
-    border-top: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    background: linear-gradient(180deg, transparent, rgba(123,201,196,0.025), transparent);
-    padding: 14px 0;
-    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
-  }
-  .marquee-track{
-    display: inline-flex; gap: 40px;
-    white-space: nowrap;
-    animation: marqueeScroll 32s linear infinite;
-    font-family:'DM Mono', monospace;
-    font-size: 13px; letter-spacing: 0.16em;
-    text-transform: uppercase; color: var(--ink-mute);
-  }
-  .marquee-track span{ display: inline-flex; align-items: center; gap: 14px; }
-  .marquee-track span::after{
-    content: ""; width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent); opacity: 0.6;
-  }
-  .marquee-track .accent{ color: var(--accent); }
   @keyframes marqueeScroll{
     0%{ transform: translate3d(0,0,0); }
     100%{ transform: translate3d(-50%, 0, 0); }
   }
   @media (prefers-reduced-motion: reduce){
-    .marquee-track{ animation: none; }
   }
 
   /* Word-by-word reveal for H1 */
@@ -312,7 +286,6 @@
   @media (prefers-reduced-motion: reduce){
     .cadence-track.in-view .cadence-period{ opacity: 1; transform: none; animation: none; }
   }
-
 
   .page{ max-width: 1200px; margin: 0 auto; padding: 0 32px; }
   @media (max-width: 640px){ .page{ padding: 0 20px; } }
@@ -630,25 +603,6 @@
     letter-spacing: -0.005em; line-height: 1.4;
     margin-bottom: 22px; max-width: 32ch;
   }
-  .hero-logo-strip{
-    margin-top: 28px; padding-top: 22px;
-    border-top: 1px solid var(--rule);
-    display: flex; flex-wrap: wrap; align-items: center;
-    gap: 10px 18px;
-    font-family:'DM Mono', monospace; font-size: 11px;
-    letter-spacing: 0.06em; color: var(--ink-mute);
-  }
-  .hls-lbl{
-    text-transform: uppercase; letter-spacing: 0.18em;
-    color: var(--ink-mute); margin-right: 6px;
-  }
-  .hls-tag{
-    padding: 6px 12px; border-radius: 999px;
-    border: 1px solid var(--rule-strong);
-    background: rgba(232,228,220,0.025);
-    color: var(--ink-dim);
-  }
-  .hls-tag em{ color: var(--accent); font-style: normal; font-weight: 500; margin-left: 4px; }
 
   /* SCORE RESULT MOCK — hero right-column */
   .score-result{ display: grid; gap: 18px; position: relative; z-index: 1; }
@@ -773,13 +727,6 @@
     margin-top: 40px;
     display:flex; flex-wrap:wrap; gap: 14px;
   }
-  .hero-trust{
-    margin-top: 48px; padding-top: 24px;
-    border-top: 1px solid var(--rule);
-    font-size: 13px; line-height: 1.7; color: var(--ink-mute); max-width: 60ch;
-    font-family: 'DM Mono', monospace; letter-spacing: 0.005em;
-  }
-  .hero-trust .dot{ color: var(--accent); margin: 0 8px; }
 
   /* HERO VISUAL — score-result wrapper, with liquid-glass refraction */
   .hero-visual{
@@ -1610,51 +1557,8 @@
     .testimonial-attr{ flex-wrap: wrap; }
     .testimonial-stat{ margin-left: 0; border-left: 0; padding-left: 0; flex-direction: row; gap: 10px; align-items: baseline; width: 100%; padding-top: 14px; border-top: 1px solid var(--rule); margin-top: 4px; }
   }
-
-  /* MICROPROOF STRIP — above final CTA */
-  .microproof{
-    margin-top: 36px; padding: 18px 22px;
-    border: 1px solid var(--rule-strong);
-    border-radius: 12px;
-    background: rgba(232,228,220,0.025);
-    display: grid; gap: 12px;
-    grid-template-columns: 1fr;
-    font-family:'DM Mono', monospace; font-size: 12px;
-    letter-spacing: 0.04em; color: var(--ink-dim);
-  }
   @media (min-width: 720px){
-    .microproof{ grid-template-columns: repeat(3, 1fr); gap: 22px; }
   }
-  .microproof-item{
-    display: flex; align-items: center; gap: 10px;
-  }
-  .microproof-dot{
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-dim);
-    animation: pulse 2.4s ease-in-out infinite;
-    flex-shrink: 0;
-  }
-  .microproof-item strong{ color: var(--ink); font-weight: 500; }
-
-  /* FOUNDER CREDIT — bottom of hero */
-  .founder-credit{
-    margin-top: 22px; padding-top: 18px;
-    border-top: 1px solid var(--rule);
-    display: flex; align-items: center; gap: 12px;
-    font-size: 12.5px; color: var(--ink-mute); line-height: 1.4;
-    font-family:'DM Mono', monospace; letter-spacing: 0.04em;
-  }
-  .founder-credit-avatar{
-    width: 36px; height: 36px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), rgba(123,201,196,0.4));
-    color: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 500; font-size: 12px;
-    flex-shrink: 0;
-  }
-  .founder-credit strong{ color: var(--ink); font-weight: 500; }
-
   /* IDENTITY CHECK — between problem and how */
   .identity-check{
     margin-top: 64px;
@@ -1879,46 +1783,8 @@
     font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.04em;
     color: var(--ink-mute); margin-top: 4px;
   }
-
-  /* SCREENSHOT WALL — three pull-quotes formatted as shareable artifacts */
-  .quote-wall{
-    margin-top: 56px;
-    display: grid; gap: 16px;
-    grid-template-columns: 1fr;
-  }
   @media (min-width: 880px){
-    .quote-wall{ grid-template-columns: repeat(3, 1fr); gap: 18px; }
   }
-  .quote-card{
-    padding: 28px 26px 22px;
-    border: 1px solid var(--rule-strong);
-    border-radius: 12px;
-    background: var(--bg-elev);
-    position: relative;
-    display: flex; flex-direction: column;
-  }
-  .quote-card::before{
-    content: "“"; position: absolute;
-    top: -2px; right: 18px;
-    font-family: Georgia, serif;
-    font-size: 64px; line-height: 1;
-    color: var(--accent); opacity: 0.18;
-  }
-  .quote-card-text{
-    font-size: clamp(16px, 1.5vw, 19px); font-weight: 400;
-    line-height: 1.45; color: var(--ink);
-    letter-spacing: -0.008em; margin: 0 0 18px;
-  }
-  .quote-card-text em{ color: var(--accent); font-style: italic; }
-  .quote-card-text strong{ color: var(--ink); font-weight: 500; }
-  .quote-card-attr{
-    font-family:'DM Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.1em; color: var(--ink-mute);
-    margin-top: auto; padding-top: 14px;
-    border-top: 1px solid var(--rule);
-    display: flex; gap: 10px; align-items: center;
-  }
-  .quote-card-attr .dot{ color: var(--accent); }
 
   /* SOLD-WHAT pre-pricing line */
   .pricing-preamble{
@@ -1939,51 +1805,6 @@
     padding: 32px 36px !important;
   }
   .outcomes-frame strong{ font-size: 1em; }
-
-  /* SHARE BADGE — at the bottom of the score-result hero mock */
-  .score-share{
-    margin-top: 12px;
-    padding: 12px 14px;
-    border: 1px dashed var(--rule-strong);
-    border-radius: 8px;
-    display: flex; align-items: center; gap: 12px;
-    background: rgba(123,201,196,0.04);
-  }
-  .score-share-ic{
-    width: 28px; height: 28px; border-radius: 6px;
-    background: rgba(123,201,196,0.18);
-    color: var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    font-family:'DM Mono', monospace; font-size: 11px; font-weight: 600;
-    flex-shrink: 0;
-  }
-  .score-share-body{
-    font-family:'DM Mono', monospace; font-size: 10.5px;
-    letter-spacing: 0.04em; color: var(--ink-dim); line-height: 1.4;
-  }
-  .score-share-body strong{ color: var(--accent); font-weight: 500; }
-
-  /* TWEET-READY callout at bottom of manifesto */
-  .tweet-this{
-    margin: 24px 28px 0;
-    padding: 16px 22px;
-    border-top: 1px solid var(--rule);
-    display: flex; flex-wrap: wrap; align-items: center;
-    gap: 12px 18px;
-    font-family:'DM Mono', monospace; font-size: 11px;
-    letter-spacing: 0.04em; color: var(--ink-mute);
-  }
-  .tweet-this-link{
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 14px; border-radius: 999px;
-    border: 1px solid rgba(123,201,196,0.3);
-    background: rgba(123,201,196,0.05);
-    color: var(--accent); font-weight: 500;
-    transition: background .2s ease, transform .2s ease;
-  }
-  .tweet-this-link:hover{ background: rgba(123,201,196,0.12); transform: translateY(-1px); }
-  .tweet-this-tag{ color: var(--ink-dim); }
-
   /* INDUSTRY LEADERBOARD — preview teaser */
   .leaderboard{
     margin: 56px auto 0; max-width: 760px;
@@ -2173,30 +1994,8 @@
     color: var(--accent); font-size: 24px; font-weight: 300; line-height: 1;
   }
   .wont-do-list li strong{ color: var(--ink); font-weight: 500; }
-
-  /* FOUNDER COUNTER above final CTA */
-  .founder-counter{
-    margin: 0 0 28px;
-    padding: 22px 26px;
-    border: 1px solid var(--rule-strong);
-    border-radius: 12px;
-    background: linear-gradient(160deg, rgba(123,201,196,0.06), rgba(20,16,26,0.4) 80%);
-    display: flex; flex-direction: column; gap: 6px;
-  }
   @media (min-width: 720px){
-    .founder-counter{ flex-direction: row; align-items: baseline; gap: 18px; flex-wrap: wrap; }
   }
-  .founder-counter-num{
-    font-size: clamp(34px, 4vw, 48px);
-    font-weight: 300; color: var(--accent);
-    letter-spacing: -0.028em; line-height: 1;
-    font-feature-settings: "tnum";
-  }
-  .founder-counter-lbl{
-    font-family:'DM Mono', monospace; font-size: 12px; letter-spacing: 0.06em;
-    color: var(--ink-dim); line-height: 1.4;
-  }
-  .founder-counter-lbl strong{ color: var(--ink); font-weight: 500; }
 
   /* FOOTER — section 11 */
   footer.foot{
@@ -2283,7 +2082,6 @@
   .wont-do,
   .identity-check,
   .leaderboard,
-  .founder-counter,
   .cadence-period{
     position: relative;
   }
@@ -2368,23 +2166,6 @@
             Read it before you commit <span class="arr">↓</span>
           </a>
         </div>
-        <p class="hero-trust">
-          Built by the operator behind a <strong>$30M company</strong><span class="dot">·</span>
-          Live with <strong>$10M coaching</strong> + <strong>$17M trades</strong><span class="dot">·</span>
-          EOS · OKR · Holacracy · Scaling Up · 4DX · Ovae Native
-        </p>
-        <div class="hero-logo-strip" aria-label="Industries shipped">
-          <span class="hls-lbl">Live in</span>
-          <span class="hls-tag">Coaching <em>$10M</em></span>
-          <span class="hls-tag">Trades <em>$17M</em></span>
-          <span class="hls-tag">DTC <em>$30M</em> · internal</span>
-        </div>
-        <div class="founder-credit">
-          <div class="founder-credit-avatar" aria-hidden="true">CS</div>
-          <div>
-            Founded by <strong>Christopher Schenk</strong> + <strong>Isaiah</strong> (Orectic) · 2026
-          </div>
-        </div>
       </div>
 
       <!-- Hero visual: live-feel preview of what the diagnostic returns -->
@@ -2439,40 +2220,11 @@
             </div>
           </div>
 
-          <div class="score-share" aria-label="Score result shareable">
-            <div class="score-share-ic" aria-hidden="true">SC</div>
-            <div class="score-share-body">
-              <strong>Shareable result.</strong> Yours generates a private link + LinkedIn-ready card. Optional, never auto-posted.
-            </div>
-          </div>
         </div>
       </aside>
     </div>
   </div>
 </section>
-
-<!-- ========= KINETIC MARQUEE — manifesto as moving graphic device ========= -->
-<div class="marquee" aria-hidden="true">
-  <div class="marquee-track">
-    <span><span class="accent">BRAIN</span> first</span>
-    <span><span class="accent">VISIBILITY</span> second</span>
-    <span><span class="accent">AUTOMATION</span> third</span>
-    <span><span class="accent">SCALE</span>, only after</span>
-    <span>Evidence-gated</span>
-    <span>Human-reviewed</span>
-    <span>Model-agnostic</span>
-    <span>Methodology-agnostic</span>
-    <!-- duplicate for seamless loop -->
-    <span><span class="accent">BRAIN</span> first</span>
-    <span><span class="accent">VISIBILITY</span> second</span>
-    <span><span class="accent">AUTOMATION</span> third</span>
-    <span><span class="accent">SCALE</span>, only after</span>
-    <span>Evidence-gated</span>
-    <span>Human-reviewed</span>
-    <span>Model-agnostic</span>
-    <span>Methodology-agnostic</span>
-  </div>
-</div>
 
 <!-- ========= RESULTS STRIP — quantified proof between hero and problem ========= -->
 <aside class="results-strip" aria-label="Quantified proof">
@@ -2601,33 +2353,6 @@
       </a>
     </div>
 
-    <!-- Screenshot wall — 3 stackable pull-quotes for sharing -->
-    <div class="quote-wall reveal" aria-label="Lines worth screenshotting">
-      <article class="quote-card">
-        <p class="quote-card-text">
-          The bottleneck moves <em>off the humans</em> and into the system.
-        </p>
-        <div class="quote-card-attr">
-          <span>Why-Ovae</span><span class="dot">·</span><span>Methodology principle</span>
-        </div>
-      </article>
-      <article class="quote-card">
-        <p class="quote-card-text">
-          You're not buying a framework <em>someone read about.</em>
-        </p>
-        <div class="quote-card-attr">
-          <span>Operator + builder</span><span class="dot">·</span><span>$30M revenue arc</span>
-        </div>
-      </article>
-      <article class="quote-card">
-        <p class="quote-card-text">
-          We don't <em>preach</em> what we don't <strong>operate.</strong>
-        </p>
-        <div class="quote-card-attr">
-          <span>Engagement 03</span><span class="dot">·</span><span>Built on Ovae, by Ovae</span>
-        </div>
-      </article>
-    </div>
   </div>
 </section>
 
@@ -3014,11 +2739,6 @@
         <div class="manifesto-sub">After validation. Never before.</div>
       </div>
     </div>
-    <div class="tweet-this">
-      <span class="tweet-this-tag">If you build with this sequence —</span>
-      <a class="tweet-this-link" href="https://twitter.com/intent/tweet?text=Brain%20first.%20Visibility%20second.%20Automation%20third.%20Scale%2C%20only%20after.%0A%0AThe%20AI-native%20operating%20sequence%2C%20via%20Ovae%20%E2%86%92&url=https%3A%2F%2Fovae.ai" target="_blank" rel="noopener">Share the manifesto <span class="arr">↗</span></a>
-      <a class="tweet-this-link" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fovae.ai" target="_blank" rel="noopener">Post to LinkedIn <span class="arr">↗</span></a>
-    </div>
     </div>
 
     <!-- Mid-page reinforcement -->
@@ -3370,10 +3090,6 @@
 <section id="diagnostic" class="final-cta">
   <div class="page">
     <div class="final-inner reveal">
-      <div class="founder-counter">
-        <span class="founder-counter-num">5 min</span>
-        <span class="founder-counter-lbl">to a <strong>defensible Phase score</strong> · principal-reviewed if you want it to be</span>
-      </div>
       <div class="eyebrow"><span class="num">10</span><span>Ready when you are</span></div>
       <h2 class="final-head">
         If you've ever opened your laptop on a Sunday because
@@ -3392,11 +3108,6 @@
       <p class="final-secondary">
         Prefer to talk first? <a href="mailto:hello@ovae.ai?subject=Strategy%20call%20request">Book a 30-min strategy call ↗</a>
       </p>
-      <div class="microproof" aria-label="Live activity">
-        <div class="microproof-item"><span class="microproof-dot" aria-hidden="true"></span><span><strong>Last Spark started:</strong> 2 days ago</span></div>
-        <div class="microproof-item"><span class="microproof-dot" aria-hidden="true"></span><span><strong>Next Build cohort:</strong> 6 seats left</span></div>
-        <div class="microproof-item"><span class="microproof-dot" aria-hidden="true"></span><span><strong>$250K Embed:</strong> trades discovery scheduled</span></div>
-      </div>
       <p class="final-trust">
         Five minutes · No card required · Operator-built · Methodology-agnostic
       </p>
