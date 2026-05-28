@@ -1357,6 +1357,40 @@
   .meth-plug::before{
     content: ""; width: 12px; height: 1px; background: var(--accent);
   }
+  /* Orectic product block — rust accent marks the product layer */
+  .orectic-product{ margin-top: 44px; }
+  .op-head{ display:flex; flex-direction:column; gap:8px; margin-bottom: 26px; }
+  .op-tag{
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--rust);
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .op-tag::before{ content:""; width:18px; height:1px; background: var(--rust); }
+  .op-intro{ font-size: 15px; color: var(--ink-dim); line-height: 1.55; max-width: 60ch; margin:0; }
+  .op-grid{ display:grid; gap:14px; grid-template-columns: 1fr; }
+  @media (min-width: 640px){ .op-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 980px){ .op-grid{ grid-template-columns: repeat(3, 1fr); } }
+  .op-cell{
+    padding: 22px 22px 20px;
+    border: 1px solid var(--rule-strong); border-radius: 12px;
+    background: var(--bg-elev);
+    transition: transform .3s ease, border-color .3s ease;
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .op-cell:hover{ transform: translateY(-2px); border-color: rgba(201,125,92,0.34); }
+  .op-step{
+    font-family:'DM Mono', monospace; font-size: 12px; letter-spacing: 0.08em;
+    color: var(--rust);
+  }
+  .op-cell h3{
+    font-size: 17px; font-weight: 500; color: var(--ink);
+    letter-spacing: -0.005em; margin: 2px 0 0;
+  }
+  .op-cell p{ margin: 4px 0 0; font-size: 13px; color: var(--ink-dim); line-height: 1.55; max-width:none; }
+  .op-cell-note{
+    background: linear-gradient(160deg, rgba(201,125,92,0.12), var(--bg-elev) 82%);
+    border-color: rgba(201,125,92,0.32);
+  }
   .meth-disclaimer{
     margin-top: 32px; padding: 18px 22px;
     border: 1px dashed var(--rule-strong); border-radius: 10px;
@@ -2232,7 +2266,7 @@
   <div class="page">
     <div class="hero-grid">
       <div class="reveal">
-        <div class="kicker">Ovae · The AI-native operating layer</div>
+        <div class="kicker">Ovae · The official team that makes you AI-native</div>
         <div class="powered-by">Powered by <strong>Orectic</strong> — the AI-Native Operating System</div>
         <div class="pre-hero">For founders who built it — and got buried by it.</div>
         <h1 class="display">
@@ -2612,15 +2646,56 @@
 <section id="layers">
   <div class="page">
     <div class="section-head reveal">
-      <div class="eyebrow"><span class="num">04</span><span>The engine underneath</span></div>
-      <h2>We don't replace your operating system. <em>We make it AI-native — on Orectic.</em></h2>
+      <div class="eyebrow"><span class="num">04</span><span>The product · Orectic</span></div>
+      <h2>Meet the engine. <em>Orectic is the AI-Native Operating System you'll run on.</em></h2>
       <p class="lede">
-        The transformation isn't a deck or a coaching call. It runs on
-        <strong>Orectic</strong>, the AI-Native Operating System Ovae installs underneath
-        your business. Ovae is how you adopt it: the guided onboarding, the founder
-        transformation, and the operating cadence that keeps it working. The platform
-        is Orectic. The way you run on it is Ovae.
+        The transformation isn't a deck or a coaching call — it runs on a real product.
+        <strong>Orectic</strong> is the AI-Native Operating System: built and owned by
+        Isaiah and his engineering team, and the same foundation under every company
+        that adopts it. <strong>Ovae is the official team that installs and runs it for
+        you</strong> — the guided onboarding, the founder transformation, and the
+        operating cadence that keeps it working. Orectic is the product. Ovae is the team.
       </p>
+    </div>
+
+    <!-- What Orectic actually is -->
+    <div class="orectic-product reveal">
+      <div class="op-head">
+        <span class="op-tag">What Orectic does</span>
+        <p class="op-intro">One platform, five moving parts — sequenced so the value is real before anything runs on its own.</p>
+      </div>
+      <div class="op-grid">
+        <article class="op-cell">
+          <span class="op-step">01</span>
+          <h3>Evidence Core</h3>
+          <p>A permissioned memory that captures the founder's judgment and the company's institutional knowledge — the source of truth everything else is built on.</p>
+        </article>
+        <article class="op-cell">
+          <span class="op-step">02</span>
+          <h3>Company Brain</h3>
+          <p>One place that actually knows your business. Ask it anything; it answers from your evidence, not the open internet.</p>
+        </article>
+        <article class="op-cell">
+          <span class="op-step">03</span>
+          <h3>Business Intelligence</h3>
+          <p>A live operating picture for the CEO — the metrics, the bottlenecks, the truth — sitting on top of the Brain.</p>
+        </article>
+        <article class="op-cell">
+          <span class="op-step">04</span>
+          <h3>Governed automation</h3>
+          <p>Agents that do real work under human-review rules. Hand-validated first, automated second — never the other way around.</p>
+        </article>
+        <article class="op-cell">
+          <span class="op-step">05</span>
+          <h3>Four-phase maturity</h3>
+          <p>A model that meets you where you are — Manual → Visible → Automated → AI-native — and moves you through it deliberately.</p>
+        </article>
+        <article class="op-cell op-cell-note">
+          <span class="op-step">↳</span>
+          <h3>It's its own product</h3>
+          <p>Orectic stands alone — Isaiah's company keeps building it. Ovae is the team that brings it to you and runs it with you.</p>
+        </article>
+      </div>
     </div>
 
     <div class="two-layer-img reveal">
@@ -2806,7 +2881,7 @@
   <div class="page">
     <div class="section-head reveal">
       <div class="eyebrow"><span class="num">06</span><span>Methodology partners</span></div>
-      <h2>Bring your operating system. <em>Ovae goes underneath.</em></h2>
+      <h2>Bring your operating system. <em>Orectic goes underneath.</em></h2>
       <p class="lede">
         Six methodologies, one AI-native foundation. The workshop adapts to whichever
         you're already running — or our default planning ladder if you're not.
@@ -2921,24 +2996,24 @@
           <span class="status" data-s="live">live · internal &amp; dogfooded</span>
         </div>
         <p class="outcome-headline">
-          Ovae runs on <strong>Ovae's own AI-native operating layer.</strong>
-          Same install, same Brain-first sequencing.
+          Ovae runs on <strong>Orectic.</strong>
+          The same install, the same Brain-first sequencing we bring to you.
         </p>
         <p class="outcome-body">
           We don't preach what we don't operate. The Evidence Core, dashboards,
-          automations, and weekly cadence are the same SKU we ship — running on
-          us first. When the model layer shifts (it does, monthly), we feel it
-          before our clients do.
+          automations, and weekly cadence are the same Orectic system we install
+          for clients — running on us first. When the model layer shifts (it does,
+          monthly), we feel it before you do.
         </p>
         <div class="outcome-metric">
           <span class="num">Live</span>
-          <span class="lbl">built by Ovae, on Ovae</span>
+          <span class="lbl">Ovae, running on Orectic</span>
         </div>
       </article>
     </div>
 
     <p class="outcomes-frame reveal">
-      <strong>We sell the operating layer we use to run ourselves.</strong>
+      <strong>We run our own company on Orectic — the same system we install for you.</strong>
       The product is the proof.
     </p>
 
@@ -3179,9 +3254,9 @@
       <div class="foot-brand">
         <a href="#" class="wordmark">Ovae</a>
         <p class="foot-tag">
-          The AI-native operating layer for founder-led companies. Built on
-          <strong>Orectic</strong>, the AI-Native Operating System, and plugged into
-          the methodology you already run.
+          The official team that makes founder-led companies AI-native. We install
+          and run <strong>Orectic</strong>, the AI-Native Operating System, plugged
+          into the methodology you already run.
         </p>
         <p class="foot-origin">Built by operators because nobody was building this for us.</p>
       </div>
