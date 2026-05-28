@@ -1,0 +1,2292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI-Native Readiness Score — Ovae</title>
+<meta name="description" content="Five-minute diagnostic. Get your AI-Native Phase score (0–3), per-dimension breakdown, and your single highest-leverage next move." />
+<meta name="theme-color" content="#14101A" />
+<meta name="color-scheme" content="dark" />
+<link rel="canonical" href="https://ovae.ai/readiness/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2314101A'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%237BC9C4'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%237BC9C4' stroke-opacity='0.4' stroke-width='1'/%3E%3C/svg%3E" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Ovae" />
+<meta property="og:title" content="AI-Native Readiness Score — Ovae" />
+<meta property="og:description" content="Five minutes. Phase score 0–3, per-dimension breakdown, your single highest-leverage next move." />
+<meta property="og:url" content="https://ovae.ai/readiness/" />
+<meta property="og:image" content="https://ovae.ai/og-image.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --bg: #14101A;
+    --bg-elev: #1A1622;
+    --bg-soft: #1F1A28;
+    --ink: #E8E4DC;
+    --ink-dim: #A39E96;
+    --ink-mute: #6F6A63;
+    --rule: rgba(232,228,220,0.08);
+    --rule-strong: rgba(232,228,220,0.16);
+    --accent: #7BC9C4;
+    --accent-dim: rgba(123,201,196,0.18);
+    --accent-soft: rgba(123,201,196,0.06);
+    --rust: #C97D5C;
+    --warn: #D9B26B;
+    --warn-dim: rgba(217,178,107,0.18);
+    --green: #63E084;
+  }
+
+  *,*::before,*::after{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; scroll-padding-top: 24px; }
+  html,body{
+    margin:0; padding:0; background:var(--bg); color:var(--ink);
+    font-family:'DM Sans', system-ui, sans-serif; font-weight:400; line-height:1.55;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    min-height: 100vh;
+  }
+  body{ overflow-x:hidden; font-feature-settings:"ss01","cv11"; }
+  ::selection{ background: var(--accent-dim); color: var(--ink); }
+  :focus{ outline: none; }
+  :focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  a{ color: inherit; text-decoration: none; }
+  ul,ol{ margin: 0; padding: 0; list-style: none; }
+  button{ font-family: inherit; cursor: pointer; }
+
+  body::before{
+    content:""; position:fixed; inset:0; z-index:60; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.92 0 0 0 0 0.89 0 0 0 0 0.86 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+    opacity:0.03; mix-blend-mode:overlay;
+  }
+  body::after{
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(800px 600px at 80% -10%, rgba(123,201,196,0.06), transparent 60%),
+      radial-gradient(900px 700px at -10% 110%, rgba(201,125,92,0.04), transparent 60%);
+  }
+
+  .page{ max-width: 880px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 640px){ .page{ padding: 0 20px; } }
+
+  .topbar{
+    position: sticky; top:0; z-index:40;
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    background: linear-gradient(180deg, rgba(20,16,26,0.86) 0%, rgba(20,16,26,0.66) 100%);
+    border-bottom: 1px solid var(--rule);
+  }
+  .topbar-inner{
+    max-width: 1080px; margin: 0 auto; padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; font-size: 13px;
+  }
+  @media (max-width: 640px){ .topbar-inner{ padding: 12px 20px; } }
+  .wordmark{
+    display:flex; align-items:center; gap:10px;
+    font-weight:500; color:var(--ink); font-size: 16px; letter-spacing: -0.005em;
+  }
+  .wordmark::before{
+    content:""; width:7px; height:7px; border-radius:50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-dim);
+    animation: pulse 3.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 0 0 4px var(--accent-dim); }
+    50%{ box-shadow:0 0 0 6px rgba(123,201,196,0.08); }
+  }
+  .topbar-meta{
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    color: var(--ink-mute); text-transform: uppercase;
+  }
+  .topbar-meta a{ color: var(--ink-dim); border-bottom: 1px solid var(--rule); padding-bottom: 1px; }
+  .topbar-meta a:hover{ color: var(--ink); border-color: var(--ink-dim); }
+
+  .progress-wrap{ margin: 28px 0 0; display: grid; gap: 8px; }
+  .progress-meta{
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em;
+    color: var(--ink-mute); text-transform: uppercase;
+  }
+  .progress-meta .pm-current{ color: var(--accent); }
+  .progress-track{
+    position: relative; height: 3px; background: var(--rule);
+    border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill{
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), rgba(123,201,196,0.6));
+    width: 0%;
+    transition: width .5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  main{ padding: 56px 0 96px; min-height: calc(100vh - 64px); }
+
+  .screen{ display: none; animation: screenIn .55s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .screen.active{ display: block; }
+  @keyframes screenIn{
+    from{ opacity: 0; transform: translate3d(0, 18px, 0); }
+    to{ opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+  @media (prefers-reduced-motion: reduce){ .screen{ animation: none; } }
+
+  .eyebrow{
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--ink-mute);
+    display: flex; align-items: center; gap: 14px; margin-bottom: 18px;
+  }
+  .eyebrow .num{ color: var(--accent); }
+  .eyebrow::after{
+    content:""; flex: 0 0 60px; height: 1px; background: var(--rule-strong);
+  }
+  h1.headline{
+    font-weight: 300; letter-spacing: -0.032em; line-height: 1.04;
+    font-size: clamp(34px, 5.2vw, 60px);
+    margin: 0 0 24px; max-width: 18ch;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  h1.headline em{ font-style: italic; color: var(--accent); font-weight: 300; }
+  h2.subhead{
+    font-weight: 300; letter-spacing: -0.022em; line-height: 1.18;
+    font-size: clamp(22px, 2.6vw, 30px);
+    margin: 0 0 22px; max-width: 24ch;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  h2.subhead em{ font-style: italic; color: var(--accent); font-weight: 300; }
+  p.lede{
+    font-size: clamp(15px, 1.3vw, 17px);
+    line-height: 1.62; color: var(--ink-dim);
+    max-width: 60ch; font-weight: 300;
+    margin: 0 0 28px;
+  }
+  p.lede strong{ color: var(--ink); font-weight: 500; }
+
+  .btn{
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px; border-radius: 999px;
+    font-weight: 500; font-size: 14.5px; letter-spacing: -0.005em;
+    border: 1px solid transparent;
+    transition: transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+    cursor: pointer;
+  }
+  .btn-primary{
+    background: var(--accent); color: var(--bg);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .btn-primary:hover{ background: #94d8d3; transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 8px 22px -6px rgba(123,201,196,0.32); }
+  .btn-primary:active{ transform: translateY(0); }
+  .btn-primary:disabled{ opacity: 0.4; pointer-events: none; }
+  .btn-secondary{
+    background: transparent; color: var(--ink); border-color: var(--rule-strong);
+  }
+  .btn-secondary:hover{ border-color: var(--ink-dim); }
+  .btn-ghost{
+    background: transparent; color: var(--ink-dim);
+    padding: 14px 8px;
+  }
+  .btn-ghost:hover{ color: var(--ink); }
+  .btn .arr{ font-family:'DM Mono', monospace; font-size: 13px; transition: transform .2s ease; }
+  .btn:hover .arr{ transform: translateX(3px); }
+  .btn.btn-back .arr{ transform: rotate(180deg); }
+  .btn.btn-back:hover .arr{ transform: rotate(180deg) translateX(3px); }
+
+  .welcome-meta{
+    margin-top: 32px; padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    font-family:'DM Mono', monospace; font-size: 11.5px;
+    color: var(--ink-dim); letter-spacing: 0.04em;
+  }
+  .welcome-meta strong{ color: var(--accent); font-weight: 500; }
+  .welcome-meta .sep{ color: var(--ink-mute); }
+  .welcome-cta-row{ margin-top: 36px; display: flex; flex-wrap: wrap; gap: 14px; }
+
+  .field-grid{ display: grid; gap: 22px; margin-bottom: 36px; }
+  .field{ display: grid; gap: 10px; }
+  .field label,
+  .field .field-q{
+    font-size: 14.5px; color: var(--ink); font-weight: 500;
+    letter-spacing: -0.005em; line-height: 1.4;
+  }
+  .field .helper{
+    font-family:'DM Mono', monospace; font-size: 11px; color: var(--ink-mute);
+    letter-spacing: 0.06em; margin-top: -4px;
+  }
+  .field input[type="text"],
+  .field input[type="email"]{
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--rule-strong);
+    background: rgba(20,16,26,0.6);
+    color: var(--ink);
+    font-family: inherit; font-size: 15px;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .field input[type="text"]:focus,
+  .field input[type="email"]:focus{
+    border-color: var(--accent); background: rgba(20,16,26,0.8);
+  }
+  .field input::placeholder{ color: var(--ink-mute); }
+
+  .opt-row{ display: grid; gap: 8px; }
+  .opt-row.opt-row-grid{ grid-template-columns: 1fr; }
+  @media (min-width: 640px){
+    .opt-row.opt-row-grid{ grid-template-columns: 1fr 1fr; }
+  }
+  .opt-row .opt{
+    position: relative;
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 10px;
+    background: rgba(20,16,26,0.5);
+    color: var(--ink);
+    font-size: 14.5px; line-height: 1.4;
+    cursor: pointer;
+    transition: border-color .2s ease, background .2s ease, transform .15s ease;
+    text-align: left;
+  }
+  .opt-row .opt:hover{
+    border-color: rgba(123,201,196,0.32);
+    background: rgba(20,16,26,0.75);
+  }
+  .opt-row .opt[aria-checked="true"]{
+    border-color: var(--accent);
+    background: linear-gradient(160deg, rgba(123,201,196,0.10), rgba(20,16,26,0.6) 80%);
+    box-shadow: inset 0 1px 0 rgba(232,228,220,0.06);
+  }
+  .opt-row .opt .opt-dot{
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 1.5px solid var(--rule-strong);
+    flex-shrink: 0;
+    position: relative;
+    transition: border-color .2s ease;
+  }
+  .opt-row .opt:hover .opt-dot{ border-color: rgba(123,201,196,0.5); }
+  .opt-row .opt[aria-checked="true"] .opt-dot{ border-color: var(--accent); }
+  .opt-row .opt[aria-checked="true"] .opt-dot::after{
+    content: ""; position: absolute; inset: 3px;
+    border-radius: 50%; background: var(--accent);
+  }
+  .opt-row .opt .opt-key{
+    margin-left: auto;
+    font-family:'DM Mono', monospace; font-size: 10px;
+    color: var(--ink-mute); letter-spacing: 0.08em;
+    padding: 3px 6px; border-radius: 4px; border: 1px solid var(--rule);
+  }
+  .opt-row .opt[aria-checked="true"] .opt-key{ color: var(--accent); border-color: rgba(123,201,196,0.3); }
+
+  .q-meta{
+    display: flex; align-items: baseline; gap: 14px;
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.16em;
+    color: var(--ink-mute); text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .q-meta .q-dim{ color: var(--accent); }
+  .q-meta .q-num{ color: var(--ink); }
+  .q-text{
+    font-weight: 300; letter-spacing: -0.022em; line-height: 1.22;
+    font-size: clamp(24px, 3vw, 36px);
+    color: var(--ink);
+    margin: 0 0 36px;
+    max-width: 28ch;
+    text-wrap: balance;
+  }
+
+  .nav-row{
+    margin-top: 40px; padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .nav-row .nav-left{ display: flex; gap: 8px; align-items: center; }
+  .nav-row .nav-right{ display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .keyboard-hint{
+    font-family:'DM Mono', monospace; font-size: 10.5px;
+    color: var(--ink-mute); letter-spacing: 0.06em;
+    display: none;
+  }
+  @media (min-width: 720px){
+    .keyboard-hint{ display: inline-flex; gap: 6px; align-items: center; }
+  }
+  .keyboard-hint kbd{
+    font-family: inherit; padding: 2px 6px; border-radius: 4px;
+    border: 1px solid var(--rule-strong); background: rgba(20,16,26,0.6);
+    color: var(--ink-dim); font-size: 10px;
+  }
+
+  .gate-card{
+    margin-top: 24px; padding: 36px 36px 32px;
+    border: 1px solid var(--rule-strong);
+    border-left: 3px solid var(--accent);
+    border-radius: 14px;
+    background: linear-gradient(160deg, rgba(123,201,196,0.05), rgba(20,16,26,0.4) 80%);
+    box-shadow:
+      inset 0 1px 0 rgba(232,228,220,0.06),
+      0 18px 40px -20px rgba(20,16,26,0.6);
+  }
+  @media (max-width: 640px){ .gate-card{ padding: 28px 22px; } }
+  .gate-meta{
+    margin-top: 22px; padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.06em;
+    color: var(--ink-mute); line-height: 1.6;
+  }
+  .gate-meta strong{ color: var(--ink-dim); font-weight: 500; }
+
+  /* REPORT */
+  .report-header{ margin-bottom: 56px; }
+  .report-eyebrow{
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .report-headline{
+    font-weight: 300; letter-spacing: -0.032em; line-height: 1.04;
+    font-size: clamp(32px, 4.8vw, 56px);
+    color: var(--ink);
+    margin: 0 0 16px; max-width: 22ch;
+    text-wrap: balance;
+  }
+  .report-headline strong{ font-weight: 400; color: var(--accent); }
+  .report-sub{
+    font-size: clamp(15px, 1.3vw, 18px);
+    color: var(--ink-dim); line-height: 1.55; max-width: 62ch;
+    margin: 0;
+  }
+  .report-sub strong{ color: var(--ink); font-weight: 500; }
+
+  .score-hero{
+    margin: 40px 0;
+    padding: 36px 36px 32px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 16px;
+    background: linear-gradient(160deg, rgba(123,201,196,0.10), rgba(20,16,26,0.6) 80%);
+    box-shadow:
+      inset 0 1px 0 rgba(232,228,220,0.08),
+      0 28px 60px -22px rgba(20,16,26,0.65);
+  }
+  @media (max-width: 640px){ .score-hero{ padding: 28px 22px 24px; } }
+  .score-grid{
+    display: grid; gap: 28px;
+    grid-template-columns: 1fr;
+    align-items: end;
+  }
+  @media (min-width: 720px){
+    .score-grid{ grid-template-columns: 1.2fr 1fr; gap: 40px; }
+  }
+  .score-numblock{ display: grid; gap: 4px; }
+  .score-num-lbl{
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ink-mute);
+  }
+  .score-num{
+    font-size: clamp(72px, 11vw, 128px); font-weight: 200;
+    color: var(--accent); letter-spacing: -0.038em; line-height: 0.95;
+    font-feature-settings: "tnum";
+    margin-top: 2px;
+  }
+  .score-num .of{
+    color: var(--ink-dim); font-size: 0.36em; font-weight: 300; letter-spacing: -0.018em;
+    vertical-align: 0.4em; margin-left: 4px;
+  }
+  .score-band{
+    font-family:'DM Mono', monospace; font-size: 12px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--accent);
+    margin-top: 6px;
+  }
+  .score-phase-block{
+    padding: 18px 20px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 12px;
+    background: rgba(20,16,26,0.5);
+  }
+  .score-phase-lbl{
+    font-family:'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-mute); margin-bottom: 6px;
+  }
+  .score-phase-val{
+    font-size: 24px; font-weight: 400; color: var(--ink);
+    letter-spacing: -0.012em; margin-bottom: 12px;
+  }
+  .score-phase-val strong{ color: var(--accent); font-weight: 500; }
+  .score-band-copy{
+    font-size: 13.5px; color: var(--ink-dim); line-height: 1.55;
+    padding-top: 12px; border-top: 1px solid var(--rule);
+    font-style: italic;
+  }
+
+  .dim-chart{
+    margin: 48px 0 36px;
+    padding: 28px 28px 24px;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: rgba(20,16,26,0.4);
+  }
+  @media (max-width: 640px){ .dim-chart{ padding: 22px 18px; } }
+  .dim-chart-lbl{
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-mute); margin-bottom: 22px;
+  }
+  .dim-row{
+    display: grid; grid-template-columns: 1fr;
+    gap: 6px 16px;
+    padding: 14px 0;
+    border-top: 1px solid var(--rule);
+  }
+  @media (min-width: 720px){
+    .dim-row{ grid-template-columns: 200px 1fr 140px; align-items: center; }
+  }
+  .dim-row:first-of-type{ border-top: 0; }
+  .dim-row-name{
+    font-size: 14.5px; color: var(--ink); font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+  .dim-row[data-lowest="1"] .dim-row-name .fix-flag{
+    display: inline-block; margin-left: 10px;
+    font-family:'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.14em; color: var(--rust);
+    padding: 2px 6px; border-radius: 4px;
+    background: rgba(201,125,92,0.12);
+    border: 1px solid rgba(201,125,92,0.3);
+    vertical-align: 2px;
+    text-transform: uppercase;
+  }
+  .dim-row-bar{
+    position: relative; height: 10px;
+    border-radius: 999px;
+    background: rgba(232,228,220,0.04);
+    border: 1px solid var(--rule);
+    overflow: hidden;
+  }
+  .dim-row-bar-fill{
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), rgba(123,201,196,0.6));
+    transform-origin: left;
+    transform: scaleX(0);
+    animation: barFill 1s cubic-bezier(0.16, 1, 0.3, 1) .2s forwards;
+    border-radius: 999px;
+  }
+  .dim-row[data-lowest="1"] .dim-row-bar-fill{
+    background: linear-gradient(90deg, var(--rust), rgba(201,125,92,0.6));
+  }
+  @keyframes barFill{ to{ transform: scaleX(var(--p)); } }
+  @media (prefers-reduced-motion: reduce){
+    .dim-row-bar-fill{ animation: none; transform: scaleX(var(--p)); }
+  }
+  .dim-row-label{
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.06em;
+    color: var(--ink-dim); text-align: right;
+  }
+  .dim-row[data-lowest="1"] .dim-row-label{ color: var(--rust); }
+  .dim-constraint-note{
+    margin-top: 22px; padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-size: 13px; color: var(--ink-mute); line-height: 1.55;
+    font-style: italic;
+  }
+  .dim-constraint-note strong{ color: var(--rust); font-style: normal; font-weight: 500; }
+
+  .opps{ margin: 48px 0 36px; }
+  .opps-lbl{
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--ink-mute); margin-bottom: 22px;
+  }
+  .opps-grid{ display: grid; gap: 14px; grid-template-columns: 1fr; }
+  .opp-card{
+    padding: 24px 26px;
+    border: 1px solid var(--rule-strong);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    background: var(--bg-elev);
+    box-shadow: inset 0 1px 0 rgba(232,228,220,0.04);
+  }
+  .opp-card[data-rank="1"]{
+    border-left-color: var(--rust);
+    background: linear-gradient(160deg, rgba(201,125,92,0.06), var(--bg-elev) 80%);
+  }
+  .opp-rank{
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 10px;
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.16em;
+    color: var(--ink-mute); text-transform: uppercase;
+  }
+  .opp-rank .num{ color: var(--accent); font-weight: 500; }
+  .opp-card[data-rank="1"] .opp-rank .num{ color: var(--rust); }
+  .opp-rank .constraint-tag{
+    margin-left: auto;
+    padding: 2px 8px; border-radius: 4px;
+    background: rgba(201,125,92,0.12); border: 1px solid rgba(201,125,92,0.3);
+    font-size: 10px; color: var(--rust);
+    display: none;
+  }
+  .opp-card[data-rank="1"] .opp-rank .constraint-tag{ display: inline-block; }
+  .opp-headline{
+    font-size: clamp(17px, 1.5vw, 20px);
+    color: var(--ink); font-weight: 500; letter-spacing: -0.008em;
+    margin: 0 0 8px; line-height: 1.32;
+  }
+  .opp-body{
+    font-size: 14px; color: var(--ink-dim); line-height: 1.55;
+    margin: 0; max-width: 60ch;
+  }
+
+  .value-frame{
+    margin: 48px 0 36px;
+    padding: 32px 36px 30px;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: linear-gradient(160deg, rgba(99,224,132,0.04), rgba(20,16,26,0.4) 80%);
+  }
+  @media (max-width: 640px){ .value-frame{ padding: 24px 22px; } }
+  .value-lbl{
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--green); margin-bottom: 14px;
+  }
+  .value-copy{
+    font-size: clamp(16px, 1.4vw, 19px); color: var(--ink); line-height: 1.55;
+    font-weight: 300; max-width: 62ch;
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+  .value-copy strong{ color: var(--accent); font-weight: 500; }
+  .value-copy em{ font-style: italic; color: var(--ink-dim); }
+  .value-c3{
+    margin-top: 18px; padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-size: 14px; color: var(--ink-dim); line-height: 1.55;
+  }
+  .value-c3 strong{ color: var(--ink); font-weight: 500; }
+  .value-c3-tag{
+    display: block; margin-top: 4px;
+    font-family:'DM Mono', monospace; font-size: 11px; color: var(--ink-mute); letter-spacing: 0.04em;
+  }
+
+  .engagement{
+    margin: 48px 0 36px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 36px 0;
+  }
+  .engagement-lbl{
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--ink-mute); margin-bottom: 18px;
+  }
+  .engagement h3{
+    font-weight: 300; letter-spacing: -0.018em; line-height: 1.18;
+    font-size: clamp(22px, 2.4vw, 28px);
+    margin: 0 0 24px; max-width: 28ch;
+    color: var(--ink);
+  }
+  .engagement h3 em{ font-style: italic; color: var(--accent); font-weight: 300; }
+  .engagement-steps{
+    display: grid; gap: 14px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 720px){
+    .engagement-steps{ grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  }
+  .engagement-step{
+    padding: 18px 18px;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    background: rgba(20,16,26,0.4);
+  }
+  .engagement-step-day{
+    font-family:'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+  }
+  .engagement-step-name{
+    font-size: 14px; color: var(--ink); font-weight: 500;
+    letter-spacing: -0.005em; line-height: 1.4; margin-bottom: 6px;
+  }
+  .engagement-step-body{
+    font-size: 12.5px; color: var(--ink-dim); line-height: 1.5;
+  }
+
+  .report-cta{
+    margin: 56px 0 0; padding: 40px 40px 36px;
+    border: 1px solid rgba(123,201,196,0.32);
+    border-radius: 16px;
+    background: linear-gradient(160deg, rgba(123,201,196,0.10), rgba(20,16,26,0.5) 80%);
+    box-shadow:
+      inset 0 1px 0 rgba(232,228,220,0.08),
+      0 28px 70px -28px rgba(123,201,196,0.18);
+  }
+  @media (max-width: 640px){ .report-cta{ padding: 28px 24px; } }
+  .report-cta-flag{
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; margin-bottom: 12px;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 4px 12px; border-radius: 999px;
+  }
+  .report-cta-flag[data-flag="flagship"]{ color: var(--green); background: rgba(99,224,132,0.10); border: 1px solid rgba(99,224,132,0.3); }
+  .report-cta-flag[data-flag="qualified"]{ color: var(--warn); background: var(--warn-dim); border: 1px solid rgba(217,178,107,0.3); }
+  .report-cta-flag[data-flag="nurture"]{ color: var(--ink-dim); background: rgba(232,228,220,0.04); border: 1px solid var(--rule-strong); }
+  .report-cta h3{
+    font-weight: 300; letter-spacing: -0.022em; line-height: 1.12;
+    font-size: clamp(24px, 2.8vw, 36px);
+    margin: 0 0 14px; max-width: 22ch;
+    color: var(--ink);
+  }
+  .report-cta h3 em{ font-style: italic; color: var(--accent); font-weight: 300; }
+  .report-cta p{
+    font-size: 15px; color: var(--ink-dim); line-height: 1.55;
+    max-width: 56ch; margin: 0 0 24px;
+  }
+  .report-cta-row{ display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .report-cta-row .scarcity{
+    margin-left: auto;
+    font-family:'DM Mono', monospace; font-size: 11px;
+    color: var(--ink-mute); letter-spacing: 0.04em;
+  }
+  @media (max-width: 720px){ .report-cta-row .scarcity{ margin-left: 0; flex-basis: 100%; } }
+
+  .report-foot{
+    margin-top: 32px; padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    display: flex; flex-wrap: wrap; gap: 18px 28px;
+    align-items: center; justify-content: space-between;
+    font-family:'DM Mono', monospace; font-size: 11.5px; letter-spacing: 0.06em;
+    color: var(--ink-mute);
+  }
+  .report-foot a{
+    color: var(--accent); border-bottom: 1px solid var(--accent-dim);
+    padding-bottom: 1px; transition: border-color .2s ease;
+  }
+  .report-foot a:hover{ border-color: var(--accent); }
+
+  footer.foot{
+    border-top: 1px solid var(--rule);
+    padding: 36px 0 40px;
+    text-align: center;
+    font-family:'DM Mono', monospace; font-size: 11px; letter-spacing: 0.06em;
+    color: var(--ink-mute);
+  }
+  footer.foot .etym{ color: var(--ink-dim); font-style: italic; font-family: 'DM Sans', sans-serif; letter-spacing: 0.02em; }
+  footer.foot .etym em{ color: var(--accent); font-style: normal; }
+
+  .err{
+    margin-top: 12px;
+    font-size: 13px; color: var(--rust);
+    font-family:'DM Mono', monospace; letter-spacing: 0.04em;
+  }
+
+  .toast{
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+    padding: 12px 22px; border-radius: 999px;
+    background: var(--accent); color: var(--bg);
+    font-weight: 500; font-size: 13.5px;
+    box-shadow: 0 18px 40px -16px rgba(123,201,196,0.45);
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s ease, transform .3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 80;
+  }
+  .toast.show{ opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ============================================================
+   * MOBILE PASS — diagnostic-focused improvements
+   * Targets the friction points specific to filling out a 20-question
+   * form on a phone: thumb-reach, scroll cost per question, tap-target
+   * comfort, narrow-viewport overflow safety.
+   * ============================================================ */
+
+  @media (max-width: 720px){
+
+    /* -- TOP-OF-VIEWPORT BREATHING ROOM ------------------------------ */
+    main{ padding: 32px 0 96px; }
+
+    /* -- SCREEN-IN ANIMATION SOFTER ON PHONES (perceived speed) ------ */
+    .screen{ animation-duration: .4s; }
+
+    /* -- TYPE CALIBRATION FOR NARROW VIEWPORTS ----------------------- */
+    h1.headline{ font-size: clamp(28px, 8.5vw, 38px); margin-bottom: 18px; }
+    h2.subhead{ font-size: clamp(20px, 6.2vw, 26px); margin-bottom: 16px; }
+    p.lede{ font-size: 15.5px; line-height: 1.6; margin-bottom: 22px; }
+    .q-text{ font-size: clamp(22px, 6.5vw, 28px); margin-bottom: 28px; line-height: 1.25; }
+
+    /* -- TAP-TARGET COMFORT (Apple HIG / Material 48px+) ------------- */
+    .opt-row .opt{
+      min-height: 58px;
+      padding: 16px 18px;
+      font-size: 15.5px;
+      line-height: 1.4;
+      gap: 14px;
+      /* Larger active feedback so a thumb tap feels acknowledged */
+      transition: transform .12s ease, border-color .2s ease, background .2s ease;
+    }
+    .opt-row .opt:active{ transform: scale(0.985); }
+    .opt-row .opt .opt-dot{ width: 18px; height: 18px; }
+    .opt-row .opt .opt-key{ display: none; }   /* keyboard hints irrelevant on touch */
+
+    /* Profile/value 2-col grid collapses to 1 col — already there, but force */
+    .opt-row.opt-row-grid{ grid-template-columns: 1fr; gap: 10px; }
+
+    /* -- FORM INPUT HEIGHT — thumb-friendly, room for visible focus -- */
+    .field input[type="text"],
+    .field input[type="email"]{
+      padding: 16px 16px;
+      font-size: 16px;          /* 16px disables iOS auto-zoom-in on focus */
+      min-height: 52px;
+    }
+    .field label,
+    .field .field-q{ font-size: 15.5px; }
+
+    /* -- WELCOME CTAs FULL-WIDTH, STACKED ---------------------------- */
+    .welcome-cta-row{ flex-direction: column; gap: 12px; }
+    .welcome-cta-row .btn{
+      width: 100%; justify-content: center;
+      min-height: 54px; padding: 16px 22px;
+      font-size: 15.5px;
+    }
+    .welcome-meta{
+      gap: 6px 12px; font-size: 11.5px;
+    }
+
+    /* -- PROGRESS BAR — sticky to top so it never scrolls away ------ */
+    .progress-wrap{
+      position: sticky; top: 0;
+      z-index: 30;
+      margin: 0 -20px 28px;
+      padding: 14px 20px 14px;
+      background: linear-gradient(180deg, rgba(20,16,26,0.95), rgba(20,16,26,0.85));
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    /* -- STICKY ACTION BAR on question screen ----------------------- *
+     * Single biggest mobile UX win: no scrolling-to-find-Next between
+     * each of the 20 questions. Bar sits at the viewport bottom and
+     * respects the iOS safe-area inset for notched/dynamic-island phones.
+     */
+    .screen[data-screen="question"]{ padding-bottom: 110px; }
+    .screen[data-screen="question"] .nav-row{
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 35;
+      margin: 0;
+      padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
+      background: linear-gradient(180deg, rgba(20,16,26,0.0), rgba(20,16,26,0.96) 30%);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-top: 1px solid var(--rule);
+      display: flex; gap: 12px; align-items: stretch;
+    }
+    .screen[data-screen="question"] .nav-row .nav-left{
+      flex: 0 0 auto;
+    }
+    .screen[data-screen="question"] .nav-row .nav-right{
+      flex: 1; justify-content: stretch;
+    }
+    .screen[data-screen="question"] .nav-row .btn-primary{
+      flex: 1; justify-content: center;
+      min-height: 54px; font-size: 15.5px;
+    }
+    .screen[data-screen="question"] .nav-row .btn-back{
+      min-height: 54px; padding: 14px 16px;
+    }
+
+    /* -- VALUE / GATE / WELCOME / PROFILE NAV ROWS — bigger CTA ----- */
+    .nav-row{ gap: 12px; padding-top: 22px; }
+    .nav-row .btn-primary,
+    .nav-row .nav-right .btn-primary{
+      min-height: 54px; padding: 16px 22px; font-size: 15.5px;
+    }
+    .nav-row .btn-ghost{
+      min-height: 48px;
+    }
+
+    /* -- GATE FIELD STACKING IS DEFAULT; just widen padding ---------- */
+    .gate-card{ padding: 24px 20px; }
+    .gate-card .nav-row{ padding-top: 12px; }
+
+    /* -- REPORT — score hero ---------------------------------------- */
+    .score-hero{ padding: 26px 22px; }
+    .score-num{ font-size: clamp(56px, 16vw, 80px); letter-spacing: -0.034em; }
+    .score-num .of{ font-size: 0.4em; vertical-align: 0.3em; }
+    .score-phase-block{ padding: 16px 18px; }
+    .score-phase-val{ font-size: 20px; }
+
+    /* -- REPORT — dim-chart layout that actually reads on a phone --- *
+     * Was: 1fr / 1fr (name+label on top, bar below) — but the label
+     * landed on the right with awkward spacing. This regroups so each
+     * row is: NAME above, BAR + LABEL inline below.
+     */
+    .dim-row{
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .dim-row-name{ font-size: 14px; }
+    .dim-row-bar{ height: 8px; }
+    .dim-row-label{
+      text-align: left;
+      font-size: 10.5px;
+      letter-spacing: 0.04em;
+    }
+    .dim-row[data-lowest="1"] .dim-row-name .fix-flag{
+      display: block;
+      margin: 6px 0 0 0;
+      width: max-content;
+      vertical-align: baseline;
+    }
+
+    /* -- REPORT — engagement steps stack with breathing room --------- */
+    .engagement-steps{ gap: 10px; }
+    .engagement-step{ padding: 16px 16px; }
+
+    /* -- REPORT — CTA cluster: stacked, full-width, scarcity last ---- */
+    .report-cta{ padding: 26px 22px; }
+    .report-cta h3{ font-size: clamp(22px, 6vw, 28px); }
+    .report-cta-row{ flex-direction: column; align-items: stretch; gap: 10px; }
+    .report-cta-row .btn{
+      width: 100%; justify-content: center;
+      min-height: 54px; padding: 16px 22px;
+      font-size: 15.5px;
+    }
+    .report-cta-row .scarcity{
+      order: 99; text-align: center; margin: 8px 0 0;
+      flex-basis: auto;
+    }
+
+    /* -- REPORT — foot reflow ---------------------------------------- */
+    .report-foot{
+      flex-direction: column; align-items: flex-start; gap: 12px;
+      text-align: left;
+    }
+
+    /* -- VALUE FRAME / OPP CARDS narrower padding -------------------- */
+    .value-frame{ padding: 22px 20px; }
+    .opp-card{ padding: 22px 20px; }
+    .opp-headline{ font-size: 17px; }
+
+    /* -- TOPBAR shrink + back link readable -------------------------- */
+    .topbar-inner{ padding: 12px 16px; gap: 12px; }
+    .wordmark{ font-size: 15px; }
+    .topbar-meta{ font-size: 11px; letter-spacing: 0.08em; }
+
+    /* -- KEYBOARD HINT HIDDEN ON TOUCH ------------------------------- */
+    .keyboard-hint{ display: none !important; }
+  }
+
+  /* Even narrower (iPhone SE / mini, <380px) — extra-careful */
+  @media (max-width: 380px){
+    .page{ padding: 0 16px; }
+    h1.headline{ font-size: clamp(26px, 8vw, 32px); }
+    .q-text{ font-size: 20px; }
+    .score-num{ font-size: 52px; }
+    .topbar-meta{ font-size: 10.5px; }
+    /* Hide the long "← Back to site" wording on tiny screens, keep arrow */
+    .topbar-meta a::after{ content: ""; }
+  }
+
+  /* Touch-device universals (any pointer:coarse, any size) — kills hover
+   * sticky states that make taps feel laggy and bumps the active-press
+   * feedback so a tap registers visibly even on slow phones. */
+  @media (hover: none) and (pointer: coarse){
+    .opt-row .opt:hover{
+      border-color: var(--rule-strong);
+      background: rgba(20,16,26,0.5);
+    }
+    .opt-row .opt[aria-checked="true"]:hover{
+      border-color: var(--accent);
+      background: linear-gradient(160deg, rgba(123,201,196,0.10), rgba(20,16,26,0.6) 80%);
+    }
+    .btn:hover{ transform: none; }
+    .btn:active{ transform: scale(0.97); }
+  }
+
+  /* ============================================================
+   * DESIGN-POLISH PASS — sits at end of cascade. Overrides earlier
+   * rules to enforce a single button system, optical alignment, and
+   * one set of transition curves. No business logic touched.
+   *
+   * Audit found:
+   *   - 20+ unique padding values across components
+   *   - 17 font-size variants in 10–17 px range (4 too many)
+   *   - mixed transition durations (.12 / .15 / .2 / .3 / .5)
+   *   - btn-primary min-height 54 vs btn-ghost min-height 48 in nav-row
+   *     → visible vertical misalignment between Cancel + Continue
+   *
+   * Strategy: keep all the earlier rules, append a final layer that
+   * normalizes the elements that show up next to each other in the
+   * UI (buttons + inputs + opt rows + nav rows + focus rings).
+   * ============================================================ */
+
+  /* --- Unified motion curve token. Use everywhere for consistency. */
+  /* (Inlined per rule because CSS vars in transition values work,
+   *  but defining --ease here for readability.) */
+  :root{
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --t-fast: 160ms;
+    --t-base: 220ms;
+    --t-slow: 380ms;
+  }
+
+  /* --- SINGLE BUTTON SYSTEM ---------------------------------------
+   * .btn base sets size; variants only set color/background/border.
+   * All variants in any flex row share min-height → align-items:center
+   * resolves to a real baseline instead of "floating ghost text".
+   */
+  .btn{
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-weight: 500; font-size: 14.5px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    border: 1px solid transparent;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    transition:
+      transform var(--t-base) var(--ease),
+      background var(--t-base) var(--ease),
+      border-color var(--t-base) var(--ease),
+      color var(--t-base) var(--ease),
+      box-shadow var(--t-base) var(--ease);
+  }
+  .btn-primary{
+    background: var(--accent); color: var(--bg);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.18),
+      0 1px 2px rgba(20,16,26,0.4);
+  }
+  .btn-primary:hover{
+    background: #94d8d3;
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.25),
+      0 10px 26px -8px rgba(123,201,196,0.36);
+  }
+  .btn-primary:active{ transform: translateY(0) scale(0.985); }
+  .btn-secondary{
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--rule-strong);
+  }
+  .btn-secondary:hover{
+    border-color: var(--ink-dim);
+    background: rgba(232,228,220,0.025);
+    transform: translateY(-1px);
+  }
+  .btn-secondary:active{ transform: translateY(0) scale(0.985); }
+  .btn-ghost{
+    background: transparent;
+    color: var(--ink-dim);
+    padding: 12px 18px;      /* symmetric — was 14px 8px (visibly off) */
+  }
+  .btn-ghost:hover{
+    color: var(--ink);
+    background: rgba(232,228,220,0.045);
+  }
+  .btn-ghost:active{ transform: scale(0.985); }
+  .btn:disabled, .btn[disabled]{
+    opacity: 0.35; pointer-events: none;
+  }
+  .btn .arr{
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    transition: transform var(--t-base) var(--ease);
+  }
+  .btn:hover .arr{ transform: translateX(3px); }
+  .btn.btn-back .arr{ transform: rotate(180deg); }
+  .btn.btn-back:hover .arr{ transform: rotate(180deg) translateX(3px); }
+
+  /* --- NAV ROW LAYOUT NORMALIZATION ------------------------------ */
+  .nav-row{
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .nav-row .nav-left,
+  .nav-row .nav-right{
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  /* Disambiguate: when nav-left is empty, the right cluster should
+     still sit to the right (default flex behavior — verified) */
+
+  /* --- FORM INPUT HEIGHT MATCHES BUTTON SYSTEM ------------------- *
+   * Inputs feel like the same family as buttons. Same 48px desktop,
+   * same focus motion curve.
+   */
+  .field input[type="text"],
+  .field input[type="email"]{
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--rule-strong);
+    background: rgba(20,16,26,0.6);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.4;
+    transition:
+      border-color var(--t-base) var(--ease),
+      background var(--t-base) var(--ease),
+      box-shadow var(--t-base) var(--ease);
+  }
+  .field input[type="text"]:hover,
+  .field input[type="email"]:hover{
+    border-color: rgba(123,201,196,0.32);
+  }
+  .field input[type="text"]:focus,
+  .field input[type="email"]:focus{
+    border-color: var(--accent);
+    background: rgba(20,16,26,0.85);
+    box-shadow: 0 0 0 4px rgba(123,201,196,0.10);
+  }
+  .field input::placeholder{ color: var(--ink-mute); opacity: 1; }
+
+  /* --- OPTION ROW NORMALIZATION ---------------------------------- */
+  .opt-row .opt{
+    min-height: 52px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 14.5px; line-height: 1.4;
+    transition:
+      border-color var(--t-base) var(--ease),
+      background var(--t-base) var(--ease),
+      transform 120ms ease;
+  }
+  .opt-row .opt:active{ transform: scale(0.99); }
+
+  /* --- BACKDROP BLUR NORMALIZATION ------------------------------- */
+  .topbar,
+  .progress-wrap{
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+  }
+
+  /* --- FOCUS RING — single token ---------------------------------- */
+  :focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  /* Suppress double-ring on inputs (focus state already styles border + glow) */
+  .field input:focus-visible{ outline: none; }
+  /* Same for buttons — primary already has its own visible focus via shadow */
+  .btn:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  /* --- SCORE-BAR TICK LABELS SAFETY ------------------------------- */
+  .score-bar-tick{ white-space: nowrap; font-size: 9.5px; }
+
+  /* --- TOAST RAISED ABOVE STICKY NAV ON MOBILE -------------------- */
+  @media (max-width: 720px){
+    .toast{
+      bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+
+  /* --- MOBILE HEIGHT BUMPS (overrides via cascade order) ---------- */
+  @media (max-width: 720px){
+    .btn{
+      min-height: 54px;
+      padding: 14px 22px;
+      font-size: 15px;
+    }
+    .btn-ghost{ padding: 14px 18px; }
+    .field input[type="text"],
+    .field input[type="email"]{
+      min-height: 52px;
+      padding: 14px 16px;
+      font-size: 16px;     /* 16px is the iOS-no-zoom threshold */
+    }
+    .opt-row .opt{
+      min-height: 58px;
+      padding: 16px 18px;
+      font-size: 15.5px;
+    }
+    /* Sticky bottom action bar primary keeps the bar's vertical breathing
+       without overflowing the iOS safe area */
+    .screen[data-screen="question"] .nav-row .btn{ min-height: 50px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../" class="wordmark">Ovae</a>
+    <div class="topbar-meta">
+      <a href="../">← Back to site</a>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+
+  <div class="progress-wrap" id="progressWrap" hidden>
+    <div class="progress-meta">
+      <span><span class="pm-current" id="pmCurrent">01</span> <span id="pmDivider"> / 20</span></span>
+      <span id="pmStage">Block B · Readiness</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="pmFill"></div></div>
+  </div>
+
+  <!-- WELCOME -->
+  <section class="screen active" data-screen="welcome">
+    <div class="eyebrow"><span class="num">00</span><span>Readiness Score</span></div>
+    <h1 class="headline">Five minutes to a <em>defensible Phase score.</em></h1>
+    <p class="lede">
+      Twenty questions across the six dimensions that govern AI-native readiness.
+      You'll get back a Phase score (0–3), a per-dimension breakdown, your single
+      highest-leverage next move, and — if you want it — a conversation with the
+      principals who'd run the install.
+    </p>
+    <div class="welcome-cta-row">
+      <button class="btn btn-primary" data-go="profile">
+        Start — 5 min <span class="arr">→</span>
+      </button>
+      <a href="../" class="btn btn-ghost">Read the site first <span class="arr">↗</span></a>
+    </div>
+    <div class="welcome-meta">
+      <span><strong>Built by operators.</strong></span>
+      <span class="sep">·</span>
+      <span>Twenty questions, six dimensions</span>
+      <span class="sep">·</span>
+      <span>Answers stay on your device until you choose to share</span>
+      <span class="sep">·</span>
+      <span>Principal-reviewed within 4 business hours when you send it</span>
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section class="screen" data-screen="profile">
+    <div class="eyebrow"><span class="num">A</span><span>About your company</span></div>
+    <h2 class="subhead">Seven quick questions before the diagnostic. <em>Used only to tailor your report.</em></h2>
+
+    <div class="field-grid" id="profileFields">
+      <div class="field">
+        <label for="A1">Company name</label>
+        <input type="text" id="A1" name="A1" placeholder="e.g. Maple Ridge Trades" autocomplete="organization" />
+      </div>
+
+      <div class="field" data-field-radio="A2">
+        <div class="field-q">Your role</div>
+        <div class="opt-row opt-row-grid" role="radiogroup"></div>
+      </div>
+
+      <div class="field" data-field-radio="A3">
+        <div class="field-q">Annual revenue</div>
+        <div class="opt-row opt-row-grid" role="radiogroup"></div>
+      </div>
+
+      <div class="field" data-field-radio="A4">
+        <div class="field-q">Who makes the final call on a six-figure operations investment?</div>
+        <div class="opt-row" role="radiogroup"></div>
+      </div>
+
+      <div class="field" data-field-radio="A5">
+        <div class="field-q">Full-time headcount</div>
+        <div class="opt-row opt-row-grid" role="radiogroup"></div>
+      </div>
+
+      <div class="field" data-field-radio="A6">
+        <div class="field-q">Which best describes your overhead today?</div>
+        <div class="opt-row" role="radiogroup"></div>
+      </div>
+
+      <div class="field" data-field-radio="A7">
+        <div class="field-q">Do you have an audience or distribution channel? <span class="helper">(newsletter, podcast, social, community)</span></div>
+        <div class="opt-row" role="radiogroup"></div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <div class="nav-left"></div>
+      <div class="nav-right">
+        <button class="btn btn-ghost" data-go="welcome">Cancel</button>
+        <button class="btn btn-primary" id="profileNext">Continue to questions <span class="arr">→</span></button>
+      </div>
+    </div>
+    <p class="err" id="profileErr" hidden></p>
+  </section>
+
+  <!-- QUESTION -->
+  <section class="screen" data-screen="question">
+    <div class="q-meta">
+      <span class="q-dim" id="qDim">Business Intelligence</span>
+      <span>·</span>
+      <span class="q-num" id="qNum">Q1 of 20</span>
+    </div>
+    <h2 class="q-text" id="qText"></h2>
+    <div class="opt-row" id="qOpts" role="radiogroup"></div>
+
+    <div class="nav-row">
+      <div class="nav-left">
+        <button class="btn btn-ghost btn-back" id="qBack" aria-label="Previous question">
+          <span class="arr">→</span> Back
+        </button>
+      </div>
+      <div class="nav-right">
+        <span class="keyboard-hint"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> to answer · <kbd>↵</kbd> to continue</span>
+        <button class="btn btn-primary" id="qNext" disabled>
+          Next <span class="arr">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUE -->
+  <section class="screen" data-screen="value">
+    <div class="eyebrow"><span class="num">C</span><span>The dollar math (optional)</span></div>
+    <h2 class="subhead">Two bands and one sentence. <em>Lets your report show real numbers.</em></h2>
+    <p class="lede">
+      Strictly optional — your report renders fine without these. If you answer,
+      the report frames the value of an Ovae install against numbers from your
+      business, not generic averages.
+    </p>
+
+    <div class="field-grid" id="valueFields">
+      <div class="field" data-field-radio="C1">
+        <div class="field-q">Roughly, what's your annual overhead/payroll you suspect could be leaner?</div>
+        <div class="opt-row opt-row-grid" role="radiogroup"></div>
+      </div>
+      <div class="field" data-field-radio="C2">
+        <div class="field-q">If you could reliably grow revenue, what's a realistic 12-month upside?</div>
+        <div class="opt-row opt-row-grid" role="radiogroup"></div>
+      </div>
+      <div class="field">
+        <label for="C3">What's the one thing eating the most of your or your team's time right now?</label>
+        <div class="helper">free text · one sentence is fine</div>
+        <input type="text" id="C3" name="C3" placeholder="e.g. customer-escalation triage routes through me every day" />
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <div class="nav-left">
+        <button class="btn btn-ghost btn-back" data-go="question-last" aria-label="Back to last question">
+          <span class="arr">→</span> Back
+        </button>
+      </div>
+      <div class="nav-right">
+        <button class="btn btn-ghost" id="valueSkip">Skip — go to my report</button>
+        <button class="btn btn-primary" id="valueNext">Continue <span class="arr">→</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GATE -->
+  <section class="screen" data-screen="gate">
+    <div class="eyebrow"><span class="num">★</span><span>Last step</span></div>
+    <h2 class="subhead">Your report is ready. <em>Name and email to unlock it.</em></h2>
+    <p class="lede">
+      The report renders here in your browser. If you want a copy in your inbox
+      and an optional principal review, send it to the Ovae founders when prompted.
+      <strong>No newsletter list. No drip campaign.</strong>
+    </p>
+
+    <div class="gate-card">
+      <div class="field-grid">
+        <div class="field">
+          <label for="gateName">First name</label>
+          <input type="text" id="gateName" placeholder="Chris" autocomplete="given-name" />
+        </div>
+        <div class="field">
+          <label for="gateEmail">Work email</label>
+          <input type="email" id="gateEmail" placeholder="chris@yourcompany.com" autocomplete="email" />
+        </div>
+      </div>
+      <div class="nav-row" style="margin-top: 12px; padding-top: 18px;">
+        <div class="nav-left">
+          <button class="btn btn-ghost btn-back" data-go="value" aria-label="Back to value">
+            <span class="arr">→</span> Back
+          </button>
+        </div>
+        <div class="nav-right">
+          <button class="btn btn-primary" id="gateNext">Show me my report <span class="arr">→</span></button>
+        </div>
+      </div>
+      <p class="err" id="gateErr" hidden></p>
+      <p class="gate-meta">
+        <strong>What we do with this:</strong> the report renders client-side; nothing is sent
+        anywhere until you click the "Send to the founders" button on the next screen.
+        That opens an email draft addressed to <strong>hello@ovae.ai</strong> with your full
+        diagnostic — you decide whether to hit send.
+      </p>
+    </div>
+  </section>
+
+  <!-- REPORT -->
+  <section class="screen" data-screen="report">
+    <div class="report-header">
+      <div class="report-eyebrow" id="repEyebrow">Your AI-Native Readiness Report</div>
+      <h1 class="report-headline" id="repHeadline"></h1>
+      <p class="report-sub" id="repSub"></p>
+    </div>
+
+    <div class="score-hero">
+      <div class="score-grid">
+        <div>
+          <div class="score-numblock">
+            <div class="score-num-lbl">Readiness score</div>
+            <div class="score-num" id="repScoreNum"></div>
+            <div class="score-band" id="repScoreBand"></div>
+          </div>
+        </div>
+        <div>
+          <div class="score-phase-block">
+            <div class="score-phase-lbl">Maturity phase</div>
+            <div class="score-phase-val" id="repPhaseVal"></div>
+            <p class="score-band-copy" id="repBandCopy"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dim-chart">
+      <div class="dim-chart-lbl">Score by dimension · highest → lowest</div>
+      <div id="repDims"></div>
+      <p class="dim-constraint-note">
+        <strong>Why the lowest dimension is your constraint:</strong>
+        the phases are sequential — you can't make a low-dimension area AI-native by
+        skipping it. Brain first, then visibility, then automation, then scale.
+        Whatever scores lowest is the work that unlocks everything stacked on top of it.
+      </p>
+    </div>
+
+    <div class="opps">
+      <div class="opps-lbl">Your top 3 opportunities · fix-order</div>
+      <div class="opps-grid" id="repOpps"></div>
+    </div>
+
+    <div class="value-frame" id="repValueFrame">
+      <div class="value-lbl">The math we'd validate together</div>
+      <p class="value-copy" id="repValueCopy"></p>
+    </div>
+
+    <div class="engagement">
+      <div class="engagement-lbl">If we worked together — 120-day Embed shape</div>
+      <h3>A 120-day flagship engagement, <em>personalized to your constraint.</em></h3>
+      <div class="engagement-steps">
+        <div class="engagement-step">
+          <div class="engagement-step-day">Days 0–10</div>
+          <div class="engagement-step-name">Diagnose &amp; Set Vision</div>
+          <div class="engagement-step-body" id="repEng1">We'd start where you scored lowest.</div>
+        </div>
+        <div class="engagement-step">
+          <div class="engagement-step-day">Days 10–30</div>
+          <div class="engagement-step-name">See — single source of truth</div>
+          <div class="engagement-step-body">Company Brain live, first dashboard wired, KPI baseline.</div>
+        </div>
+        <div class="engagement-step">
+          <div class="engagement-step-day">Days 30–75</div>
+          <div class="engagement-step-name">Validate &amp; Automate</div>
+          <div class="engagement-step-body">Highest-value workflow proven by hand, then built as a governed agent.</div>
+        </div>
+        <div class="engagement-step">
+          <div class="engagement-step-day">Days 75–120</div>
+          <div class="engagement-step-name">Train &amp; Hand Off</div>
+          <div class="engagement-step-body">Your team running the cadence without us. Governed handoff on a named list.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="report-cta" id="repCta">
+      <div class="report-cta-flag" id="repFlag"></div>
+      <h3 id="repCtaHead"></h3>
+      <p id="repCtaBody"></p>
+      <div class="report-cta-row">
+        <button class="btn btn-primary" id="repCtaPrimary"></button>
+        <button class="btn btn-secondary" id="repCtaShare">Copy report link <span class="arr">↗</span></button>
+        <span class="scarcity">We take on a handful of flagship engagements per year.</span>
+      </div>
+    </div>
+
+    <div class="report-foot">
+      <div>
+        <a href="#" id="repRestart">Restart the diagnostic ↺</a>
+      </div>
+      <div>
+        Your answers stay on your device. Sending the email is the one moment they leave it.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="page">
+    © 2026 Ovae &nbsp;·&nbsp; Austin, TX (US Central)
+    &nbsp;·&nbsp; <span class="etym">Ovae — Latin, plural of <em>ovum</em>: eggs, origins.</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast">Link copied to clipboard.</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ============================================================
+  // SAFE DOM HELPERS — textContent + createElement only, no innerHTML
+  // ============================================================
+  function makeEl(tag, opts){
+    opts = opts || {};
+    var el = document.createElement(tag);
+    if (opts.cls) el.className = opts.cls;
+    if (opts.text != null) el.textContent = opts.text;
+    if (opts.attrs){
+      Object.keys(opts.attrs).forEach(function(k){ el.setAttribute(k, opts.attrs[k]); });
+    }
+    if (opts.style) el.setAttribute('style', opts.style);
+    if (opts.children){
+      opts.children.forEach(function(c){
+        el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+      });
+    }
+    return el;
+  }
+  function clear(el){
+    while (el.firstChild) el.removeChild(el.firstChild);
+  }
+  function setNodes(el, nodes){
+    clear(el);
+    nodes.forEach(function(n){
+      el.appendChild(typeof n === 'string' ? document.createTextNode(n) : n);
+    });
+  }
+
+  // ============================================================
+  // SOURCE OF TRUTH — questions, options, dimensions, weights
+  // Verbatim from projects/practice/03-diagnostic/readiness-diagnostic.md
+  // ============================================================
+
+  var PROFILE_OPTS = {
+    A2: [
+      { v: 'founder',  l: 'Founder / CEO / Owner' },
+      { v: 'csuite',   l: 'C-suite (non-founder)' },
+      { v: 'vp',       l: 'VP / Director' },
+      { v: 'other',    l: 'Other' }
+    ],
+    A3: [
+      { v: '<3m',      l: 'Under $3M' },
+      { v: '3-5m',     l: '$3–5M' },
+      { v: '5-10m',    l: '$5–10M' },
+      { v: '10-25m',   l: '$10–25M' },
+      { v: '25-50m',   l: '$25–50M' },
+      { v: '50m+',     l: '$50M+' }
+    ],
+    A4: [
+      { v: 'me',       l: 'Me alone' },
+      { v: 'partner',  l: 'Me + one partner' },
+      { v: 'team',     l: 'A small leadership team' },
+      { v: 'board',    l: 'A board / committee / PE sponsor' }
+    ],
+    A5: [
+      { v: '1-10',     l: '1–10' },
+      { v: '11-25',    l: '11–25' },
+      { v: '26-75',    l: '26–75' },
+      { v: '76-200',   l: '76–200' },
+      { v: '200+',     l: '200+' }
+    ],
+    A6: [
+      { v: 'lean',     l: 'Lean — every role is essential' },
+      { v: 'patch',    l: 'Some roles exist to patch broken process' },
+      { v: 'bloated',  l: "We've grown headcount faster than output" },
+      { v: 'unsure',   l: 'Not sure' }
+    ],
+    A7: [
+      { v: 'sizable',  l: 'Yes, sizable (10k+)' },
+      { v: 'small',    l: 'Yes, small / growing' },
+      { v: 'no',       l: 'No' },
+      { v: 'na',       l: 'Not relevant to us' }
+    ]
+  };
+
+  var QUESTIONS = [
+    { dim: 'BI', text: 'When you want to know "how is the business doing right now?", how do you find out?',
+      opts: [
+        'I ask someone to pull numbers, or I check my gut — there’s no single place',
+        'I open a few spreadsheets or tools and assemble the picture myself',
+        'I open one dashboard the team maintains and trust most of it',
+        'I glance at one live dashboard I fully trust; it’s how we run' ] },
+    { dim: 'BI', text: 'Is there a single source of truth — one dashboard or BI layer — that you, the CEO, actually look at?',
+      opts: [
+        'No',
+        'Sort of — it exists but I don’t trust it or rarely open it',
+        'Yes, and I reference it weekly',
+        'Yes, and the whole leadership team runs off it daily' ] },
+    { dim: 'BI', text: 'How are your core metrics assembled?',
+      opts: [
+        'They aren’t defined; numbers live in people’s heads or scattered files',
+        'Defined, but someone hand-assembles them into a report',
+        'Defined and pulled automatically from source systems into one view',
+        'Defined, automatic, and they drive decisions and trigger work' ] },
+    { dim: 'BI', text: 'Do you have an operating cadence — a recurring meeting or scoreboard that keeps the company on track?',
+      opts: [
+        'No real rhythm; planning is annual or reactive',
+        'We’ve tried; it doesn’t reliably stick',
+        'Yes — a real weekly meeting with a metric scoreboard',
+        'Yes — a connected BHAG→annual→quarterly→weekly rhythm that holds' ] },
+
+    { dim: 'AUTO', text: 'How many meaningful workflows (not toy demos) currently run on automation or AI agents?',
+      opts: [
+        'None',
+        'One, and it’s brittle / experimental',
+        'Two or more, running reliably with humans supervising',
+        'Several, and they’re a maintained system we keep improving' ] },
+    { dim: 'AUTO', text: 'When you automate something, do you prove it works by hand first?',
+      opts: [
+        'We don’t automate anything yet',
+        'We jump straight to building; results are hit or miss',
+        'Usually — we hand-run the workflow, then automate the proven version',
+        'Always — validate-before-automate is just how we operate' ] },
+    { dim: 'AUTO', text: 'For work that AI/automation does, what’s your team’s role?',
+      opts: [
+        'The team does all the work manually',
+        'A few people use AI tools for personal tasks',
+        'The team supervises the automations rather than executing the work',
+        'The team owns and evolves the automated system itself' ] },
+    { dim: 'AUTO', text: 'Are your automations maintained, or do they quietly break?',
+      opts: [
+        'We have none',
+        'We built some things that are now half-broken / abandoned',
+        'They’re owned and monitored; someone fixes them when they drift',
+        'They’re a living system that adapts as the AI models change' ] },
+
+    { dim: 'DATA', text: 'Do your core systems (CRM, finance, ops, marketing) talk to each other?',
+      opts: [
+        'No — everything is a silo; data is re-keyed by hand',
+        'A couple are connected; most aren’t',
+        'Most core systems feed one central place automatically',
+        'Everything is connected; data flows without anyone moving it' ] },
+    { dim: 'DATA', text: 'If you wanted to answer a new question about the business, could you get clean data to do it?',
+      opts: [
+        'No — the data is messy, scattered, or untrusted',
+        'With significant manual cleanup and a few days',
+        'Yes, mostly — the data is consolidated and reasonably clean',
+        'Yes, immediately — and an agent could query it for me' ] },
+    { dim: 'DATA', text: 'Is your data ready for AI to act on (not just to look at)?',
+      opts: [
+        'Haven’t thought about it / no',
+        'Some data is structured, but not for automation',
+        'Our key workflows have clean data feeding them',
+        'Our planning, metrics, and automations all run off one connected data layer' ] },
+
+    { dim: 'TEAM', text: 'Over the last two years, how has output moved relative to headcount?',
+      opts: [
+        'We added people to keep up; output barely moved',
+        'Output grew, but only by adding proportional headcount',
+        'Output rose faster than headcount on at least one function',
+        'We’ve grown output meaningfully without adding heads — and can prove it' ] },
+    { dim: 'TEAM', text: 'Are your important processes documented, or do they live in people’s heads?',
+      opts: [
+        'In people’s heads; if someone leaves, knowledge leaves',
+        'A few are written down; most aren’t',
+        'Core processes are documented and followed',
+        'Documented, and increasingly run by agents the team supervises' ] },
+    { dim: 'TEAM', text: 'Could you point to a cost line that fell, or output that rose, because of AI/automation — with a number?',
+      opts: [
+        'No',
+        'We think so, but we can’t put a number on it',
+        'Yes — one clear before/after with a real number',
+        'Yes — multiple, and we track the leverage continuously' ] },
+
+    { dim: 'FNDR', text: 'How many important decisions get made without you in the room?',
+      opts: [
+        'Almost none — most decisions route through me',
+        'Some routine ones; the important ones still need me',
+        'Many — the team decides within clear guardrails',
+        'Nearly all — I’d only step in on the truly strategic' ] },
+    { dim: 'FNDR', text: 'If you disappeared for two weeks with no contact, what happens to the core operation?',
+      opts: [
+        'It stalls within days — I’m the integration layer',
+        'It limps; several things wait for me',
+        'It runs fine on the routine; a few decisions queue up',
+        'It runs and even improves — the system, not me, runs the company' ] },
+    { dim: 'FNDR', text: 'How much of your week is spent in the business (operating) vs. on the business (growth/vision)?',
+      opts: [
+        'Almost entirely in the business — I’m firefighting',
+        'Mostly in the business',
+        'A real split — I’ve reclaimed time for growth',
+        'Mostly on the business — operations run without me' ] },
+
+    { dim: 'REV', text: 'How does your revenue engine (marketing/sales/fulfillment) run?',
+      opts: [
+        'On heroics — specific people hustling; no system',
+        'Some playbooks exist, but it depends on individuals',
+        'It runs on documented, repeatable systems',
+        'It’s instrumented and partly automated; the system finds and converts demand' ] },
+    { dim: 'REV', text: 'Do you have visibility into what’s actually driving revenue?',
+      opts: [
+        'No — revenue is a surprise each month',
+        'Lagging only — we see it after the fact',
+        'Yes — we see the leading indicators on the dashboard',
+        'Yes — and the system acts on them automatically' ] },
+    { dim: 'REV', text: 'Is there obvious room to grow revenue with the customers/market you already have?',
+      opts: [
+        'Not sure — we can’t see the opportunity clearly',
+        'Probably, but we’re not equipped to capture it',
+        'Yes, and we’re starting to systematically pursue it',
+        'Yes, and our AI-native engine is already capturing it' ] }
+  ];
+
+  var VALUE_OPTS = {
+    C1: [
+      { v: '<250k',  l: '< $250K' },
+      { v: '250k-1m',l: '$250K – $1M' },
+      { v: '1m-3m',  l: '$1M – $3M' },
+      { v: '3m+',    l: '$3M+' },
+      { v: 'unsure', l: 'Not sure' }
+    ],
+    C2: [
+      { v: '<500k',  l: '< $500K' },
+      { v: '500k-2m',l: '$500K – $2M' },
+      { v: '2m-5m',  l: '$2M – $5M' },
+      { v: '5m+',    l: '$5M+' },
+      { v: 'unsure', l: 'Not sure' }
+    ]
+  };
+
+  var DIM_META = {
+    BI:   { name: 'Business Intelligence', weight: 1.5 },
+    AUTO: { name: 'Workflow Automation',   weight: 1.0 },
+    DATA: { name: 'Data Infrastructure',   weight: 1.0 },
+    TEAM: { name: 'Team Leverage',         weight: 1.0 },
+    FNDR: { name: 'Founder Bottleneck',    weight: 1.5 },
+    REV:  { name: 'Revenue Engine',        weight: 1.0 }
+  };
+  var TIE_BREAK = ['BI','DATA','FNDR','AUTO','TEAM','REV'];
+  var DIM_PHASE_LABEL = ['Blind / Manual', 'Visible / Starting', 'Working / Leveraged', 'AI-Native'];
+
+  var BANDS = [
+    { min: 0,  max: 25,  name: 'Blind',     phase: 'Phase 0 — Manual / Blind',
+      copy: "You're running on yourself. The business lives in your head and a pile of disconnected tools. The single highest-leverage move is visibility — before any AI." },
+    { min: 26, max: 50,  name: 'Surfacing', phase: 'Phase 0 → 1',
+      copy: "You can see some of the business but not trust it yet. You're one solid BI layer away from making faster, safer decisions — the foundation everything else stacks on." },
+    { min: 51, max: 75,  name: 'Leveraged', phase: 'Phase 1 → 2',
+      copy: "You can see the business and you've started to automate. The opportunity now is validated automation on your highest-value workflows — turning visibility into leverage." },
+    { min: 76, max: 100, name: 'AI-Native', phase: 'Phase 2 → 3',
+      copy: "You're operating ahead of nearly everyone. The work now is connecting plan→see→act into one loop and getting you fully out of the bottleneck — Founder-to-System." }
+  ];
+
+  var OPP_COPY = {
+    BI:   { h: 'Give yourself a single source of truth',
+            b: "You can't automate or grow what you can't see. The first move is one trusted dashboard wired to your source systems — the foundation every later gain stacks on." },
+    AUTO: { h: 'Automate your highest-value workflow — validated first',
+            b: 'You have visibility; now turn it into leverage. We hand-run your top workflow, prove the before/after, then build it as an agent you can trust.' },
+    DATA: { h: 'Connect your systems so data flows without hands',
+            b: "Your tools don't talk, so your team re-keys data and your AI has nothing clean to act on. Connecting them unlocks both visibility and automation." },
+    TEAM: { h: 'Turn headcount into supervised leverage',
+            b: 'Output is tied to heads. Documenting and automating core processes lets the team supervise systems instead of executing tasks — output rises without hiring.' },
+    FNDR: { h: 'Get yourself out of the bottleneck',
+            b: 'Most decisions still route through you. Moving you out of the critical path is the deepest transformation — Founder-to-System — and it compounds everything else.' },
+    REV:  { h: 'Put your revenue engine on a system',
+            b: 'Revenue runs on heroics and you see it only after the fact. Instrumenting and partly automating the engine makes growth repeatable and visible.' }
+  };
+
+  var C1_MID = { '<250k': 125000, '250k-1m': 625000, '1m-3m': 2000000, '3m+': 5000000 };
+  var C2_MID = { '<500k': 250000, '500k-2m': 1250000, '2m-5m': 3500000, '5m+': 8000000 };
+  var C1_LBL = { '<250k': 'under $250K', '250k-1m': '$250K–$1M', '1m-3m': '$1M–$3M', '3m+': '$3M+' };
+  var C2_LBL = { '<500k': 'under $500K', '500k-2m': '$500K–$2M', '2m-5m': '$2M–$5M', '5m+': '$5M+' };
+
+  // ============================================================
+  // STATE
+  // ============================================================
+  var state = {
+    profile: { A1: '', A2: null, A3: null, A4: null, A5: null, A6: null, A7: null },
+    answers: new Array(QUESTIONS.length).fill(null),
+    qIdx:    0,
+    value:   { C1: null, C2: null, C3: '' },
+    contact: { name: '', email: '' }
+  };
+
+  // ============================================================
+  // ROUTING / PROGRESS
+  // ============================================================
+  var screens = Array.prototype.slice.call(document.querySelectorAll('.screen'));
+  function show(name){
+    screens.forEach(function(s){
+      s.classList.toggle('active', s.getAttribute('data-screen') === name);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateProgress(name);
+  }
+  function updateProgress(name){
+    var wrap = document.getElementById('progressWrap');
+    var fill = document.getElementById('pmFill');
+    var cur  = document.getElementById('pmCurrent');
+    var div  = document.getElementById('pmDivider');
+    var stg  = document.getElementById('pmStage');
+
+    if (name === 'question'){
+      wrap.hidden = false;
+      var total = QUESTIONS.length;
+      var n = state.qIdx + 1;
+      cur.textContent = ('0' + n).slice(-2);
+      div.textContent = ' / ' + total;
+      stg.textContent = 'Block B · Readiness · ' + DIM_META[QUESTIONS[state.qIdx].dim].name;
+      fill.style.width = ((n / total) * 100) + '%';
+    } else if (name === 'profile'){
+      wrap.hidden = false;
+      cur.textContent = '01';  div.textContent = ' / 4';
+      stg.textContent = 'Block A · Profile';
+      fill.style.width = '12%';
+    } else if (name === 'value'){
+      wrap.hidden = false;
+      cur.textContent = '03';  div.textContent = ' / 4';
+      stg.textContent = 'Block C · Value math (optional)';
+      fill.style.width = '88%';
+    } else if (name === 'gate'){
+      wrap.hidden = false;
+      cur.textContent = '04';  div.textContent = ' / 4';
+      stg.textContent = 'Last step';
+      fill.style.width = '96%';
+    } else {
+      wrap.hidden = true;
+    }
+  }
+
+  // ============================================================
+  // RADIO RENDERER (safe — text-only options)
+  // ============================================================
+  function renderRadioGroup(container, opts, selectedIdx, onSelect, showKeyHints){
+    clear(container);
+    opts.forEach(function(opt, i){
+      var btn = makeEl('button', {
+        cls: 'opt',
+        attrs: {
+          type: 'button',
+          role: 'radio',
+          'aria-checked': selectedIdx === i ? 'true' : 'false',
+          'data-idx': String(i)
+        },
+        children: [ makeEl('span', { cls: 'opt-dot' }),
+                    makeEl('span', { cls: 'opt-lbl', text: typeof opt === 'string' ? opt : opt.l }) ]
+      });
+      if (showKeyHints){
+        btn.appendChild(makeEl('span', { cls: 'opt-key', text: String(i + 1) }));
+      }
+      btn.addEventListener('click', function(){ onSelect(i); });
+      container.appendChild(btn);
+    });
+  }
+
+  function bindRadioField(fieldKey, optsArr, onSet){
+    var field = document.querySelector('[data-field-radio="' + fieldKey + '"] .opt-row');
+    if (!field) return;
+    var current = null;
+    function rerender(){
+      renderRadioGroup(field, optsArr, current, function(i){
+        current = i;
+        onSet(optsArr[i].v);
+        rerender();
+      }, false);
+    }
+    rerender();
+  }
+
+  // ============================================================
+  // PROFILE
+  // ============================================================
+  function initProfile(){
+    Object.keys(PROFILE_OPTS).forEach(function(key){
+      bindRadioField(key, PROFILE_OPTS[key], function(v){ state.profile[key] = v; });
+    });
+    document.getElementById('A1').addEventListener('input', function(e){ state.profile.A1 = e.target.value; });
+  }
+
+  document.getElementById('profileNext').addEventListener('click', function(){
+    var err = document.getElementById('profileErr');
+    var missing = [];
+    if (!state.profile.A1 || !state.profile.A1.trim()) missing.push('Company name');
+    ['A2','A3','A4','A5','A6','A7'].forEach(function(k){
+      if (!state.profile[k]) missing.push(k);
+    });
+    if (missing.length){
+      err.hidden = false;
+      err.textContent = 'Please complete all seven fields before continuing.';
+      return;
+    }
+    err.hidden = true;
+    state.qIdx = 0;
+    show('question');
+    renderQuestion();
+  });
+
+  // ============================================================
+  // QUESTIONS
+  // ============================================================
+  function renderQuestion(){
+    var q = QUESTIONS[state.qIdx];
+    document.getElementById('qDim').textContent = DIM_META[q.dim].name;
+    document.getElementById('qNum').textContent = 'Q' + (state.qIdx + 1) + ' of ' + QUESTIONS.length;
+    document.getElementById('qText').textContent = q.text;
+
+    var container = document.getElementById('qOpts');
+    var selected = state.answers[state.qIdx];
+    renderRadioGroup(container, q.opts, selected, function(i){
+      state.answers[state.qIdx] = i;
+      renderQuestion();
+    }, true);
+
+    document.getElementById('qBack').style.visibility = state.qIdx === 0 ? 'hidden' : 'visible';
+    document.getElementById('qNext').disabled = state.answers[state.qIdx] === null;
+    setNodes(document.getElementById('qNext'), [
+      state.qIdx === QUESTIONS.length - 1 ? 'Continue ' : 'Next ',
+      makeEl('span', { cls: 'arr', text: '→' })
+    ]);
+    updateProgress('question');
+  }
+
+  document.getElementById('qBack').addEventListener('click', function(){
+    if (state.qIdx > 0){ state.qIdx--; renderQuestion(); }
+    else { show('profile'); }
+  });
+  document.getElementById('qNext').addEventListener('click', function(){
+    if (state.answers[state.qIdx] === null) return;
+    if (state.qIdx < QUESTIONS.length - 1){
+      state.qIdx++;
+      renderQuestion();
+    } else {
+      show('value');
+    }
+  });
+
+  document.addEventListener('keydown', function(e){
+    var activeScreen = document.querySelector('.screen.active');
+    if (!activeScreen || activeScreen.getAttribute('data-screen') !== 'question') return;
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+
+    if (e.key >= '1' && e.key <= '4'){
+      state.answers[state.qIdx] = parseInt(e.key, 10) - 1;
+      renderQuestion();
+    } else if (e.key === 'Enter'){
+      if (state.answers[state.qIdx] !== null) document.getElementById('qNext').click();
+    } else if (e.key === 'Backspace' || e.key === 'ArrowLeft'){
+      document.getElementById('qBack').click();
+    } else if (e.key === 'ArrowRight'){
+      if (state.answers[state.qIdx] !== null) document.getElementById('qNext').click();
+    }
+  });
+
+  // ============================================================
+  // VALUE
+  // ============================================================
+  function initValue(){
+    ['C1','C2'].forEach(function(key){
+      bindRadioField(key, VALUE_OPTS[key], function(v){ state.value[key] = v; });
+    });
+    document.getElementById('C3').addEventListener('input', function(e){ state.value.C3 = e.target.value; });
+  }
+  document.getElementById('valueNext').addEventListener('click', function(){ show('gate'); });
+  document.getElementById('valueSkip').addEventListener('click', function(){ show('gate'); });
+
+  // ============================================================
+  // GATE
+  // ============================================================
+  document.getElementById('gateNext').addEventListener('click', function(){
+    var err = document.getElementById('gateErr');
+    var name = document.getElementById('gateName').value.trim();
+    var email = document.getElementById('gateEmail').value.trim();
+    var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!name || !emailOk){
+      err.hidden = false;
+      err.textContent = !name ? 'First name is required.' : 'Please enter a valid work email.';
+      return;
+    }
+    err.hidden = true;
+    state.contact.name = name;
+    state.contact.email = email;
+    renderReport();
+    show('report');
+  });
+  document.getElementById('gateName').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') document.getElementById('gateEmail').focus();
+  });
+  document.getElementById('gateEmail').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') document.getElementById('gateNext').click();
+  });
+
+  // ============================================================
+  // SCORING (spec §3–§5)
+  // ============================================================
+  function score(){
+    var dim = {};
+    Object.keys(DIM_META).forEach(function(d){ dim[d] = { raw: 0, count: 0 }; });
+
+    QUESTIONS.forEach(function(q, i){
+      var a = state.answers[i] === null ? 0 : state.answers[i];
+      dim[q.dim].raw += a;
+      dim[q.dim].count += 1;
+    });
+
+    var dims = {};
+    Object.keys(dim).forEach(function(d){
+      var raw = dim[d].raw;
+      var count = dim[d].count;
+      var max = count * 3;
+      var pct = max > 0 ? raw / max : 0;
+      var phase = Math.round(count > 0 ? raw / count : 0);
+      dims[d] = { raw: raw, count: count, max: max, pct: pct, phase: phase, label: DIM_PHASE_LABEL[phase] };
+    });
+
+    var weightedSum = 0, weightTotal = 0;
+    Object.keys(DIM_META).forEach(function(d){
+      weightedSum += DIM_META[d].weight * dims[d].pct;
+      weightTotal += DIM_META[d].weight;
+    });
+    var readiness = Math.round((weightedSum / weightTotal) * 100);
+
+    var phasesSum = Object.keys(dims).reduce(function(s, d){ return s + dims[d].phase; }, 0);
+    var center = Math.round(phasesSum / 6);
+
+    var band = BANDS.find(function(b){ return readiness >= b.min && readiness <= b.max; }) || BANDS[0];
+
+    var lowest = TIE_BREAK[0];
+    var lowestPct = dims[lowest].pct;
+    TIE_BREAK.forEach(function(d){
+      if (dims[d].pct < lowestPct){ lowest = d; lowestPct = dims[d].pct; }
+    });
+
+    var top3 = TIE_BREAK
+      .map(function(d){ return { d: d, pct: dims[d].pct, tieIdx: TIE_BREAK.indexOf(d) }; })
+      .sort(function(a, b){ return a.pct === b.pct ? a.tieIdx - b.tieIdx : a.pct - b.pct; })
+      .slice(0, 3)
+      .map(function(x){ return x.d; });
+
+    var icp = 0;
+    var A3 = state.profile.A3;
+    if (A3 === '5-10m' || A3 === '10-25m') icp += 2;
+    else if (A3 === '3-5m' || A3 === '25-50m') icp += 1;
+
+    var A4 = state.profile.A4;
+    if (A4 === 'me' || A4 === 'partner') icp += 2;
+    else if (A4 === 'team') icp += 1;
+
+    if (state.profile.A2 === 'founder') icp += 1;
+    if (state.profile.A6 === 'patch' || state.profile.A6 === 'bloated') icp += 1;
+    if (state.answers[19] !== null && state.answers[19] >= 1) icp += 1;
+    if (readiness < 76) icp += 1;
+    if (state.profile.A7 === 'sizable') icp += 1;
+    else if (state.profile.A7 === 'small') icp += 0.5;
+
+    var hardDisq = (state.profile.A3 === '<3m') || (state.profile.A4 === 'board');
+    var flag = 'nurture';
+    if (!hardDisq){
+      if (icp >= 6) flag = 'flagship';
+      else if (icp >= 3.5) flag = 'qualified';
+    }
+
+    return { dims: dims, readiness: readiness, center: center, band: band, lowest: lowest, top3: top3, icp: icp, flag: flag };
+  }
+
+  // ============================================================
+  // REPORT (DOM-method only)
+  // ============================================================
+  function fmtUsd(n){
+    if (n >= 1000000) return '$' + (Math.round(n / 100000) / 10).toFixed(n >= 10000000 ? 0 : 1) + 'M';
+    if (n >= 1000) return '$' + Math.round(n / 1000) + 'K';
+    return '$' + n;
+  }
+
+  function renderReport(){
+    var s = score();
+    var compName = state.profile.A1 || 'your company';
+
+    // Header
+    document.getElementById('repEyebrow').textContent = 'Your AI-Native Readiness Report · ' + compName;
+    setNodes(document.getElementById('repHeadline'), [
+      state.contact.name + ', here is where ',
+      makeEl('strong', { text: compName }),
+      ' sits today.'
+    ]);
+    setNodes(document.getElementById('repSub'), [
+      'Across six dimensions, your business reads as ',
+      makeEl('strong', { text: s.band.name }),
+      '. The single biggest unlock is your ',
+      makeEl('strong', { text: DIM_META[s.lowest].name }),
+      ' dimension — your constraint. Everything else compounds once that’s moved.'
+    ]);
+
+    // Score hero
+    var scoreNum = document.getElementById('repScoreNum');
+    setNodes(scoreNum, [
+      String(s.readiness),
+      makeEl('span', { cls: 'of', text: ' / 100' })
+    ]);
+    document.getElementById('repScoreBand').textContent = s.band.name;
+    setNodes(document.getElementById('repPhaseVal'), [
+      'Phase ',
+      makeEl('strong', { text: String(s.center) }),
+      ' / 3 · ' + s.band.phase
+    ]);
+    document.getElementById('repBandCopy').textContent = s.band.copy;
+
+    // Dimensions
+    var dimsContainer = document.getElementById('repDims');
+    clear(dimsContainer);
+    var sortedHighLow = Object.keys(s.dims)
+      .map(function(d){ return { d: d, pct: s.dims[d].pct }; })
+      .sort(function(a, b){ return b.pct - a.pct; });
+
+    sortedHighLow.forEach(function(item){
+      var d = item.d;
+      var isLowest = d === s.lowest;
+      var nameChildren = [DIM_META[d].name];
+      if (isLowest){
+        nameChildren.push(makeEl('span', { cls: 'fix-flag', text: '← fix this first' }));
+      }
+      var fill = makeEl('div', { cls: 'dim-row-bar-fill', style: '--p: ' + s.dims[d].pct + ';' });
+      var bar = makeEl('div', { cls: 'dim-row-bar', children: [fill] });
+
+      var row = makeEl('div', {
+        cls: 'dim-row',
+        attrs: isLowest ? { 'data-lowest': '1' } : {},
+        children: [
+          makeEl('div', { cls: 'dim-row-name', children: nameChildren }),
+          bar,
+          makeEl('div', { cls: 'dim-row-label', text: s.dims[d].label })
+        ]
+      });
+      dimsContainer.appendChild(row);
+    });
+
+    // Top 3 opps
+    var oppsContainer = document.getElementById('repOpps');
+    clear(oppsContainer);
+    s.top3.forEach(function(d, idx){
+      var rank = makeEl('div', {
+        cls: 'opp-rank',
+        children: [
+          makeEl('span', { cls: 'num', text: ('0' + (idx + 1)).slice(-2) }),
+          makeEl('span', { text: DIM_META[d].name + ' · ' + s.dims[d].label }),
+          makeEl('span', { cls: 'constraint-tag', text: 'your constraint' })
+        ]
+      });
+      var card = makeEl('article', {
+        cls: 'opp-card',
+        attrs: { 'data-rank': String(idx + 1) },
+        children: [
+          rank,
+          makeEl('h3', { cls: 'opp-headline', text: OPP_COPY[d].h }),
+          makeEl('p',  { cls: 'opp-body',     text: OPP_COPY[d].b })
+        ]
+      });
+      oppsContainer.appendChild(card);
+    });
+
+    // Value framing
+    var vc = document.getElementById('repValueCopy');
+    var c1 = state.value.C1, c2 = state.value.C2;
+    if (c1 && c1 !== 'unsure' && c2 && c2 !== 'unsure'){
+      var c1Mid = C1_MID[c1] || 0;
+      var c2Mid = C2_MID[c2] || 0;
+      var total = c1Mid + c2Mid;
+      var lo = Math.round(total * 0.25);
+      var hi = Math.round(total * 0.40);
+      setNodes(vc, [
+        'You flagged roughly ',
+        makeEl('strong', { text: C1_LBL[c1] || c1 }),
+        ' in overhead that could be leaner and a realistic ',
+        makeEl('strong', { text: C2_LBL[c2] || c2 }),
+        ' in unrealized revenue. If an AI-Native install captured even a fraction of that — say a third — that’s ',
+        makeEl('strong', { text: fmtUsd(lo) + '–' + fmtUsd(hi) }),
+        ' in annual value. ',
+        makeEl('em', { text: 'Our engagement is priced as a fraction of the value we uncover, never by the hour. The discovery call is where we put real numbers on this for your business.' })
+      ]);
+    } else {
+      setNodes(vc, [
+        makeEl('em', { text: 'The discovery call is where we size this — most founders are surprised how concrete it gets in 30 minutes.' }),
+        ' We work from your actual numbers, not generic averages, and the engagement is priced as a fraction of the value we uncover.'
+      ]);
+    }
+
+    // Strip any prior C3 note then re-append fresh if present
+    var existingC3 = document.querySelector('#repValueFrame .value-c3');
+    if (existingC3) existingC3.remove();
+    if (state.value.C3 && state.value.C3.trim()){
+      var note = makeEl('p', {
+        cls: 'value-c3',
+        children: [
+          makeEl('strong', { text: 'What’s eating the most time: ' }),
+          state.value.C3,
+          makeEl('span', { cls: 'value-c3-tag', text: '— this is where the discovery call would start.' })
+        ]
+      });
+      document.getElementById('repValueFrame').appendChild(note);
+    }
+
+    // Engagement step 1
+    document.getElementById('repEng1').textContent =
+      'We’d start where you scored lowest: ' + DIM_META[s.lowest].name + '. ' +
+      'Charter, baseline KPIs, Evidence Core architecture deployed.';
+
+    // CTA
+    var flag = document.getElementById('repFlag');
+    var head = document.getElementById('repCtaHead');
+    var body = document.getElementById('repCtaBody');
+    var primary = document.getElementById('repCtaPrimary');
+
+    flag.setAttribute('data-flag', s.flag);
+    if (s.flag === 'flagship'){
+      flag.textContent = '★ Flagship-fit · founder-led, ICP, room to install';
+      setNodes(head, [ 'You’re a flagship-fit. ', makeEl('em', { text: 'Talk to CT & Isaiah directly.' }) ]);
+      body.textContent = "When the ICP signals line up like this — founder-led, decisive buyer, room to install, audience or distribution attached — we recommend a 30-minute call with the principals before anything else. The diagnostic above is what we’d walk through.";
+      setNodes(primary, [ 'Book a 30-min call with CT & Isaiah ', makeEl('span', { cls: 'arr', text: '→' }) ]);
+    } else if (s.flag === 'qualified'){
+      flag.textContent = '◇ Qualified · discovery call queue';
+      setNodes(head, [ 'Strong fit. ', makeEl('em', { text: 'Let’s talk.' }) ]);
+      body.textContent = "Most of the signals line up. A 30-minute discovery call lets us route you to the right rung — Spark, Build, or Embed — based on what your numbers actually show, not what the diagnostic guessed.";
+      setNodes(primary, [ 'Book a 30-min discovery call ', makeEl('span', { cls: 'arr', text: '→' }) ]);
+    } else {
+      flag.textContent = '○ Nurture · content + playbook';
+      setNodes(head, [ 'Stay close. ', makeEl('em', { text: 'Get the playbook.' }) ]);
+      body.textContent = "Right now an Embed isn’t the highest-leverage move. The Brain-first playbook plus The Operator’s AI Digest will keep you moving — and when revenue, role, or the buying structure shifts, the next move is the diagnostic, not another tool.";
+      setNodes(primary, [ 'Send me the playbook + Digest ', makeEl('span', { cls: 'arr', text: '↗' }) ]);
+    }
+
+    primary.onclick = function(){ openLeadEmail(s); };
+    document.getElementById('repCtaShare').onclick = function(){ copyShareLink(); };
+    document.getElementById('repRestart').onclick = function(e){ e.preventDefault(); restart(); };
+  }
+
+  // ============================================================
+  // LEAD EMAIL
+  // ============================================================
+  function labelFor(group, v){
+    var found = group.find(function(o){ return o.v === v; });
+    return found ? found.l : v;
+  }
+  function openLeadEmail(s){
+    var lines = [];
+    lines.push('From: ' + state.contact.name + ' <' + state.contact.email + '>');
+    lines.push('Company: ' + state.profile.A1);
+    lines.push('Role: ' + labelFor(PROFILE_OPTS.A2, state.profile.A2));
+    lines.push('Revenue: ' + labelFor(PROFILE_OPTS.A3, state.profile.A3));
+    lines.push('Decision-maker: ' + labelFor(PROFILE_OPTS.A4, state.profile.A4));
+    lines.push('Headcount: ' + labelFor(PROFILE_OPTS.A5, state.profile.A5));
+    lines.push('Overhead read: ' + labelFor(PROFILE_OPTS.A6, state.profile.A6));
+    lines.push('Audience: ' + labelFor(PROFILE_OPTS.A7, state.profile.A7));
+    lines.push('');
+    lines.push('-- DIAGNOSTIC RESULT --');
+    lines.push('Readiness score: ' + s.readiness + '/100 · Band: ' + s.band.name);
+    lines.push('Center-of-gravity phase: ' + s.center + '/3');
+    lines.push('Constraint (fix first): ' + DIM_META[s.lowest].name + ' (' + Math.round(s.dims[s.lowest].pct * 100) + '%)');
+    lines.push('ICP points: ' + s.icp + ' · Flag: ' + s.flag.toUpperCase());
+    lines.push('');
+    lines.push('-- DIMENSION BREAKDOWN --');
+    Object.keys(DIM_META).forEach(function(d){
+      lines.push((DIM_META[d].name + '                        ').slice(0, 24) + Math.round(s.dims[d].pct * 100) + '%  · ' + s.dims[d].label);
+    });
+    lines.push('');
+    lines.push('-- VALUE FIELDS --');
+    lines.push('Lean-able overhead: ' + (state.value.C1 ? (C1_LBL[state.value.C1] || state.value.C1) : 'not shared'));
+    lines.push('12-mo revenue upside: ' + (state.value.C2 ? (C2_LBL[state.value.C2] || state.value.C2) : 'not shared'));
+    lines.push('Biggest time-eater: ' + (state.value.C3 || 'not shared'));
+    lines.push('');
+    lines.push('-- RAW ANSWERS (0-3 by question) --');
+    state.answers.forEach(function(a, i){
+      lines.push('Q' + ('0' + (i + 1)).slice(-2) + ' [' + (QUESTIONS[i].dim + '    ').slice(0,4) + ']  ' + (a === null ? '—' : a));
+    });
+    lines.push('');
+    lines.push('-- sent from ovae.ai/readiness');
+
+    var subj;
+    if (s.flag === 'flagship') subj = '[Readiness · FLAGSHIP] ' + state.contact.name + ' · ' + state.profile.A1 + ' · ' + s.band.name + ' (' + s.readiness + '/100)';
+    else if (s.flag === 'qualified') subj = '[Readiness · qualified] ' + state.contact.name + ' · ' + state.profile.A1 + ' · ' + s.band.name + ' (' + s.readiness + '/100)';
+    else subj = '[Readiness · nurture] ' + state.contact.name + ' · ' + state.profile.A1 + ' · send playbook';
+
+    var mailto = 'mailto:hello@ovae.ai?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(lines.join('\n'));
+    window.location.href = mailto;
+  }
+
+  // ============================================================
+  // SHARE — copy URL with answers encoded in hash
+  // ============================================================
+  function copyShareLink(){
+    var payload = { a: state.answers, p: state.profile, v: state.value };
+    var encoded = btoa(encodeURIComponent(JSON.stringify(payload)));
+    var url = location.origin + location.pathname + '#r=' + encoded;
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){ showToast('Report link copied.'); });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = url; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); showToast('Report link copied.'); } catch(_) {}
+      document.body.removeChild(ta);
+    }
+  }
+  function showToast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 2200);
+  }
+
+  // ============================================================
+  // RESTART + HASH RESTORE
+  // ============================================================
+  function restart(){
+    state.profile = { A1: '', A2: null, A3: null, A4: null, A5: null, A6: null, A7: null };
+    state.answers = new Array(QUESTIONS.length).fill(null);
+    state.qIdx = 0;
+    state.value = { C1: null, C2: null, C3: '' };
+    state.contact = { name: '', email: '' };
+    document.getElementById('A1').value = '';
+    document.getElementById('C3').value = '';
+    document.getElementById('gateName').value = '';
+    document.getElementById('gateEmail').value = '';
+    initProfile();
+    initValue();
+    location.hash = '';
+    show('welcome');
+  }
+
+  function restoreFromHash(){
+    if (!location.hash || location.hash.indexOf('#r=') !== 0) return false;
+    try {
+      var encoded = location.hash.slice(3);
+      var payload = JSON.parse(decodeURIComponent(atob(encoded)));
+      if (!payload || !Array.isArray(payload.a)) return false;
+      state.answers = payload.a;
+      Object.keys(payload.p || {}).forEach(function(k){ state.profile[k] = payload.p[k]; });
+      Object.keys(payload.v || {}).forEach(function(k){ state.value[k] = payload.v[k]; });
+      state.contact = { name: 'Shared report', email: 'shared@example.com' };
+      renderReport();
+      show('report');
+      return true;
+    } catch (e) { return false; }
+  }
+
+  // ============================================================
+  // WIRE
+  // ============================================================
+  Array.prototype.forEach.call(document.querySelectorAll('[data-go]'), function(btn){
+    btn.addEventListener('click', function(){
+      var target = btn.getAttribute('data-go');
+      if (target === 'question-last'){
+        state.qIdx = QUESTIONS.length - 1;
+        show('question');
+        renderQuestion();
+      } else {
+        show(target);
+      }
+    });
+  });
+
+  initProfile();
+  initValue();
+  if (!restoreFromHash()) show('welcome');
+
+})();
+</script>
+
+</body>
+</html>
