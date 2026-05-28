@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Partnership structure &amp; next steps — Ovae × Orectic</title>
+<meta name="robots" content="noindex, nofollow"/>
+<meta name="theme-color" content="#14101A"/>
+<meta name="color-scheme" content="dark"/>
+<link rel="canonical" href="https://ovae.ai/partnership/proposal/"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2314101A'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%237BC9C4'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%237BC9C4' stroke-opacity='0.4' stroke-width='1'/%3E%3C/svg%3E"/>
+<meta property="og:type" content="article"/>
+<meta property="og:site_name" content="Ovae"/>
+<meta property="og:title" content="Partnership structure &amp; next steps — Ovae × Orectic"/>
+<meta property="og:description" content="Ovae × Orectic — partnership structure, options considered, pre-mortem, and next steps."/>
+<meta property="og:image" content="https://ovae.ai/assets/og-image.jpg"/>
+<meta property="og:url" content="https://ovae.ai/partnership/proposal/"/>
+<meta name="robots" content="noindex, nofollow"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#14101A; --bg-elev:#1A1622; --bg-soft:#1F1A28;
+  --ink:#E8E4DC; --ink-dim:#A39E96; --ink-mute:#6F6A63;
+  --rule:rgba(232,228,220,0.08); --rule-strong:rgba(232,228,220,0.16);
+  --accent:#7BC9C4; --rust:#C97D5C; --warn:#D9B26B;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'DM Sans',system-ui,sans-serif; font-weight:300;
+  line-height:1.72; font-size:16.5px;
+  -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1200px 600px at 80% -10%, rgba(123,201,196,0.06), transparent 60%),
+                   radial-gradient(900px 500px at -10% 20%, rgba(201,125,92,0.05), transparent 55%);
+  background-attachment:fixed;
+}
+.wrap{max-width:860px; margin:0 auto; padding:0 28px 120px}
+.topbar{
+  position:sticky; top:0; z-index:10; backdrop-filter:blur(10px);
+  background:rgba(20,16,26,0.82); border-bottom:1px solid var(--rule);
+  margin:0 -28px 0; padding:11px 28px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.topbar .brand{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-dim)}
+.topbar .brand b{color:var(--accent); font-weight:500}
+.conf{font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--rust); border:1px solid rgba(201,125,92,0.4); border-radius:999px; padding:4px 11px; white-space:nowrap}
+.head{padding:54px 0 8px}
+.kicker{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:18px; display:flex; align-items:center; gap:9px}
+.kicker::before{content:""; width:22px; height:1px; background:var(--accent)}
+.content h1{font-size:clamp(30px,5vw,46px); font-weight:300; letter-spacing:-0.02em; line-height:1.08; margin:.1em 0 .5em}
+.content h1 em{font-style:italic; color:var(--accent)}
+.content h2{font-size:clamp(20px,3vw,25px); font-weight:400; letter-spacing:-0.012em; color:var(--ink); margin:2.4em 0 .7em; padding-top:1.5em; border-top:1px solid var(--rule)}
+.content h2 em{font-style:italic; color:var(--accent); font-weight:300}
+.content h3{font-size:17px; font-weight:500; color:var(--ink); margin:1.8em 0 .5em; letter-spacing:-0.005em}
+.content p{color:var(--ink-dim); margin:.7em 0}
+.content strong{color:var(--ink); font-weight:600}
+.content em{color:var(--ink); font-style:italic}
+.content a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(123,201,196,0.3)}
+.content ul,.content ol{color:var(--ink-dim); padding-left:1.25em; margin:.7em 0}
+.content li{margin:.42em 0}
+.content li::marker{color:var(--rust)}
+.content hr{border:none; border-top:1px solid var(--rule); margin:2.4em 0}
+.content code{font-family:'DM Mono',monospace; font-size:.85em; background:var(--bg-soft); border:1px solid var(--rule); border-radius:5px; padding:1px 6px; color:var(--accent)}
+.content blockquote{margin:1.2em 0; padding:.5em 0 .5em 1.2em; border-left:2px solid var(--rust); color:var(--ink); font-style:italic; background:linear-gradient(90deg, rgba(201,125,92,0.06), transparent 70%)}
+.content blockquote p{color:var(--ink)}
+.content table{width:100%; border-collapse:collapse; margin:1.2em 0; font-size:14.5px; display:block; overflow-x:auto}
+.content thead{background:linear-gradient(180deg, rgba(123,201,196,0.08), transparent)}
+.content th{text-align:left; font-family:'DM Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:500; padding:11px 14px; border-bottom:1px solid var(--rule-strong); vertical-align:top}
+.content td{padding:11px 14px; border-bottom:1px solid var(--rule); color:var(--ink-dim); vertical-align:top}
+.content td strong{color:var(--ink)}
+.content tr:last-child td{border-bottom:none}
+.foot{margin-top:60px; padding-top:22px; border-top:1px solid var(--rule); font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.04em; color:var(--ink-mute); line-height:1.7}
+.foot .rust{color:var(--rust)}
+@media (max-width:600px){ body{font-size:15.5px} .wrap{padding:0 18px 80px} .topbar{margin:0 -18px} }
+</style>
+</head><body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="brand">Ovae <b>×</b> Orectic &nbsp;·&nbsp; Powered by Orectic</span>
+    <span class="conf">Confidential — do not distribute</span>
+  </div>
+  <div class="head"><div class="kicker">Partnership structure &amp; next steps</div></div>
+  <div class="content">
+<h1>Ovae × Orectic — Partnership Structure &amp; Next Steps</h1>
+<p><em>A working proposal for Isaiah &amp; CT · May 2026 · draft for discussion, not a binding agreement</em></p>
+<blockquote>
+<p><strong>How to read this.</strong> This is a starting structure designed to be <strong>fair to both of us</strong> and to make the upside <strong>roughly co-equal and exponential</strong> — not a deal that favors one side. It's the output of working through corporate-structure, fundraising, M&amp;A/exit, founder-comp, and deliberate "how could this fail" lenses. Everything here is a recommendation to react to, not a take-it-or-leave-it. Numbers are placeholders to anchor the conversation; a startup attorney finalizes the specifics.</p>
+</blockquote>
+<hr />
+<h2>0. The recommended deal, in one box</h2>
+<table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Entity</strong></td>
+<td>One <strong>Delaware C-corp HoldCo</strong> over two operating brands: <strong>Orectic</strong> (the product) and <strong>Ovae</strong> (the go-to-market team).</td>
+</tr>
+<tr>
+<td><strong>Where the IP lives</strong></td>
+<td>The crown jewels — the platform IP <strong>and</strong> the co-created vertical <strong>data + runbooks</strong> — owned at the <strong>HoldCo (parent)</strong> level, not buried in one sub.</td>
+</tr>
+<tr>
+<td><strong>Equity split</strong></td>
+<td><strong>55% Isaiah / 45% CT</strong> of founder equity, plus a <strong>~10–12% team option pool</strong>. Same share class, same terms.</td>
+</tr>
+<tr>
+<td><strong>Royalty</strong></td>
+<td><strong>No ongoing cash royalty</strong> during normal operations (it's circular inside a HoldCo). A <strong>dormant license</strong> is documented that only activates if the companies ever separate. Isaiah's IP is recognized via his equity premium.</td>
+</tr>
+<tr>
+<td><strong>Income now</strong></td>
+<td><strong>Equal</strong> founder salaries (target ~$25K/mo each), funded by the first 3–4 anchor clients, documented as comp for defined roles. A <strong>hiring pool is ring-fenced</strong> before pay scales.</td>
+</tr>
+<tr>
+<td><strong>Vesting</strong></td>
+<td><strong>4-year vest, 12-month cliff, monthly after, double-trigger acceleration.</strong> (Keeps Isaiah's cliff; drops "full grant, no vesting.")</td>
+</tr>
+<tr>
+<td><strong>Capital</strong></td>
+<td><strong>Bootstrap to ~$10M ARR</strong> on the hot inbound, then a strategic round from strength (primary + secondary).</td>
+</tr>
+<tr>
+<td><strong>Exit / liquidity</strong></td>
+<td>Not an early sale. Build to ~$10M ARR → strategic round at a high multiple with <strong>partial secondary (~$5M+ each off the table)</strong> → keep compounding toward a much larger outcome. $60–80M is a milestone, not the ceiling.</td>
+</tr>
+<tr>
+<td><strong>Before the next client</strong></td>
+<td>Sign: IP assignment, founder agreement + vesting, Orectic contribution agreement, and a client MSA with data/runbook ownership.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1. The premise — why this is worth it for <em>both</em> of us</h2>
+<p>The partnership rests on a clean division of labor neither of us can easily replicate alone:</p>
+<blockquote>
+<p><strong>Isaiah builds the best AI-Native OS. CT builds the machine that fills it with customers and runs them</strong> — brand, sales engine, the delivery team, events, relationships, onboarding.</p>
+</blockquote>
+<p>And one insight that drives everything below: <strong>the durable, acquirable asset — the vertical usage data + the runbooks ("the billion-dollar play") — is co-created.</strong> Isaiah brought the platform and a real head start; the data moat itself accumulates from the clients Ovae brings in and operates. So this isn't "CT rents Isaiah's IP." It's <em>Isaiah brings the engine + head start; CT brings the distribution that builds the moat going forward; we co-own what compounds.</em></p>
+<p>That's also why "Isaiah could just do it solo" has a real answer (see §6): he could keep building Orectic and pay a referral fee — but he'd still have no brand, no GTM machine, no delivery layer, and no way to be <em>extracted from services</em>, which he's said he wants. The JV exists to marry product + distribution and capture the combined value.</p>
+<hr />
+<h2>2. The structure — and the options we considered</h2>
+<p><strong>Three structures were on the table:</strong></p>
+<ul>
+<li><strong>① Orectic is the company; Ovae is its GTM brand.</strong> Cleanest for Isaiah's value capture, but CT doesn't own a real company — closer to the Opus risk.</li>
+<li><strong>② Two independent companies + a license.</strong> Each keeps their own co — but it's the most fragile: channel conflict, IP outside the funded entity, a license to police. This is roughly where we started, and it's the source of the unease.</li>
+<li><strong>③ HoldCo over both</strong> ✅ <em>recommended.</em> A parent owns Orectic (product) and Ovae (GTM) as operating brands. It's the only one that delivers the stated goal: <em>a valuable company </em><em>and</em><em> a valuable asset, where an acquirer could buy all of the above.</em></li>
+</ul>
+<p><strong>The one refinement the experts insisted on:</strong> in a HoldCo, the <strong>IP and the co-created data/runbooks must sit at the parent</strong>, not inside Isaiah's Orectic sub. If the moat data lives only in Orectic, a sale of just that piece cuts CT out of the value he helped build — and an acquirer of the whole is two layers removed from the asset. Parent-level ownership fixes both.</p>
+<hr />
+<h2>3. The money</h2>
+<h3>3a. Equity — 55 / 45, and why</h3>
+<p><strong>Recommended: 55% Isaiah / 45% CT</strong> of founder equity (plus the option pool below).</p>
+<p>The logic is simple and forward-looking: Isaiah brings the platform and a real head start, recognized in his larger share. But the asset that compounds — the vertical data + runbooks — is built <em>going forward</em>, largely through the clients Ovae brings in and runs. So both of us materially own what grows in value, and we're pointed at the same outcome. The point isn't to litigate a precise number; it's that the split reflects <em>platform + head start on one side, the engine that builds the moat on the other</em> — and leaves both genuinely motivated.</p>
+<p><strong>Option pool:</strong> carve <strong>~10–12%</strong> for the ~10-person, equity-sharing team — granted from the company, not from CT's slice silently.</p>
+<h3>3b. The royalty — recommended change from the initial "light 10%"</h3>
+<p>You'd leaned toward a light ~10% royalty so Isaiah clearly benefits from his IP. Three independent experts pushed back, and the logic holds: <strong>inside one HoldCo, a cash royalty is circular</strong> (money moving between entities the same people own) and it <strong>quietly demotivates CT</strong> — every dollar he closes is taxed before he sees it, toward an entity he doesn't control. That's a subtle version of the Opus dynamic.</p>
+<p><strong>Recommendation:</strong> no ongoing cash royalty during normal operations. Recognize Isaiah's IP through (a) his <strong>equity premium</strong> (the 55) and, if he wants it named explicitly, (b) a one-time documented <strong>"platform contribution credit."</strong> Keep a <strong>dormant intercompany license</strong> on paper that only becomes a real royalty obligation <strong>if the companies ever separate</strong> (sale of one sub, investor into one sub, a buyout). Isaiah's IP is unambiguously valued; CT isn't taxed for selling. <em>(This is the one place we're recommending against your initial lean — flagged so you can decide before showing Isaiah.)</em></p>
+<h3>3c. Income now — salary, not a draw</h3>
+<ul>
+<li><strong>Equal salaries — target ~$25K/mo each.</strong> Funded from client revenue — start payroll once 2–3 clients are closed; don't pay ahead of revenue. (Equity carries the contribution difference; monthly cash comp should be equal — paying one founder more cash on less equity is inconsistent.)</li>
+<li><strong>Documented as W-2 compensation for a defined role</strong>, <em>not</em> a founder draw or advance. (Draws-that-become-loans-that-erase-equity-claims is exactly the Opus mechanism — avoid it by structure.)</li>
+<li><strong>Ring-fence a ~$30K/mo hiring pool</strong> before scaling founder pay. Build a <em>profitable</em> company; keep cash in to hire.</li>
+<li>Post-profitability: founder pay can move to ~$30–35K/mo once monthly net-after-payroll clears ~$150K; profit distributions above that split pro-rata to equity, only when runway &gt; 6 months.</li>
+</ul>
+<h3>3d. Capital — bootstrap first</h3>
+<p>Use the hot inbound to close 10–15 clients and build a year of platform-revenue data <strong>before</strong> raising. A seed today buys money at a ~$6–10M pre (15–25% dilution); the same raise after ~$1M ARR prices at ~$15–25M pre (10–15% dilution) — a multi-million-dollar founder-net-worth difference. Raise only when a specific need (a product team, expansion) exceeds what operations generate — <em>not</em> to "get going." We're already going.</p>
+<hr />
+<h2>4. Vesting &amp; mutual protection</h2>
+<h3>4a. Vesting — keep the cliff, drop "no vesting"</h3>
+<p>Isaiah's instinct for a <strong>cliff</strong> is right and we keep it — it protects against either of us walking in month 3, and it covers the period while CT's Opus situation resolves. But <strong>"cliff then full grant, no ongoing vesting"</strong> is dangerous for <em>both</em>: after the cliff, neither of us has any structural reason to keep showing up, and there's no remedy if one of us goes inactive while fully vested.</p>
+<p><strong>Recommended:</strong> 4-year vest · 12-month cliff · monthly thereafter · <strong>double-trigger acceleration</strong> (change-of-control <strong>and</strong> termination). CT's clock starts at signing, not at some future "Opus is closed" date.</p>
+<h3>4b. Protections — symmetric, in the shareholders' agreement (not a handshake)</h3>
+<p><strong>For CT (anti-Opus):</strong>
+- <strong>Anti-dilution floor</strong> — CT's stake can't be pushed below a defined floor without his written consent.
+- <strong>Equal governance</strong> — board is Isaiah / CT / one mutually-agreed independent (1-1-1). No unilateral action.
+- <strong>Pro-rata rights</strong> on future rounds; <strong>defined role</strong> in writing; removal-without-cause triggers acceleration + a broad "good leaver" clause.</p>
+<p><strong>For Isaiah (anti-under-delivery):</strong>
+- A <strong>milestone-linked tranche</strong> (~10% of CT's grant) tied to fair GTM milestones (e.g., ARR targets), with a cure period — forfeited if badly missed.
+- <strong>Reverse-vesting / clawback</strong> if CT exits early; <strong>role definition</strong> with material-non-performance defined.
+- <strong>Brand control</strong> over the "Powered by Orectic" mark (quality standards on what carries his name).</p>
+<hr />
+<h2>5. The IP &amp; the moat — the thing to lock <em>this week</em></h2>
+<p>Isaiah is right that the open-source base isn't the moat. Here's what actually is, and how to protect it:</p>
+<ul>
+<li><strong>Trademark</strong> "Orectic" and "Ovae" (USPTO, Class 42) — file within 30 days; most durable, easiest to enforce.</li>
+<li><strong>Trade secrets</strong> — the runbooks, vertical playbooks, and data pipeline are protectable <em>only if kept secret</em>: NDAs on every contractor/employee + access controls. This is the billion-dollar asset; treat it that way.</li>
+<li><strong>Copyright</strong> — register Isaiah's core modifications for litigation standing.</li>
+<li><strong>Client contracts (the clause founders forget, and the one that matters most at exit):</strong> every MSA must grant the company a perpetual, royalty-free license to use <strong>de-identified, aggregated</strong> operational data, and must state that <strong>generalized runbooks/configurations derived from engagements are owned by the company</strong> (client keeps only their specific instantiation). Without this, clients later claim co-ownership of the moat and the data story collapses in diligence.</li>
+<li><strong>Patents:</strong> not realistic here — spend the energy on trademarks, trade secrets, and contract terms.</li>
+<li><strong>Ownership principle:</strong> all runbooks + de-identified data + trained configs are <strong>HoldCo assets</strong>, licensed down to each brand. So an acquirer buys the parent and gets everything; neither founder can be cut out of the asset they co-built.</li>
+</ul>
+<hr />
+<h2>6. Pre-mortem — how this fails (both sides), so we design against it</h2>
+<p><strong>Most likely killer: drift.</strong> Hot inbound → first big client signed on a handshake → "we'll paper it later" → 6 good months → one small misalignment with no framework to resolve it → the partnership quietly stalls and CT is deeper in financial stress with nothing signed. <em>Governance isn't bureaucracy; it's what keeps a good relationship good under pressure.</em></p>
+<p><strong>Top failure modes &amp; early warnings:</strong>
+1. <strong>Isaiah goes solo</strong> after CT validates the GTM playbook. <em>Warning:</em> he starts taking discovery calls "just to understand the client."
+2. <strong>Co-created moat becomes leverage against CT</strong> — clients' data/runbooks live in Isaiah's sub; on a split he has the asset and a direct line to the buyers. <em>Fixed by §5 parent-level ownership.</em>
+3. <strong>Cliff-then-full-grant</strong> leaves no alignment (and no remedy) post-cliff. <em>Fixed by §4a.</em>
+4. <strong>Services gravity</strong> — CT needs services revenue now; Isaiah wants <em>out</em> of services. <em>Warning:</em> Isaiah skips an onboarding call. <em>Fixed by extracting Isaiah from delivery within ~60 days via the builder bench + productizing delivery (Ovae in a Box).</em>
+5. <strong>Opus overhang</strong> distracts CT or pressures him into bad terms to close fast. <em>Fixed by the liability wall + a guaranteed salary so survival pressure doesn't corrupt negotiations.</em>
+6. <strong>Option-pool dilution</strong> without CT's vote; <strong>50/50 deadlock</strong> with no tiebreaker. <em>Fixed by §4b governance.</em></p>
+<p><strong>Steelman of "Isaiah just stays solo + pays a referral fee":</strong> with hot, free inbound, that's rational for him <em>unless</em> Ovae delivers four things a $5K/mo BD person can't: (1) pipeline 10× what he can close alone, validated in 90 days; (2) a defensible brand/category he owns; (3) events/community network effects; (4) <strong>a delivery layer that gets him out of services entirely.</strong> If we can't commit to those in writing with milestones, he <em>should</em> prefer solo — so the structure has to make Ovae the better choice for <em>him</em>, not just for CT.</p>
+<hr />
+<h2>7. Liquidity &amp; the long game — co-equal and exponential</h2>
+<p>This is <strong>not an early sale.</strong> The path: bootstrap to <strong>~$10M ARR</strong>, then a <strong>strategic round from strength</strong> (primary + secondary) at a high multiple — and keep compounding. At Isaiah's own ~25× reference for this space, $10M ARR ≈ $250M; more conservatively, a data-moat AI company at $10M ARR runs <strong>~$100–200M (≈$150M with clean metrics + &gt;120% NRR).</strong></p>
+<p><strong>Take money off the table without selling the company.</strong> A ~$20–25M round structured as ~$15M primary (~10% dilution) + <strong>~$10M secondary lets each of us pull ~$5M+ now</strong> while keeping control (the model Ben used — big check, small dilution, partial liquidity). That covers CT's near-term $5M breathing room and starts Isaiah's path to generational wealth, while the bulk of the upside keeps compounding toward a much larger eventual outcome. Same curve for both. <strong>$60–80M is a milestone we blow past, not the ceiling.</strong></p>
+<p>If a whole-company sale ever does make sense, the HoldCo (product + data + runbooks + client book + team) is the clean "acquire all of the above" package — that's a choice we earn, not the plan.</p>
+<hr />
+<h2>8. Next steps — what to sign <em>before the next client</em></h2>
+<p>Ranked by importance (per the legal + pre-mortem lenses):</p>
+<ol>
+<li><strong>IP ownership + client data/runbook rights</strong> — MSA template with the data-license + runbook-ownership clauses (§5). <em>Without this, CT builds Isaiah's asset for free and the exit story breaks.</em></li>
+<li><strong>Founder agreement + vesting</strong> (RSPAs, §4) — the real substitute for "no vesting": defined roles, milestones, cure periods, buyout-on-deadlock.</li>
+<li><strong>Decision-authority matrix</strong> — who decides what unilaterally, what needs consensus, what happens on deadlock.</li>
+<li><strong>CT income as a guaranteed salary</strong> (§3c), with named funding mechanics.</li>
+<li><strong>Orectic contribution agreement + IP assignment</strong> — rolls Isaiah's build into the structure, credited, and assigns all past/future IP to the company.</li>
+</ol>
+<p><strong>30/90-day checklist:</strong> trademarks filed (≤30d) · NDAs + access controls on runbooks · contribution + IP assignment executed · client MSA template finalized with data clauses · copyright registration · SOC2 readiness gap-check. <strong>Don't take a paying client until items 1, 2, and 5 are signed.</strong></p>
+<hr />
+<h2>Appendix — the five lenses behind this</h2>
+<ul>
+<li><strong>Corporate/IP attorney:</strong> DE C-corp HoldCo; contribution-for-equity; intercompany license is circular (keep dormant); protect via trademark + trade secret + client data clauses; reject no-vesting; sign IP assignment + MSA before any client.</li>
+<li><strong>VC/fundraising:</strong> bootstrap to <strong>~$10M ARR</strong> from strength, then a strategic round (~$100–200M, ≈$150M with &gt;120% NRR) structured <strong>primary + secondary (~$5M+ each off the table)</strong>; price an Orectic platform fee separately to lift the blended multiple; 55/45 reads clean to a lead.</li>
+<li><strong>M&amp;A/exit:</strong> liquidity via secondary, not an early sale; data moat is real <em>only if contracts prove it</em>; biggest kill-shots are data-rights gaps and key-man on Isaiah; keep cap table symmetric; HoldCo is the clean "acquire all of the above" package if a sale is ever chosen.</li>
+<li><strong>Founder comp/incentives:</strong> 55/45; <strong>eliminate the royalty</strong> (replace with equity + a one-time contribution credit); <strong>equal salaries (~$25K/mo each)</strong>; cliff + 4-yr vest; symmetric protections.</li>
+<li><strong>GTM/scale:</strong> path to $10M ARR is blended (flagship Embeds + Builds + self-serve Box + retainers); <strong>certified-implementer program is the unlock that frees Isaiah</strong> (without it, throughput caps ~$3M ARR); paid discovery workshop (~80% convert) + 50% deposit funds delivery; dogfood Orectic on Ovae as the live proof.</li>
+<li><strong>Devil's advocate:</strong> drift is the #1 killer; steelman Isaiah-solo and beat it on the four deliverables; CT's exposure is no-vesting + IP-in-sub + draws; Isaiah's exposure is brand dilution + services gravity + tying his momentum to a partner in limbo.</li>
+</ul>
+  </div>
+  <div class="foot">Confidential working draft — for Isaiah &amp; CT. Not a binding agreement; figures are placeholders to anchor the conversation, and final structure needs counsel.<br/><span class="rust">Ovae × Orectic</span> &nbsp;·&nbsp; May 2026</div>
+</div>
+</body></html>
