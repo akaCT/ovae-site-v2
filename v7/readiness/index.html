@@ -1919,6 +1919,36 @@
   // ============================================================
   // GATE
   // ============================================================
+  // ---- Supabase persistence (publishable key — safe in the client; protected by insert-only RLS) ----
+  var SUPABASE_URL = 'https://muguotipixphthfxjssu.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_I3ZCCsmknN03oBiYqZQc3Q_4DbiLTH0';
+  function saveSubmission(){
+    try {
+      if (!SUPABASE_URL || !SUPABASE_KEY) return;
+      var r = score();
+      var payload = {
+        name: state.contact.name, email: state.contact.email,
+        company: state.profile.A1 || null, respondent_role: state.profile.A2, revenue: state.profile.A3,
+        decision_maker: state.profile.A4, headcount: state.profile.A5, overhead: state.profile.A6, audience: state.profile.A7,
+        value_band_1: state.value.C1, value_band_2: state.value.C2, value_note: state.value.C3 || null,
+        readiness_score: r.readiness, band: r.band.name, phase: r.band.phase, center_phase: r.center,
+        constraint_dim: (DIM_META[r.lowest] ? DIM_META[r.lowest].name : r.lowest),
+        dimensions: r.dims, answers: state.answers, icp_score: r.icp, flag: r.flag,
+        user_agent: navigator.userAgent, referrer: document.referrer || null
+      };
+      fetch(SUPABASE_URL + '/rest/v1/readiness_submissions', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(payload)
+      }).catch(function(){ /* never block the report */ });
+    } catch (e) { /* swallow — UX must not depend on the save */ }
+  }
+
   document.getElementById('gateNext').addEventListener('click', function(){
     var err = document.getElementById('gateErr');
     var name = document.getElementById('gateName').value.trim();
@@ -1932,6 +1962,7 @@
     err.hidden = true;
     state.contact.name = name;
     state.contact.email = email;
+    saveSubmission();
     renderReport();
     show('report');
   });
