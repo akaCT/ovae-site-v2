@@ -86,6 +86,28 @@ h2 em{font-style:italic;color:var(--accent);font-weight:300}
 .foot{border-top:1px solid var(--rule);padding:30px 0;text-align:center}
 .foot p{color:var(--ink-mute);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;line-height:1.8}
 .foot .rust{color:var(--rust)}
+/* hero imagery */
+.hero{position:relative;overflow:hidden}
+.hero-ambient{position:absolute;inset:0;z-index:0;opacity:.42;pointer-events:none;-webkit-mask-image:radial-gradient(125% 95% at 72% 0%,#000 20%,transparent 66%);mask-image:radial-gradient(125% 95% at 72% 0%,#000 20%,transparent 66%)}
+.hero-ambient img{width:100%;height:100%;object-fit:cover}
+.hero .wrap{position:relative;z-index:1}
+/* method billboard */
+.billboard{max-width:860px;margin:0 auto;text-align:left}
+.bb-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:24px}
+.bb{font-size:clamp(38px,7.4vw,78px);font-weight:200;letter-spacing:-.03em;line-height:1.04;color:var(--ink)}
+.bb em{font-style:italic;color:var(--accent);font-weight:300}
+.bb-foot{color:var(--ink-dim);font-size:15px;margin-top:26px;max-width:62ch}
+/* orectic product */
+.orectic .eyebrow{color:var(--rust)}.orectic .eyebrow::before,.orectic .eyebrow::after{background:var(--rust)}
+.op-grid{display:grid;gap:14px;margin-top:38px;grid-template-columns:1fr}
+@media(min-width:760px){.op-grid{grid-template-columns:repeat(3,1fr)}}
+.op{background:var(--bg-elev);border:1px solid var(--rule);border-radius:13px;padding:20px;text-align:left}
+.op .n{font-family:'DM Mono',monospace;font-size:12px;color:var(--rust);letter-spacing:.1em}
+.op h3{font-size:16px;font-weight:500;margin:7px 0 5px}
+.op p{font-size:13px;color:var(--ink-dim)}
+.op.note{background:linear-gradient(160deg,rgba(201,125,92,.12),var(--bg-elev) 82%);border-color:rgba(201,125,92,.32)}
+.section-img{margin:40px auto 0;max-width:780px;border-radius:16px;overflow:hidden;border:1px solid var(--rule)}
+.section-img img{width:100%;display:block}
 </style></head>
 <body>
 
@@ -94,7 +116,9 @@ h2 em{font-style:italic;color:var(--accent);font-weight:300}
   <a href="readiness/" class="btn btn-primary">Get your Readiness Score</a>
 </div></nav>
 
-<header class="hero"><div class="wrap">
+<header class="hero">
+  <div class="hero-ambient" aria-hidden="true"><img src="assets/hero.webp" alt=""/></div>
+  <div class="wrap">
   <h1>Become <em>AI-native</em><br>in 90 days.</h1>
   <p class="lede">Ovae installs the operating system that runs your company on AI — and makes sure your team actually uses it. Not another tool. A different way to operate.</p>
   <div class="ctas">
@@ -113,17 +137,34 @@ h2 em{font-style:italic;color:var(--accent);font-weight:300}
   <p class="lede">Both dead-end at the same ceiling: <em>you're still the bottleneck.</em></p>
 </div></section>
 
-<section id="method" class="method"><div class="wrap center">
-  <div class="kicker eyebrow">The method · non-negotiable</div>
-  <h2>One sequence. <em>In order.</em></h2>
-  <p class="lede">Most AI projects fail because they automate before they can see. We don't — each step earns the right to the next.</p>
+<section id="method" class="method"><div class="wrap">
+  <div class="billboard">
+    <div class="bb-eyebrow">The non-negotiable · Orectic's method</div>
+    <div class="bb">Brain first.<br>Visibility second.<br><em>Automation</em> third.<br>Scale, only after.</div>
+    <p class="bb-foot">Built into Orectic — the same sequence regardless of your methodology. Most AI projects fail because they automate before they can see. Each step earns the right to the next.</p>
+  </div>
   <div class="steps">
     <div class="step"><div class="n">01</div><h3>Brain</h3><p>Your knowledge and judgment, in one place the company can query.</p><div class="arrow">→</div></div>
     <div class="step"><div class="n">02</div><h3>Visibility</h3><p>A live picture of the business. Decisions on data, not gut.</p><div class="arrow">→</div></div>
     <div class="step"><div class="n">03</div><h3>Automation</h3><p>Agents that do real work — hand-validated first, governed always.</p><div class="arrow">→</div></div>
     <div class="step"><div class="n">04</div><h3>Scale</h3><p>The team runs the system; the system runs the company. You're AI-native.</p></div>
   </div>
-  <p class="method-foot">Built into Orectic, the same way every time. <b>The Brain earns the right to visibility; visibility earns the right to automation.</b></p>
+</div></section>
+
+<!-- ORECTIC -->
+<section class="orectic"><div class="wrap center">
+  <div class="kicker eyebrow">The product · Orectic</div>
+  <h2>The engine you run on. <em>And why it isn't a vanilla install.</em></h2>
+  <p class="lede">Not a chatbot bolted onto your business — the system the whole company operates from.</p>
+  <div class="op-grid">
+    <div class="op"><div class="n">01</div><h3>Evidence Core</h3><p>Your knowledge and judgment, captured and permissioned — the source of truth everything runs on.</p></div>
+    <div class="op"><div class="n">02</div><h3>Company Brain</h3><p>Ask it anything; it answers from your business, not the open internet.</p></div>
+    <div class="op"><div class="n">03</div><h3>Business intelligence</h3><p>A live operating picture for whoever's steering — metrics, bottlenecks, the truth.</p></div>
+    <div class="op"><div class="n">04</div><h3>Governed automation</h3><p>Agents that do real work, under human-review rules. Hand-validated first.</p></div>
+    <div class="op"><div class="n">05</div><h3>Four-phase maturity</h3><p>Meets you where you are and moves you, deliberately, to AI-native.</p></div>
+    <div class="op note"><div class="n">↳</div><h3>Why it's different</h3><p>A standard tool hands you a dashboard. Orectic gives you organizational fluency — and every company we run through it makes the next one sharper.</p></div>
+  </div>
+  <div class="section-img"><img src="assets/two-layer.webp" alt="Two stacked forms — your operating methodology on top, the Orectic AI-native foundation underneath" loading="lazy"/></div>
 </div></section>
 
 <section><div class="wrap center">
