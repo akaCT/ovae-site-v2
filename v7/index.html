@@ -108,6 +108,23 @@ h2 em{font-style:italic;color:var(--accent);font-weight:300}
 .op.note{background:linear-gradient(160deg,rgba(201,125,92,.12),var(--bg-elev) 82%);border-color:rgba(201,125,92,.32)}
 .section-img{margin:40px auto 0;max-width:780px;border-radius:16px;overflow:hidden;border:1px solid var(--rule)}
 .section-img img{width:100%;display:block}
+/* sample score card */
+.sample{max-width:440px;margin:36px auto 0;background:var(--bg-elev);border:1px solid var(--rule-strong);border-radius:16px;padding:20px 22px;text-align:left;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.4)}
+.sample-tag{position:absolute;top:15px;right:16px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mute);border:1px solid var(--rule-strong);border-radius:999px;padding:3px 9px}
+.sample-phase{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute)}
+.sample-band{font-size:25px;font-weight:300;letter-spacing:-.015em;margin:3px 0 0;color:var(--ink)}
+.sample-band b{color:var(--accent);font-weight:400}
+.sample-meter{height:6px;border-radius:3px;background:var(--rule-strong);margin:13px 0 18px;position:relative;overflow:hidden}
+.sample-meter i{position:absolute;left:0;top:0;height:100%;width:62%;background:linear-gradient(90deg,var(--rust),var(--accent))}
+.sample-dims{display:flex;flex-direction:column;gap:9px}
+.sdim{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-dim)}
+.sdim .dots{display:inline-flex;gap:4px;flex:none}
+.sdim .dots span{width:7px;height:7px;border-radius:50%;background:var(--rule-strong)}
+.sdim .dots span.on{background:var(--accent)}
+.sdim.low{color:var(--ink)}.sdim.low .dots span.on{background:var(--rust)}
+.sdim .flag{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--rust);margin-left:7px;vertical-align:middle}
+.sample-move{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink);line-height:1.5}
+.sample-move b{color:var(--accent);font-weight:500}
 </style></head>
 <body>
 
@@ -127,6 +144,28 @@ h2 em{font-style:italic;color:var(--accent);font-weight:300}
   </div>
   <div class="powered">Powered by <b>Orectic</b> — the AI-Native Operating System</div>
 </div></header>
+
+<!-- WHAT YOU GET BACK -->
+<section><div class="wrap center">
+  <div class="kicker eyebrow">What you get back</div>
+  <h2>A real number in 5 minutes. <em>And the one move that matters.</em></h2>
+  <div class="sample" aria-hidden="true">
+    <span class="sample-tag">Sample</span>
+    <div class="sample-phase">Your AI-Native Phase</div>
+    <div class="sample-band">Phase 1 → 2 · <b>Leveraged</b></div>
+    <div class="sample-meter"><i></i></div>
+    <div class="sample-dims">
+      <div class="sdim"><span>Business Intelligence</span><span class="dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div>
+      <div class="sdim"><span>Revenue Engine</span><span class="dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div>
+      <div class="sdim"><span>Data Infrastructure</span><span class="dots"><span class="on"></span><span class="on"></span><span></span><span></span></span></div>
+      <div class="sdim"><span>Team Leverage</span><span class="dots"><span class="on"></span><span class="on"></span><span></span><span></span></span></div>
+      <div class="sdim"><span>Workflow Automation</span><span class="dots"><span class="on"></span><span></span><span></span><span></span></span></div>
+      <div class="sdim low"><span>Founder Bottleneck<span class="flag">your constraint</span></span><span class="dots"><span class="on"></span><span></span><span></span><span></span></span></div>
+    </div>
+    <div class="sample-move"><b>Your next move:</b> get your judgment out of your head and into the Brain — everything else compounds once that's moved.</div>
+  </div>
+  <div class="ctas" style="margin-top:30px;display:flex;justify-content:center"><a href="readiness/" class="btn btn-primary">Get your free Readiness Score →</a></div>
+</div></section>
 
 <section><div class="wrap center">
   <h2>You already know you should be using AI. <em>Getting it done is the hard part.</em></h2>
