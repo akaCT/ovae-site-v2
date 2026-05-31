@@ -74,6 +74,32 @@ body{
 .foot{margin-top:60px; padding-top:22px; border-top:1px solid var(--rule); font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.04em; color:var(--ink-mute); line-height:1.7}
 .foot .rust{color:var(--rust)}
 @media (max-width:600px){ body{font-size:15.5px} .wrap{padding:0 18px 80px} .topbar{margin:0 -18px} }
+/* ── cohesive elevation (matches ovae.ai v7) ── */
+html{scroll-behavior:smooth}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+body::after{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.92 0 0 0 0 0.89 0 0 0 0 0.86 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);will-change:opacity,transform}
+.reveal.in{opacity:1;transform:none}
+table,blockquote{transition:border-color .25s,box-shadow .25s,transform .25s}
+table:hover,blockquote:hover{box-shadow:0 22px 48px -30px rgba(0,0,0,.8)}
+a{transition:color .2s,border-color .2s}
+.spotlight{position:relative;isolation:isolate}
+.spotlight::before{content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;opacity:0;transition:opacity .3s;
+ background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(123,201,196,.09),transparent 62%)}
+.spotlight:hover::before{opacity:1}
+.ovchart{margin:22px 0 8px}
+.ovchart .lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
+.ovdonut circle.val{stroke-dasharray:var(--c);stroke-dashoffset:var(--c);transition:stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1)}
+[data-chart].chart-in .ovdonut circle.val{stroke-dashoffset:var(--off)}
+.ovgrid{display:grid;gap:14px}
+@media(min-width:640px){.ovgrid.cols2{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion: reduce){
+ html{scroll-behavior:auto}
+ .reveal{opacity:1!important;transform:none!important;transition:none}
+ .spotlight::before{display:none}
+ .ovdonut circle.val{transition:none}
+}
 </style>
 </head><body>
 <div class="wrap">
@@ -85,15 +111,31 @@ body{
   <div class="content">
 <h1>Equity Split — Rationale, Recommendation &amp; How to Present It</h1>
 <p><em>CT's prep — not a document to hand Isaiah · May 2026 · founders' alignment, not legal advice</em></p>
-<blockquote>
+<blockquote class="spotlight">
 <p><strong>Read this first.</strong> This is <em>your</em> prep, not a brief to slide across the table. Walking in with a document that argues your percentage will read as adversarial. Bring the <strong>conversation</strong> (the framework + the script at the end), not the memo. The memo is so <em>you</em> can hold the number calmly and defend it if asked.</p>
 </blockquote>
 <hr />
 <h2>TL;DR</h2>
 <p><strong>Present 55% Isaiah / 45% CT</strong>, plus a ~10–12% option pool carved from both. It's defensible, it sits at the <em>Isaiah-favorable</em> edge of what the analysis supports, and — the part that should settle your nerves — <strong>independent expert lenses say 45% for CT is well-earned, even slightly conservative on a value-creation basis.</strong> Your worry was that Isaiah might feel 45% is too much for you; the data says the opposite.</p>
+<div class="ovchart spotlight" data-chart aria-label="Founder equity split: 55% Isaiah, 45% CT, plus 10-12% option pool">
+  <div class="lbl">Founder equity (as stated)</div>
+  <div class="ovgrid cols2" style="align-items:center">
+    <svg viewBox="0 0 120 120" width="150" height="150" class="ovdonut" style="--c:314;--off:141" aria-hidden="true">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="var(--rule-strong)" stroke-width="14"/>
+      <circle class="val" cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" stroke-width="14" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+      <text x="60" y="56" text-anchor="middle" fill="var(--ink)" font-size="20" font-weight="300">55/45</text>
+      <text x="60" y="74" text-anchor="middle" fill="var(--ink-mute)" font-size="8" font-family="DM Mono,monospace" letter-spacing="1">ISAIAH / CT</text>
+    </svg>
+    <div style="font-size:13px;color:var(--ink-dim);line-height:1.7">
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--accent);margin-right:8px"></span>Isaiah 55%</div>
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--rust);margin-right:8px"></span>CT 45%</div>
+      <div style="color:var(--ink-mute);margin-top:4px">+ ~10–12% team option pool</div>
+    </div>
+  </div>
+</div>
 <hr />
 <h2>Pressure-tested, not asserted — five lenses</h2>
-<table>
+<table class="spotlight">
 <thead>
 <tr>
 <th>Lens</th>
@@ -127,7 +169,7 @@ body{
 
 <h2>The detailed founder-pie calculation (behind the first lens)</h2>
 <p>The Frank Demmler Founder-Pie method, weighted for this specific pair (100 points). Each factor is weighted by how much it matters to the company, then split between the two of you:</p>
-<table>
+<table class="spotlight">
 <thead>
 <tr><th>Factor</th><th>Weight</th><th>Isaiah</th><th>CT</th><th>Isaiah score</th><th>CT score</th></tr>
 </thead>
@@ -145,7 +187,7 @@ body{
 <p><strong>Founder-pie result: Isaiah 57 / CT 43.</strong> You dominate GTM/BD/sales (80%) and capital raising/strategy (80%), you sit near even on forward value, and Isaiah dominates product/tech (90%) and idea/IP (70%). Reconciled with the replacement-cost / opportunity-cost view (Isaiah 52–55 / CT 43–45), the band is ~54–58 Isaiah / 42–46 CT, midpoint ~56/44. That is why 55/45 is the clean, Isaiah-favorable rounding.</p>
 <hr />
 <h2>Why 55/45 is the number — the forces</h2>
-<table>
+<table class="spotlight">
 <thead>
 <tr>
 <th>Force</th>
@@ -209,11 +251,11 @@ body{
 <li><strong>Anchor the expanding pie (math, not rhetoric):</strong> <em>"Solo, maybe a $5M outcome at 100% — that's $5M. Together: we raise, use my network to land 10 enterprise clients, position for $30M+ — your 55% is $16.5M. The question isn't what you give up; it's which bet you'd rather make."</em></li>
 </ol>
 <p><strong>Opening script (natural pace):</strong></p>
-<blockquote>
+<blockquote class="spotlight">
 <p>"Before numbers — I want to name something. You built this, you've got a paying client, you have real options. I'm not here to take a slice of that. I'm here to build something neither of us builds alone. The way I see it, this needs two things to become what we both think it can be: deep product and distribution at scale. You're the product; I'm the distribution. So here's where I landed: 55 you, 45 me, with a pool we carve out together before the raise. That reflects that you got here first and carry the technical risk — and it's enough for me to go all in, which is what this needs. What's your gut reaction?"</p>
 </blockquote>
 <p><strong>If he pushes back:</strong></p>
-<blockquote>
+<blockquote class="spotlight">
 <p>"I hear you — and I'd rather have this conversation now than have it blow up in year two. Tell me what feels off: is it the number, or is it not being sure what you'd be getting?"</p>
 </blockquote>
 <p>Then <em>listen</em>. His answer tells you whether it's a math problem or a trust problem — they need different responses.</p>
@@ -227,4 +269,31 @@ body{
   </div>
   <div class="foot">Confidential working draft — for Isaiah &amp; CT. Not a binding agreement; figures are placeholders to anchor the conversation, and final structure needs counsel.<br/><span class="rust">Ovae × Orectic</span> &nbsp;·&nbsp; May 2026</div>
 </div>
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sel = 'h2, h3, table, blockquote';
+  var nodes = Array.prototype.slice.call(document.querySelectorAll(sel));
+  if (!reduce) {
+    nodes.forEach(function(el,i){ el.classList.add('reveal'); el.style.transitionDelay=((i%6)*60)+'ms'; });
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold:.12, rootMargin:'0px 0px -8% 0px' });
+    nodes.forEach(function(el){ io.observe(el); });
+  }
+  document.querySelectorAll('.spotlight').forEach(function(c){
+    c.addEventListener('pointermove', function(e){
+      var r=c.getBoundingClientRect();
+      c.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100)+'%');
+      c.style.setProperty('--my', ((e.clientY-r.top)/r.height*100)+'%');
+    });
+  });
+  document.querySelectorAll('[data-chart]').forEach(function(c){
+    var io2 = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('chart-in'); io2.unobserve(e.target); } });
+    }, { threshold:.3 });
+    io2.observe(c);
+  });
+})();
+</script>
 </body></html>
