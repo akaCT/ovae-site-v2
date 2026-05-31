@@ -2407,6 +2407,15 @@
   }
   .cadence-foot strong{ color: var(--ink-dim); font-weight: 500; font-style: normal; }
 
+  /* ── elevation: cursor spotlight on card families (v7 parity, additive) ── */
+  .card,.cat-card,.moat-card,.math-col,.box-step,.voice-col{ position:relative; }
+  .card::after,.cat-card::after,.moat-card::after,.math-col::after,.box-step::after,.voice-col::after{
+    content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:1;
+    opacity:0; transition:opacity .3s ease;
+    background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), rgba(123,201,196,0.09), transparent 60%);
+  }
+  .card:hover::after,.cat-card:hover::after,.moat-card:hover::after,.math-col:hover::after,.box-step:hover::after,.voice-col:hover::after{ opacity:1; }
+  @media (prefers-reduced-motion: reduce){ .card::after,.cat-card::after,.moat-card::after,.math-col::after,.box-step::after,.voice-col::after{ display:none; } }
 </style>
 </head>
 <body>
@@ -3695,5 +3704,17 @@
   })();
 </script>
 
+<script>
+(function(){
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('.card,.cat-card,.moat-card,.math-col,.box-step,.voice-col').forEach(function(c){
+    c.addEventListener('pointermove',function(e){
+      var r=c.getBoundingClientRect();
+      c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+      c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+    });
+  });
+})();
+</script>
 </body>
 </html>
