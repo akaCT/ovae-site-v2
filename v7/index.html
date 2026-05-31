@@ -125,6 +125,35 @@ h2 em{font-style:italic;color:var(--accent);font-weight:300}
 .sdim .flag{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--rust);margin-left:7px;vertical-align:middle}
 .sample-move{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink);line-height:1.5}
 .sample-move b{color:var(--accent);font-weight:500}
+/* ───────────────────────── elevation pass ───────────────────────── */
+html{scroll-behavior:smooth}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+/* film grain — fixed, cohesive with /vision/v4 */
+body::after{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.92 0 0 0 0 0.89 0 0 0 0 0.86 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+/* scroll reveal */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);will-change:opacity,transform}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.sample-meter i{width:62%!important;animation:none!important}}
+/* card depth, hover lift, cursor spotlight */
+.card,.op,.step{position:relative;isolation:isolate}
+.card::before,.op::before,.step::before{content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;opacity:0;transition:opacity .3s;
+ background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(123,201,196,.1),transparent 62%)}
+.card:hover::before,.op:hover::before,.step:hover::before{opacity:1}
+.card,.step,.op,.who-row,.rung{transition:transform .25s cubic-bezier(.2,.6,.2,1),border-color .25s,box-shadow .25s,background .25s}
+.card:hover,.op:hover,.who-row:hover{transform:translateY(-3px);border-color:var(--rule-strong);box-shadow:0 22px 48px -26px rgba(0,0,0,.8)}
+.step:hover{transform:translateY(-3px);border-color:rgba(123,201,196,.4);box-shadow:0 22px 50px -22px rgba(123,201,196,.2)}
+.rung:hover{border-color:var(--rule-strong);transform:translateX(4px)}
+/* buttons: press + glow */
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn-primary{box-shadow:0 12px 30px -14px rgba(123,201,196,.55)}
+.btn-primary:hover{filter:brightness(1.06);transform:translateY(-2px);box-shadow:0 18px 38px -14px rgba(123,201,196,.65)}
+/* signature score card — tilt on hover + meter fill on reveal */
+.sample{transition:transform .45s cubic-bezier(.2,.6,.2,1),box-shadow .45s;transform-style:preserve-3d}
+.sample:hover{transform:translateY(-4px);box-shadow:0 38px 90px rgba(0,0,0,.55)}
+.sample.in .sample-meter i{animation:fill 1.5s cubic-bezier(.2,.7,.2,1) both}
+.sample-meter i{width:0}
+@keyframes fill{from{width:0}to{width:62%}}
 </style></head>
 <body>
 
@@ -264,4 +293,33 @@ h2 em{font-style:italic;color:var(--accent);font-weight:300}
   <p>© 2026 Ovae &nbsp;·&nbsp; <span class="rust">Powered by Orectic</span>, the AI-Native Operating System &nbsp;·&nbsp; Austin, TX</p>
 </div></footer>
 
+<script>
+(function(){
+  var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sel = '.hero h1,.hero .lede,.hero .ctas,.hero .powered,section .kicker,section h2,section .lede,.card,.step,.op,.who-row,.rung,.sample,.section-img,.billboard .bb-eyebrow,.billboard .bb,.billboard .bb-foot,.faq details,.foot p';
+  var nodes = Array.prototype.slice.call(document.querySelectorAll(sel));
+  if(rm){ return; } // respect reduced motion — content already visible
+  nodes.forEach(function(el){ el.classList.add('reveal'); });
+  // stagger children within groups
+  document.querySelectorAll('.grid,.steps,.op-grid,.who-rows,.path,.faq').forEach(function(g){
+    Array.prototype.forEach.call(g.children,function(c,i){ if(c.classList.contains('reveal')) c.style.transitionDelay=(i*70)+'ms'; });
+  });
+  // stagger the hero entrance
+  ['.hero h1','.hero .lede','.hero .ctas','.hero .powered'].forEach(function(s,i){
+    var el=document.querySelector(s); if(el) el.style.transitionDelay=(i*90)+'ms';
+  });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{ threshold:.12, rootMargin:'0px 0px -8% 0px' });
+  nodes.forEach(function(el){ io.observe(el); });
+  // cursor spotlight
+  document.querySelectorAll('.card,.op,.step').forEach(function(c){
+    c.addEventListener('pointermove',function(e){
+      var r=c.getBoundingClientRect();
+      c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+      c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+    });
+  });
+})();
+</script>
 </body></html>
