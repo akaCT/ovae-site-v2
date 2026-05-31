@@ -74,6 +74,35 @@ body{
 .foot{margin-top:60px; padding-top:22px; border-top:1px solid var(--rule); font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.04em; color:var(--ink-mute); line-height:1.7}
 .foot .rust{color:var(--rust)}
 @media (max-width:600px){ body{font-size:15.5px} .wrap{padding:0 18px 80px} .topbar{margin:0 -18px} }
+/* ── cohesive elevation (matches ovae.ai v7) ── */
+html{scroll-behavior:smooth}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+body::after{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.92 0 0 0 0 0.89 0 0 0 0 0.86 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);will-change:opacity,transform}
+.reveal.in{opacity:1;transform:none}
+table,blockquote{transition:border-color .25s,box-shadow .25s,transform .25s}
+table:hover,blockquote:hover{box-shadow:0 22px 48px -30px rgba(0,0,0,.8)}
+a{transition:color .2s,border-color .2s}
+.spotlight{position:relative;isolation:isolate}
+.spotlight::before{content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;opacity:0;transition:opacity .3s;
+ background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(123,201,196,.09),transparent 62%)}
+.spotlight:hover::before{opacity:1}
+.ovchart{margin:22px 0 8px}
+.ovchart .lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
+.ovbar{height:10px;border-radius:5px;background:var(--rule-strong);overflow:hidden;margin:6px 0 2px}
+.ovbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--accent));transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+[data-chart].chart-in .ovbar i{width:var(--w)}
+.ovdonut circle.val{stroke-dasharray:var(--c);stroke-dashoffset:var(--c);transition:stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1)}
+[data-chart].chart-in .ovdonut circle.val{stroke-dashoffset:var(--off)}
+.ovgrid{display:grid;gap:14px}
+@media(min-width:640px){.ovgrid.cols2{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion: reduce){
+ html{scroll-behavior:auto}
+ .reveal{opacity:1!important;transform:none!important;transition:none}
+ .spotlight::before{display:none}
+ .ovbar i,.ovdonut circle.val{transition:none}
+}
 </style>
 </head><body>
 <div class="wrap">
@@ -110,7 +139,7 @@ body{
 </blockquote>
 <hr />
 <h2>The structure</h2>
-<table>
+<table class="spotlight">
 <thead>
 <tr>
 <th>Lever</th>
@@ -144,6 +173,22 @@ body{
 </tr>
 </tbody>
 </table>
+<div class="ovchart spotlight" data-chart aria-label="Founder equity split: 55% Isaiah, 45% CT, plus 10-12% option pool">
+  <div class="lbl">Founder equity (as stated above)</div>
+  <div class="ovgrid cols2" style="align-items:center">
+    <svg viewBox="0 0 120 120" width="150" height="150" class="ovdonut" style="--c:314;--off:141" aria-hidden="true">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="var(--rule-strong)" stroke-width="14"/>
+      <circle class="val" cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" stroke-width="14" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+      <text x="60" y="56" text-anchor="middle" fill="var(--ink)" font-size="20" font-weight="300">55/45</text>
+      <text x="60" y="74" text-anchor="middle" fill="var(--ink-mute)" font-size="8" font-family="DM Mono,monospace" letter-spacing="1">ISAIAH / CT</text>
+    </svg>
+    <div style="font-size:13px;color:var(--ink-dim);line-height:1.7">
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--accent);margin-right:8px"></span>Isaiah 55%</div>
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--rust);margin-right:8px"></span>CT 45%</div>
+      <div style="color:var(--ink-mute);margin-top:4px">+ ~10–12% team option pool</div>
+    </div>
+  </div>
+</div>
 <hr />
 <h2>The lanes</h2>
 <p>It's <strong>one company, and it employs everyone</strong> — the engineers who build the product <em>and</em> the team that signs and runs clients. The split isn't two payrolls; it's <strong>who leads what:</strong></p>
@@ -161,6 +206,16 @@ body{
 <li><strong>Funnel:</strong> 30-min qualify → <strong>paid discovery workshop ($7.5–10K, ~80% convert to flagship)</strong> → proposal in 5 days → <strong>50% deposit on signature</strong> (self-funds delivery and first hires) → 25% at Evidence Core live → 25% at completion.</li>
 </ul>
 <p><strong>Path to $10M ARR (blended, ~12–15 months):</strong> ~30 flagship Embeds (~$220K) + ~25 Builds (~$90K) + a self-serve tier (The Brain) + retainers ≈ $10M at ~62–70% blended gross margin. Close rate ramps <strong>1–2 flagships/mo early → 3–4/mo by month ~10</strong> as case studies compound.</p>
+<div class="ovchart spotlight" data-chart aria-label="Path to ~$10M ARR — stated mix">
+  <div class="lbl">Path to ~$10M ARR — stated mix</div>
+  <div class="ovbar" style="display:flex;height:26px;border-radius:6px">
+    <i style="--w:100%;width:52%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--bg);font-family:'DM Mono',monospace" title="~30 Embeds (~$220K)">~30 Embeds</i>
+    <i style="--w:100%;width:24%;background:var(--rust);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--bg);font-family:'DM Mono',monospace" title="~25 Builds (~$90K)">~25 Builds</i>
+    <i style="--w:100%;width:12%;background:rgba(123,201,196,0.55);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--bg);font-family:'DM Mono',monospace" title="The Brain (self-serve)">The Brain</i>
+    <i style="--w:100%;width:12%;background:rgba(123,201,196,0.30);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--ink);font-family:'DM Mono',monospace" title="retainers">retainers</i>
+  </div>
+  <div class="lbl" style="text-transform:none;letter-spacing:0;margin-top:8px;color:var(--ink-mute)">~30 flagship Embeds (~$220K) + ~25 Builds (~$90K) + a self-serve tier (The Brain) + retainers ≈ $10M at ~62–70% blended gross margin</div>
+</div>
 <p><strong>Headcount arc:</strong> At ~$2M ARR — AE + setter + implementation lead + 2 contract builders, Isaiah on escalations only. At $5M — add AE, delivery lead, CSM, FT builder. At $10M — VP Sales, additional AEs, solutions engineer, implementation specialists, head of CS, RevOps analyst running Orectic on ourselves.</p>
 <hr />
 <h2>Fundraising — from strength, for leverage and liquidity</h2>
@@ -198,7 +253,7 @@ body{
 <hr />
 <h2>The offer ladder &amp; ACV mix</h2>
 <p>Every dollar a client spends <strong>applies forward</strong> via a "transformation account" balance — commitment architecture, not a discount.</p>
-<table>
+<table class="spotlight">
 <thead>
 <tr>
 <th>Rung</th>
@@ -246,6 +301,33 @@ body{
 </tr>
 </tbody>
 </table>
+<div class="ovchart spotlight" data-chart aria-label="Offer ladder by stated ACV">
+  <div class="lbl">Offer ladder — by stated ACV</div>
+  <div style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-dim)"><span>AI Readiness Snapshot</span><span>Free / $500 facilitated</span></div>
+    <div class="ovbar"><i style="--w:0.25%"></i></div>
+  </div>
+  <div style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-dim)"><span>Readiness Audit</span><span>$7,500, 100% credited forward</span></div>
+    <div class="ovbar"><i style="--w:3.75%"></i></div>
+  </div>
+  <div style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-dim)"><span>The Brain (DIY, self-serve)</span><span>~$4,500/yr ($497/mo)</span></div>
+    <div class="ovbar"><i style="--w:2.25%"></i></div>
+  </div>
+  <div style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-dim)"><span>Build (done-with-you)</span><span>~$90K</span></div>
+    <div class="ovbar"><i style="--w:45%"></i></div>
+  </div>
+  <div style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-dim)"><span>Embed (done-for-you flagship)</span><span>$175–225K</span></div>
+    <div class="ovbar"><i style="--w:100%"></i></div>
+  </div>
+  <div style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-dim)"><span>AI-Native Retainer</span><span>$18–36K/yr</span></div>
+    <div class="ovbar"><i style="--w:13.5%"></i></div>
+  </div>
+</div>
 <p><strong>Mix to ~$10M ARR (illustrative):</strong> ~30 Embeds ($6M) + ~25 Builds ($2.25M) + ~60 retainers ($1.4M) + ~200 The Brain ($0.9M) + audits net (~$0.3M) ≈ <strong>$10.9M at ~62–70% blended gross margin</strong> — margin expands as vertical runbooks make each new install cheaper than the last.</p>
 <p><strong>The land motion.</strong> The $7,500 paid audit filters intent and removes the budget and commitment objections at once; the "applies-forward" line closes <em>"we're not ready for the big engagement."</em> Flow: readiness snapshot pre-call → discovery only for scores &gt;60/100 → 45-min discovery (qualify on metric / economic buyer / champion / 90-day window) → close the audit → <strong>deposit on signature, no exceptions.</strong> We dogfood Orectic to run this entire funnel — lead scoring, auto-drafted discovery briefs, proposals generated in hours — so the funnel itself is the live demo.</p>
 <hr />
@@ -257,7 +339,7 @@ body{
 <p><strong>Content / brand / events as top of funnel:</strong> Adam owns creative; CT and Isaiah build their personal brands (CT on GTM and transformation, Isaiah on product and authority); a paid-media contractor amplifies what converts; <strong>monthly "Ovae Sessions"</strong> (invite-only, 25–40 operators of $3–20M companies) each yield 3–5 discovery calls and become content. Loop: content → inbound → setter → closer → client → case study → content.</p>
 <hr />
 <h2>Decision-authority matrix</h2>
-<table>
+<table class="spotlight">
 <thead>
 <tr>
 <th>Domain</th>
@@ -296,4 +378,31 @@ body{
   </div>
   <div class="foot">Confidential working draft — for Isaiah &amp; CT. Not a binding agreement; figures are placeholders to anchor the conversation, and final structure needs counsel.<br/><span class="rust">Ovae × Orectic</span> &nbsp;·&nbsp; May 2026</div>
 </div>
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sel = 'h2, h3, table, blockquote';
+  var nodes = Array.prototype.slice.call(document.querySelectorAll(sel));
+  if (!reduce) {
+    nodes.forEach(function(el,i){ el.classList.add('reveal'); el.style.transitionDelay=((i%6)*60)+'ms'; });
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold:.12, rootMargin:'0px 0px -8% 0px' });
+    nodes.forEach(function(el){ io.observe(el); });
+  }
+  document.querySelectorAll('.spotlight').forEach(function(c){
+    c.addEventListener('pointermove', function(e){
+      var r=c.getBoundingClientRect();
+      c.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100)+'%');
+      c.style.setProperty('--my', ((e.clientY-r.top)/r.height*100)+'%');
+    });
+  });
+  document.querySelectorAll('[data-chart]').forEach(function(c){
+    var io2 = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('chart-in'); io2.unobserve(e.target); } });
+    }, { threshold:.3 });
+    io2.observe(c);
+  });
+})();
+</script>
 </body></html>
