@@ -74,6 +74,37 @@ body{
 .foot{margin-top:60px; padding-top:22px; border-top:1px solid var(--rule); font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.04em; color:var(--ink-mute); line-height:1.7}
 .foot .rust{color:var(--rust)}
 @media (max-width:600px){ body{font-size:15.5px} .wrap{padding:0 18px 80px} .topbar{margin:0 -18px} }
+/* ── cohesive elevation (matches ovae.ai v7) ── */
+html{scroll-behavior:smooth}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+body::after{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.92 0 0 0 0 0.89 0 0 0 0 0.86 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);will-change:opacity,transform}
+.reveal.in{opacity:1;transform:none}
+table,blockquote{transition:border-color .25s,box-shadow .25s,transform .25s}
+table:hover,blockquote:hover{box-shadow:0 22px 48px -30px rgba(0,0,0,.8)}
+a{transition:color .2s,border-color .2s}
+.spotlight{position:relative;isolation:isolate}
+.spotlight::before{content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;opacity:0;transition:opacity .3s;
+ background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(123,201,196,.09),transparent 62%)}
+.spotlight:hover::before{opacity:1}
+.ovchart{margin:22px 0 8px}
+.ovchart .lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
+.ovbar{height:10px;border-radius:5px;background:var(--rule-strong);overflow:hidden;margin:6px 0 2px}
+.ovbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--accent));transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+[data-chart].chart-in .ovbar i{width:var(--w)}
+.ovdonut circle.val{stroke-dasharray:var(--c);stroke-dashoffset:var(--c);transition:stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1)}
+[data-chart].chart-in .ovdonut circle.val{stroke-dashoffset:var(--off)}
+.ovgrid{display:grid;gap:14px}
+@media(min-width:640px){.ovgrid.cols2{grid-template-columns:1fr 1fr}}
+.vtrack{stroke-dasharray:380;stroke-dashoffset:380;transition:stroke-dashoffset 1.6s ease}
+[data-chart].chart-in .vtrack{stroke-dashoffset:0}
+@media (prefers-reduced-motion: reduce){
+ html{scroll-behavior:auto}
+ .reveal{opacity:1!important;transform:none!important;transition:none}
+ .spotlight::before{display:none}
+ .ovbar i,.ovdonut circle.val,.vtrack{transition:none}
+}
 </style>
 </head><body>
 <div class="wrap">
@@ -90,7 +121,7 @@ body{
 </blockquote>
 <hr />
 <h2>0. The recommended deal, in one box</h2>
-<table>
+<table class="spotlight">
 <thead>
 <tr>
 <th>Lever</th>
@@ -168,7 +199,7 @@ body{
 <li><strong>We're expanding the pie, not dividing a fixed one.</strong> Solo, the realistic ceiling is a strong boutique. Together — product + distribution + capital — the outcome is an order of magnitude larger. 55% of <em>that</em> is worth far more than 100% of the solo path. That's the case, and it's true.</li>
 </ul>
 <p><strong>How the three objective lenses landed.</strong> An independent expert pass ran the split through several frameworks; the three objective ones converged:</p>
-<table>
+<table class="spotlight">
 <thead><tr><th>Lens</th><th>Where it landed</th></tr></thead>
 <tbody>
 <tr><td>Founder-split frameworks (pie + replacement-cost)</td><td><strong>~55 / 45</strong></td></tr>
@@ -179,6 +210,22 @@ body{
 </table>
 <p>The objective lenses converge at <strong>52–55 Isaiah / 45–48 CT</strong>. We're proposing <strong>55/45</strong>, the Isaiah-favorable end of that range.</p>
 <p><strong>Option pool:</strong> carve <strong>~10–12%</strong> for the team — granted from the company, not from CT's slice.</p>
+<div class="ovchart spotlight" data-chart aria-label="Founder equity split: 55% Isaiah, 45% CT, plus 10-12% option pool">
+  <div class="lbl">Founder equity (as stated above)</div>
+  <div class="ovgrid cols2" style="align-items:center">
+    <svg viewBox="0 0 120 120" width="150" height="150" class="ovdonut" style="--c:314;--off:141" aria-hidden="true">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="var(--rule-strong)" stroke-width="14"/>
+      <circle class="val" cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" stroke-width="14" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+      <text x="60" y="56" text-anchor="middle" fill="var(--ink)" font-size="20" font-weight="300">55/45</text>
+      <text x="60" y="74" text-anchor="middle" fill="var(--ink-mute)" font-size="8" font-family="DM Mono,monospace" letter-spacing="1">ISAIAH / CT</text>
+    </svg>
+    <div style="font-size:13px;color:var(--ink-dim);line-height:1.7">
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--accent);margin-right:8px"></span>Isaiah 55%</div>
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--rust);margin-right:8px"></span>CT 45%</div>
+      <div style="color:var(--ink-mute);margin-top:4px">+ ~10–12% team option pool</div>
+    </div>
+  </div>
+</div>
 <h3>3b. Income now — salary, not a draw</h3>
 <ul>
 <li><strong>Equal salaries — ~$25K/mo each.</strong> Funded from client revenue — start payroll once 2–3 clients are closed; don't pay ahead of revenue. Equity carries the contribution difference; equal monthly cash comp keeps the day-to-day dynamic clean.</li>
@@ -201,7 +248,7 @@ body{
 <p><strong>How VC / PE / M&amp;A see it.</strong> <em>Pre-raise</em> (where we are) there are no "VC rules" on our pay — it's a bootstrapped, profitable business, so we pay what it genuinely affords (base + distributions), and that's <em>attractive</em>: distributions from a real business signal a fundable company, not a science project. <em>When we raise,</em> comp resets to market and board approval — typically ~$175–225K and under ~15% of burn; big salaries on investor cash are a red flag, lean base + equity is the norm. <em>PE/M&amp;A buyers normalize owner comp</em> — excess pay is an add-back in diligence, so reasonable pay doesn't hurt valuation; they price on growth and (for PE) normalized EBITDA.</p>
 <p><strong>The deposit-driven funnel front-loads cash.</strong> A paid audit plus <strong>50% on signature</strong> means Krista ($175K) plus ~$300K of near pipeline puts ~$0.5–1M contracted within ~90 days; 2–3 Embeds cover both salaries plus the hiring pool with surplus left. The business funds its own delivery and first hires from day one.</p>
 <p><strong>A simple model — what we'd actually take home at three stages.</strong> <em>Illustrative, not a projection. Assumes ~70% blended gross margin (mature-state; ~62% during the near-term build-up); base salaries equal; distributions only past a 6-month-runway + hiring buffer, split pro-rata to equity (55/45).</em></p>
-<table>
+<table class="spotlight">
 <thead>
 <tr>
 <th>At this ARR</th>
@@ -243,6 +290,25 @@ body{
 </tr>
 </tbody>
 </table>
+<div class="ovchart spotlight" data-chart aria-label="Illustrative founder take-home by ARR stage, from the table above">
+  <div class="lbl">Illustrative take-home (from the table above)</div>
+  <div style="margin-bottom:12px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-dim)"><span>$1M ARR</span><span>~$180K each</span></div>
+    <div class="ovbar"><i style="--w:15%"></i></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-dim)"><span>$3M ARR · Isaiah</span><span>~$465K</span></div>
+    <div class="ovbar"><i style="--w:39%"></i></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-dim);margin-top:6px"><span>$3M ARR · CT</span><span>~$435K</span></div>
+    <div class="ovbar"><i style="--w:37%"></i></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-dim)"><span>$10M ARR · Isaiah</span><span>~$1.19M</span></div>
+    <div class="ovbar"><i style="--w:100%"></i></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-dim);margin-top:6px"><span>$10M ARR · CT</span><span>~$1.04M</span></div>
+    <div class="ovbar"><i style="--w:87%"></i></div>
+  </div>
+</div>
 <p>Read it this way: <strong>base is equal at every stage</strong> (so the day-to-day feels fair); the only gap in take-home is the <strong>distribution</strong>, which follows the 55/45 equity — exactly as intended. At $1M you pay yourselves a modest base and reinvest everything; by $3M you're each ~$450K with ~$300K still banked to hire; by $10M you're each pulling <strong>~$1M+/yr in cash</strong> with margin to spare. And remember the real money isn't here at all — it's the <strong>equity</strong> ($20–30M+ at exit). Distributions are deliberately throttled (the "kept in" column) precisely so the company keeps compounding toward that, instead of being bled for short-term cash.</p>
 <p><strong>Play with it live:</strong> an interactive version — slide ARR, gross margin, opex, base, the distribution throttle, and the equity split, and watch both founders' take-home update — is at <strong>https://ovae.ai/partnership/comp-model/</strong>.</p>
 <hr />
@@ -257,6 +323,18 @@ body{
 <li><strong>Isaiah's head start</strong> can be recognized with modest vesting credit at close (e.g., 6–12 months), then the same go-forward schedule as CT.</li>
 </ul>
 <p><em>(The milestone-linked tranche idea from earlier is gone — superseded by this. Symmetric vesting + the milestone accelerators + the §4b clean-break do its job: if CT underdelivers and we part, his unvested equity returns and Isaiah keeps Orectic.)</em></p>
+<div class="ovchart spotlight" data-chart aria-label="Vesting: 4-year floor, 12-month cliff, milestone acceleration, full acceleration on sale">
+  <div class="lbl">Vesting — as described in 4a</div>
+  <svg viewBox="0 0 400 60" width="100%" height="60" aria-hidden="true">
+    <line x1="10" y1="40" x2="390" y2="40" stroke="var(--rule-strong)" stroke-width="2"/>
+    <line class="vtrack" x1="10" y1="40" x2="390" y2="40" stroke="var(--accent)" stroke-width="2"/>
+    <line x1="105" y1="30" x2="105" y2="50" stroke="var(--rust)" stroke-width="2"/>
+    <text x="105" y="24" text-anchor="middle" fill="var(--ink-mute)" font-size="8" font-family="DM Mono,monospace">12-MO CLIFF</text>
+    <text x="10" y="56" fill="var(--ink-mute)" font-size="8" font-family="DM Mono,monospace">YR 0</text>
+    <text x="390" y="56" text-anchor="end" fill="var(--ink-mute)" font-size="8" font-family="DM Mono,monospace">YR 4 · FULL ON SALE</text>
+  </svg>
+  <div style="font-size:12px;color:var(--ink-dim)">Accelerates on financing rounds + valuation milestones; full acceleration on a sale.</div>
+</div>
 <h3>4b. Protections — symmetric, in the shareholders' agreement (not a handshake)</h3>
 <p><strong>The clean break — each keeps their lane (this is the heart of it).</strong> The single thing that makes it safe enough for <em>both</em> of us to start now: if it ends, neither is stranded.</p>
 <ul>
@@ -313,4 +391,31 @@ body{
   </div>
   <div class="foot">Confidential working draft — for Isaiah &amp; CT. Not a binding agreement; figures are placeholders to anchor the conversation, and final structure needs counsel.<br/><span class="rust">Ovae × Orectic</span> &nbsp;·&nbsp; May 2026</div>
 </div>
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sel = 'h2, h3, table, blockquote';
+  var nodes = Array.prototype.slice.call(document.querySelectorAll(sel));
+  if (!reduce) {
+    nodes.forEach(function(el,i){ el.classList.add('reveal'); el.style.transitionDelay=((i%6)*60)+'ms'; });
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold:.12, rootMargin:'0px 0px -8% 0px' });
+    nodes.forEach(function(el){ io.observe(el); });
+  }
+  document.querySelectorAll('.spotlight').forEach(function(c){
+    c.addEventListener('pointermove', function(e){
+      var r=c.getBoundingClientRect();
+      c.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100)+'%');
+      c.style.setProperty('--my', ((e.clientY-r.top)/r.height*100)+'%');
+    });
+  });
+  document.querySelectorAll('[data-chart]').forEach(function(c){
+    var io2 = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('chart-in'); io2.unobserve(e.target); } });
+    }, { threshold:.3 });
+    io2.observe(c);
+  });
+})();
+</script>
 </body></html>
