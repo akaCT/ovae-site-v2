@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Configure an engagement — Ovae × Orectic</title>
+<meta name="robots" content="noindex, nofollow"/>
+<meta name="theme-color" content="#14101A"/>
+<meta name="color-scheme" content="dark"/>
+<link rel="canonical" href="https://ovae.ai/partnership/configure/"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2314101A'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%237BC9C4'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%237BC9C4' stroke-opacity='0.4' stroke-width='1'/%3E%3C/svg%3E"/>
+<meta property="og:type" content="article"/>
+<meta property="og:site_name" content="Ovae"/>
+<meta property="og:title" content="Configure an engagement — Ovae × Orectic"/>
+<meta property="og:description" content="Compose a Build or Embed from the service catalog and see the price flex to what a company needs."/>
+<meta property="og:image" content="https://ovae.ai/assets/og-image.jpg"/>
+<meta property="og:url" content="https://ovae.ai/partnership/configure/"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#14101A; --bg-elev:#1A1622; --bg-soft:#1F1A28;
+  --ink:#E8E4DC; --ink-dim:#A39E96; --ink-mute:#6F6A63;
+  --rule:rgba(232,228,220,0.08); --rule-strong:rgba(232,228,220,0.16);
+  --accent:#7BC9C4; --rust:#C97D5C; --warn:#D9B26B;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:'DM Sans',system-ui,sans-serif; font-weight:300; line-height:1.6; font-size:16px; -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1200px 600px at 80% -10%, rgba(123,201,196,0.06), transparent 60%), radial-gradient(900px 500px at -10% 20%, rgba(201,125,92,0.05), transparent 55%); background-attachment:fixed;}
+.wrap{max-width:1000px; margin:0 auto; padding:0 28px 110px}
+.topbar{position:sticky; top:0; z-index:10; backdrop-filter:blur(10px); background:rgba(20,16,26,0.82); border-bottom:1px solid var(--rule); margin:0 -28px 0; padding:11px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px;}
+.topbar .brand{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-dim)}
+.topbar .brand b{color:var(--accent); font-weight:500}
+.conf{font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--rust); border:1px solid rgba(201,125,92,0.4); border-radius:999px; padding:4px 11px; white-space:nowrap}
+.head{padding:48px 0 6px}
+.kicker{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:16px; display:flex; align-items:center; gap:9px}
+.kicker::before{content:""; width:22px; height:1px; background:var(--accent)}
+h1{font-size:clamp(28px,4.4vw,40px); font-weight:300; letter-spacing:-0.02em; line-height:1.1; margin:.1em 0 .4em}
+h1 em{font-style:italic; color:var(--accent)}
+.lede{color:var(--ink-dim); max-width:62ch; margin:.2em 0 0}
+.grid{display:grid; gap:22px; margin-top:30px}
+@media(min-width:840px){.grid{grid-template-columns:1fr 360px; align-items:start}}
+.panel{background:var(--bg-elev); border:1px solid var(--rule); border-radius:16px; padding:8px 4px}
+.sec-lbl{font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-mute); padding:16px 18px 6px}
+.row{display:flex; align-items:center; gap:14px; padding:13px 18px; border-top:1px solid var(--rule); cursor:pointer; transition:background .15s}
+.row:first-of-type{border-top:none}
+.row:hover{background:rgba(255,255,255,0.02)}
+.row.on{background:rgba(123,201,196,0.05)}
+.row.fixed{cursor:default; opacity:.92}
+.box{width:20px; height:20px; flex:0 0 auto; border:1.5px solid var(--rule-strong); border-radius:6px; display:flex; align-items:center; justify-content:center; transition:.15s; margin-top:1px}
+.row.on .box{background:var(--accent); border-color:var(--accent)}
+.box svg{width:12px; height:12px; opacity:0; transition:.15s}
+.row.on .box svg{opacity:1}
+.row.fixed .box{background:var(--rust); border-color:var(--rust)}
+.row.fixed .box svg{opacity:1}
+.meta{flex:1; min-width:0}
+.meta .nm{color:var(--ink); font-weight:400; font-size:15px}
+.meta .ds{color:var(--ink-mute); font-size:12.5px; margin-top:1px}
+.price{font-family:'DM Mono',monospace; font-size:13px; color:var(--ink-dim); white-space:nowrap; text-align:right}
+.price .mo{display:block; color:var(--ink-mute); font-size:11px}
+.qty{display:flex; align-items:center; gap:8px}
+.qty button{width:26px; height:26px; border-radius:7px; border:1px solid var(--rule-strong); background:var(--bg-soft); color:var(--ink); font-size:15px; cursor:pointer; line-height:1; transition:.15s}
+.qty button:hover{border-color:var(--accent); color:var(--accent)}
+.qty input{width:34px; text-align:center; background:transparent; border:none; color:var(--ink); font-family:'DM Mono',monospace; font-size:15px}
+select{width:100%; background:var(--bg-soft); color:var(--ink); border:1px solid var(--rule-strong); border-radius:9px; padding:11px 13px; font-family:'DM Sans',sans-serif; font-size:14.5px; margin:2px 18px 16px; width:calc(100% - 36px)}
+/* summary */
+.summary{position:sticky; top:64px; background:var(--bg-elev); border:1px solid var(--rule-strong); border-radius:16px; overflow:hidden}
+.tier{padding:18px 20px; border-bottom:1px solid var(--rule); background:linear-gradient(180deg, rgba(123,201,196,0.08), transparent)}
+.tier .t-lbl{font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-mute)}
+.tier .t-name{font-size:22px; font-weight:500; color:var(--accent); margin-top:3px; letter-spacing:-0.01em}
+.tier .t-sub{font-size:12.5px; color:var(--ink-dim); margin-top:3px}
+.totals{padding:6px 20px 8px}
+.tt{display:flex; justify-content:space-between; align-items:baseline; padding:9px 0; border-top:1px solid var(--rule)}
+.tt:first-child{border-top:none}
+.tt .k{color:var(--ink-dim); font-size:13px}
+.tt .v{font-family:'DM Mono',monospace; color:var(--ink); font-size:17px; font-weight:500}
+.tt.big .v{color:var(--accent); font-size:20px}
+.lines{padding:4px 20px 14px; border-top:1px solid var(--rule)}
+.lines .li{display:flex; justify-content:space-between; font-size:12px; color:var(--ink-mute); padding:3px 0; font-family:'DM Mono',monospace}
+.note{padding:0 20px 18px; font-size:11.5px; color:var(--ink-mute); line-height:1.5}
+.note a{color:var(--accent); text-decoration:none}
+.foot{margin-top:56px; padding-top:22px; border-top:1px solid var(--rule); font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.04em; color:var(--ink-mute); line-height:1.7}
+.foot a{color:var(--accent); text-decoration:none}
+@media(max-width:600px){ body{font-size:15px} .wrap{padding:0 16px 70px} .topbar{margin:0 -16px} .summary{position:static} }
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} html{scroll-behavior:auto} }
+</style>
+</head><body>
+<div class="wrap">
+  <div class="topbar"><div class="brand">OVAE <b>×</b> ORECTIC</div><div class="conf">Confidential — internal</div></div>
+  <div class="head">
+    <div class="kicker">Pricing model</div>
+    <h1>Configure an <em>engagement</em>.</h1>
+    <p class="lede">Pricing is per component. A Build or an Embed is just how many catalog services you install on top of the Brain — the price is the sum, and it flexes to exactly what a company needs. Toggle services to see the number move.</p>
+  </div>
+
+  <div class="grid">
+    <div class="panel" id="catalog"></div>
+    <div class="summary">
+      <div class="tier">
+        <div class="t-lbl">This composition is a</div>
+        <div class="t-name" id="tierName">Land</div>
+        <div class="t-sub" id="tierSub">Audit + Brain — the entry point</div>
+      </div>
+      <div class="totals">
+        <div class="tt"><span class="k">One-time</span><span class="v" id="vOne">$0</span></div>
+        <div class="tt"><span class="k">Recurring</span><span class="v" id="vMo">$0/mo</span></div>
+        <div class="tt big"><span class="k">First-year total</span><span class="v" id="vYr">$0</span></div>
+      </div>
+      <div class="lines" id="lines"></div>
+      <div class="note">The audit ($7,500) is credited forward into the build. Builds/Embeds are then <em>value-priced</em> on top of this component cost — a fraction of the ROI uncovered in discovery. <a href="/partnership/one-pager/">← back to the one-pager</a></div>
+    </div>
+  </div>
+
+  <div class="foot">Ovae × Orectic · Configure an engagement · <a href="/partnership/one-pager/">One-pager</a> · <a href="/partnership/proposal/">Proposal</a><br/>Confidential — do not distribute.</div>
+</div>
+
+<script>
+(function(){
+  var CHK='<svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#14101A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  // catalog: one = one-time $, mo = monthly recurring $, yr = annual recurring $
+  var fixed = [
+    {id:'audit', nm:'Readiness Audit', ds:'The land — credited forward', one:7500},
+    {id:'brain', nm:'The Brain (installed foundation)', ds:'Searchable second brain + visibility', one:10000, yr:299, toggle:true, on:true}
+  ];
+  var services = [
+    {id:'dash', nm:'Dashboards', ds:'Live profit / AR / utilization', one:30000, mo:2000, toggle:true},
+    {id:'auto', nm:'Automations', ds:'Quote-to-invoice, AR chase, routing…', each:10000, qty:true, max:8, n:4},
+    {id:'onb',  nm:'Onboarding / SOP', ds:'New-hire AI trainer', one:15000, toggle:true},
+    {id:'intg', nm:'Systems integration', ds:'Connect their existing tools', one:50000, toggle:true},
+    {id:'port', nm:'Portals', ds:'Customer + team portals', one:50000, mo:1500, toggle:true},
+    {id:'plat', nm:'Custom platform', ds:'Bespoke engine on their own data', one:95000, mo:1000, toggle:true}
+  ];
+  var retainers = [{v:0,n:'None'},{v:1500,n:'Maintain — $1.5K/mo'},{v:3000,n:'Optimize — $3K/mo'},{v:5000,n:'Scale — $5K/mo'}];
+  var state = {brain:true, dash:false, auto:0, onb:false, intg:false, port:false, plat:false, ret:1500};
+
+  function money(n){ return '$'+Math.round(n).toLocaleString('en-US'); }
+  function row(item, kind){
+    var div=document.createElement('div'); div.className='row'+(kind==='fixed'?' fixed':'');
+    if(kind!=='fixed' && (item.qty ? state[item.id]>0 : state[item.id])) div.className+=' on';
+    var right;
+    if(item.qty){
+      right='<div class="qty"><button data-dec="'+item.id+'">−</button><input id="q_'+item.id+'" value="'+state[item.id]+'" readonly aria-label="quantity"><button data-inc="'+item.id+'">+</button></div>';
+    } else {
+      var p=item.one?money(item.one):''; var sub=item.mo?('+ '+money(item.mo)+'/mo'):(item.yr?('+ '+money(item.yr)+'/yr'):'');
+      right='<div class="price">'+p+(sub?'<span class="mo">'+sub+'</span>':'')+'</div>';
+    }
+    div.innerHTML='<div class="box">'+CHK+'</div><div class="meta"><div class="nm">'+item.nm+(item.each?' <span style="color:var(--ink-mute);font-size:12px">('+money(item.each)+' each)</span>':'')+'</div><div class="ds">'+item.ds+'</div></div>'+right;
+    if(kind!=='fixed' && item.toggle){
+      div.addEventListener('click', function(e){ if(e.target.closest('.qty'))return; state[item.id]=!state[item.id]; render(); });
+    }
+    return div;
+  }
+  function render(){
+    var c=document.getElementById('catalog'); c.innerHTML='';
+    var l1=document.createElement('div'); l1.className='sec-lbl'; l1.textContent='Always included'; c.appendChild(l1);
+    fixed.forEach(function(it){ c.appendChild(row(it,'fixed')); });
+    var l2=document.createElement('div'); l2.className='sec-lbl'; l2.textContent='Service catalog — pick what they need'; c.appendChild(l2);
+    services.forEach(function(it){ c.appendChild(row(it, it.qty?'qty':'svc')); });
+    var l3=document.createElement('div'); l3.className='sec-lbl'; l3.textContent='Ongoing retainer (the annuity)'; c.appendChild(l3);
+    var sel=document.createElement('select'); retainers.forEach(function(r){ var o=document.createElement('option'); o.value=r.v; o.textContent=r.n; if(r.v===state.ret)o.selected=true; sel.appendChild(o); });
+    sel.addEventListener('change', function(){ state.ret=+sel.value; render(); }); c.appendChild(sel);
+    // wire qty buttons
+    c.querySelectorAll('[data-inc]').forEach(function(b){ b.addEventListener('click',function(){ var id=b.getAttribute('data-inc'); state[id]=Math.min(8,state[id]+1); render(); }); });
+    c.querySelectorAll('[data-dec]').forEach(function(b){ b.addEventListener('click',function(){ var id=b.getAttribute('data-dec'); state[id]=Math.max(0,state[id]-1); render(); }); });
+    compute();
+  }
+  function compute(){
+    var one=7500, mo=0, yr=0, lines=[];
+    lines.push(['Readiness Audit', money(7500)]);
+    if(state.brain){ one+=10000; yr+=299; lines.push(['The Brain', money(10000)+' + $299/yr']); }
+    if(state.dash){ one+=30000; mo+=2000; lines.push(['Dashboards', money(30000)]); }
+    if(state.auto>0){ one+=10000*state.auto; lines.push(['Automations ×'+state.auto, money(10000*state.auto)]); }
+    if(state.onb){ one+=15000; lines.push(['Onboarding / SOP', money(15000)]); }
+    if(state.intg){ one+=50000; lines.push(['Systems integration', money(50000)]); }
+    if(state.port){ one+=50000; mo+=1500; lines.push(['Portals', money(50000)]); }
+    if(state.plat){ one+=95000; mo+=1000; lines.push(['Custom platform', money(95000)]); }
+    if(state.ret>0){ mo+=state.ret; lines.push(['Retainer', money(state.ret)+'/mo']); }
+    var firstYr = one + mo*12 + yr;
+    document.getElementById('vOne').textContent=money(one);
+    document.getElementById('vMo').textContent= mo? money(mo)+'/mo' : '$0';
+    document.getElementById('vYr').textContent=money(firstYr);
+    var ll=document.getElementById('lines'); ll.innerHTML='';
+    lines.forEach(function(p){ var d=document.createElement('div'); d.className='li'; d.innerHTML='<span>'+p[0]+'</span><span>'+p[1]+'</span>'; ll.appendChild(d); });
+    // tier by one-time
+    var name,sub;
+    if(one < 30000){ name='Land'; sub='Audit + Brain — the entry point'; }
+    else if(one < 150000){ name='Build'; sub='Done-with-you — a focused composition'; }
+    else { name='Embed'; sub='Done-for-you flagship — the 90-day transformation'; }
+    document.getElementById('tierName').textContent=name;
+    document.getElementById('tierSub').textContent=sub;
+  }
+  render();
+})();
+</script>
+</body></html>
