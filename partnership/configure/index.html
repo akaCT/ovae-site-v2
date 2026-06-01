@@ -11,7 +11,7 @@
 <meta property="og:type" content="article"/>
 <meta property="og:site_name" content="Ovae"/>
 <meta property="og:title" content="Configure an engagement — Ovae × Orectic"/>
-<meta property="og:description" content="Compose a Build or Embed from the service catalog and see the price flex to what a company needs."/>
+<meta property="og:description" content="Compose a Build or Embed from the service catalog by complexity tier, and see the price — and the monthly to keep it running — flex to exactly what a company needs."/>
 <meta property="og:image" content="https://ovae.ai/assets/og-image.jpg"/>
 <meta property="og:url" content="https://ovae.ai/partnership/configure/"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -28,42 +28,51 @@
 html{scroll-behavior:smooth}
 body{margin:0; background:var(--bg); color:var(--ink); font-family:'DM Sans',system-ui,sans-serif; font-weight:300; line-height:1.6; font-size:16px; -webkit-font-smoothing:antialiased;
   background-image:radial-gradient(1200px 600px at 80% -10%, rgba(123,201,196,0.06), transparent 60%), radial-gradient(900px 500px at -10% 20%, rgba(201,125,92,0.05), transparent 55%); background-attachment:fixed;}
-.wrap{max-width:1000px; margin:0 auto; padding:0 28px 110px}
+.wrap{max-width:1040px; margin:0 auto; padding:0 28px 110px}
 .topbar{position:sticky; top:0; z-index:10; backdrop-filter:blur(10px); background:rgba(20,16,26,0.82); border-bottom:1px solid var(--rule); margin:0 -28px 0; padding:11px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px;}
 .topbar .brand{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-dim)}
 .topbar .brand b{color:var(--accent); font-weight:500}
 .conf{font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--rust); border:1px solid rgba(201,125,92,0.4); border-radius:999px; padding:4px 11px; white-space:nowrap}
-.head{padding:48px 0 6px}
+.head{padding:42px 0 6px}
 .kicker{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:16px; display:flex; align-items:center; gap:9px}
 .kicker::before{content:""; width:22px; height:1px; background:var(--accent)}
 h1{font-size:clamp(28px,4.4vw,40px); font-weight:300; letter-spacing:-0.02em; line-height:1.1; margin:.1em 0 .4em}
 h1 em{font-style:italic; color:var(--accent)}
-.lede{color:var(--ink-dim); max-width:62ch; margin:.2em 0 0}
-.grid{display:grid; gap:22px; margin-top:30px}
-@media(min-width:840px){.grid{grid-template-columns:1fr 360px; align-items:start}}
+.lede{color:var(--ink-dim); max-width:64ch; margin:.2em 0 0}
+/* preset wizard */
+.wiz-lbl{font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-mute); margin:26px 0 10px}
+.presets{display:flex; gap:9px; flex-wrap:wrap}
+.preset-btn{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; padding:9px 16px; border:1px solid var(--rule-strong); border-radius:999px; background:var(--bg-soft); color:var(--ink-dim); cursor:pointer; transition:.15s}
+.preset-btn:hover{border-color:var(--accent); color:var(--accent)}
+.preset-btn.active{background:var(--accent); color:var(--bg); border-color:var(--accent); font-weight:500}
+.grid{display:grid; gap:22px; margin-top:24px}
+@media(min-width:880px){.grid{grid-template-columns:1fr 372px; align-items:start}}
 .panel{background:var(--bg-elev); border:1px solid var(--rule); border-radius:16px; padding:8px 4px}
 .sec-lbl{font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-mute); padding:16px 18px 6px}
-.row{display:flex; align-items:center; gap:14px; padding:13px 18px; border-top:1px solid var(--rule); cursor:pointer; transition:background .15s}
+.row{display:flex; align-items:flex-start; gap:13px; padding:13px 18px; border-top:1px solid var(--rule); transition:background .15s; flex-wrap:wrap}
 .row:first-of-type{border-top:none}
-.row:hover{background:rgba(255,255,255,0.02)}
 .row.on{background:rgba(123,201,196,0.05)}
-.row.fixed{cursor:default; opacity:.92}
-.box{width:20px; height:20px; flex:0 0 auto; border:1.5px solid var(--rule-strong); border-radius:6px; display:flex; align-items:center; justify-content:center; transition:.15s; margin-top:1px}
+.box{width:20px; height:20px; flex:0 0 auto; border:1.5px solid var(--rule-strong); border-radius:6px; display:flex; align-items:center; justify-content:center; transition:.15s; margin-top:2px}
 .row.on .box{background:var(--accent); border-color:var(--accent)}
 .box svg{width:12px; height:12px; opacity:0; transition:.15s}
 .row.on .box svg{opacity:1}
-.row.fixed .box{background:var(--rust); border-color:var(--rust)}
-.row.fixed .box svg{opacity:1}
-.meta{flex:1; min-width:0}
+.meta{flex:1; min-width:160px}
 .meta .nm{color:var(--ink); font-weight:400; font-size:15px}
 .meta .ds{color:var(--ink-mute); font-size:12.5px; margin-top:1px}
-.price{font-family:'DM Mono',monospace; font-size:13px; color:var(--ink-dim); white-space:nowrap; text-align:right}
-.price .mo{display:block; color:var(--ink-mute); font-size:11px}
-.qty{display:flex; align-items:center; gap:8px}
-.qty button{width:26px; height:26px; border-radius:7px; border:1px solid var(--rule-strong); background:var(--bg-soft); color:var(--ink); font-size:15px; cursor:pointer; line-height:1; transition:.15s}
+.meta .bn{color:var(--ink-dim); font-size:11.5px; margin-top:3px; opacity:.75}
+.meta .bn::before{content:"⤷ "; color:var(--accent)}
+.meta .crit{color:var(--accent); font-size:11px; margin-top:4px; font-family:'DM Mono',monospace; opacity:.85; min-height:14px}
+.ctrl{flex:0 0 auto; display:flex; flex-direction:column; align-items:flex-end; gap:4px}
+select.tier{width:188px; background:var(--bg-soft); color:var(--ink); border:1px solid var(--rule-strong); border-radius:9px; padding:9px 11px; font-family:'DM Sans',sans-serif; font-size:13.5px; cursor:pointer}
+select.tier:hover{border-color:var(--accent)}
+.qty3{display:flex; gap:12px}
+.qcell{text-align:center}
+.qcell .ql{font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-mute); display:block; margin-bottom:4px}
+.qty{display:flex; align-items:center; gap:5px}
+.qty button{width:24px; height:24px; border-radius:6px; border:1px solid var(--rule-strong); background:var(--bg-soft); color:var(--ink); font-size:14px; cursor:pointer; line-height:1; transition:.15s}
 .qty button:hover{border-color:var(--accent); color:var(--accent)}
-.qty input{width:34px; text-align:center; background:transparent; border:none; color:var(--ink); font-family:'DM Mono',monospace; font-size:15px}
-select{width:100%; background:var(--bg-soft); color:var(--ink); border:1px solid var(--rule-strong); border-radius:9px; padding:11px 13px; font-family:'DM Sans',sans-serif; font-size:14.5px; margin:2px 18px 16px; width:calc(100% - 36px)}
+.qty .qv{width:22px; text-align:center; font-family:'DM Mono',monospace; font-size:14px}
+.qprice{font-family:'DM Mono',monospace; font-size:9.5px; color:var(--ink-mute); margin-top:3px}
 /* summary */
 .summary{position:sticky; top:64px; background:var(--bg-elev); border:1px solid var(--rule-strong); border-radius:16px; overflow:hidden}
 .tier{padding:18px 20px; border-bottom:1px solid var(--rule); background:linear-gradient(180deg, rgba(123,201,196,0.08), transparent)}
@@ -76,34 +85,34 @@ select{width:100%; background:var(--bg-soft); color:var(--ink); border:1px solid
 .tt .k{color:var(--ink-dim); font-size:13px}
 .tt .v{font-family:'DM Mono',monospace; color:var(--ink); font-size:17px; font-weight:500}
 .tt.big .v{color:var(--accent); font-size:20px}
-.lines{padding:4px 20px 14px; border-top:1px solid var(--rule)}
+.tt .sub{display:block; color:var(--ink-mute); font-size:10.5px; font-family:'DM Sans',sans-serif; text-align:right; font-weight:300}
+.bd{padding:2px 20px 8px}
+.bd .li{display:flex; justify-content:space-between; font-size:11px; color:var(--ink-mute); padding:2px 0; font-family:'DM Mono',monospace}
+.bd .li.head{color:var(--ink-dim); padding-top:6px; border-top:1px dashed var(--rule); margin-top:2px}
+.retsel{padding:4px 20px 12px; display:flex; align-items:center; gap:8px; justify-content:space-between}
+.retsel label{font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:.08em; text-transform:uppercase}
+.retsel select{background:var(--bg-soft); color:var(--ink); border:1px solid var(--rule-strong); border-radius:8px; padding:6px 9px; font-family:'DM Sans',sans-serif; font-size:12.5px; cursor:pointer}
+.chip{display:inline-block; font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:0.08em; padding:3px 9px; border-radius:999px; border:1px solid rgba(123,201,196,0.4); color:var(--accent); margin:0 20px}
+.lines{padding:8px 20px 8px; border-top:1px solid var(--rule)}
 .lines .li{display:flex; justify-content:space-between; font-size:12px; color:var(--ink-mute); padding:3px 0; font-family:'DM Mono',monospace}
-.note{padding:0 20px 18px; font-size:11.5px; color:var(--ink-mute); line-height:1.5}
+.lines .li .cr{color:var(--accent)}
+.roi{margin:6px 20px 4px; padding:10px 12px; background:rgba(123,201,196,0.06); border:1px solid rgba(123,201,196,0.18); border-radius:10px; font-size:11.5px; color:var(--ink-dim); line-height:1.5}
+.roi b{color:var(--accent); font-weight:500}
+.note{padding:8px 20px 18px; font-size:11.5px; color:var(--ink-mute); line-height:1.5}
 .note a{color:var(--accent); text-decoration:none}
-.foot{margin-top:56px; padding-top:22px; border-top:1px solid var(--rule); font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.04em; color:var(--ink-mute); line-height:1.7}
+.warnrow{margin:0 18px 8px; font-size:11.5px; color:var(--warn); font-family:'DM Sans',sans-serif; padding:8px 12px; border:1px solid rgba(217,178,107,0.3); border-radius:9px; background:rgba(217,178,107,0.06)}
+.selfserve{margin-top:34px; padding:20px 22px; background:var(--bg-elev); border:1px solid var(--rule); border-radius:14px}
+.selfserve h3{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-mute); margin:0 0 12px; font-weight:400}
+.ssgrid{display:grid; gap:14px}
+@media(min-width:680px){.ssgrid{grid-template-columns:repeat(3,1fr)}}
+.sscard{border:1px solid var(--rule); border-radius:11px; padding:14px 15px; background:var(--bg-soft)}
+.sscard .ssn{color:var(--ink); font-weight:500; font-size:14px}
+.sscard .ssp{font-family:'DM Mono',monospace; color:var(--accent); font-size:13px; margin:5px 0 7px}
+.sscard .ssd{color:var(--ink-mute); font-size:11.5px; line-height:1.5}
+.foot{margin-top:48px; padding-top:22px; border-top:1px solid var(--rule); font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.04em; color:var(--ink-mute); line-height:1.7}
 .foot a{color:var(--accent); text-decoration:none}
-@media(max-width:600px){ body{font-size:15px} .wrap{padding:0 16px 70px} .topbar{margin:0 -16px} .summary{position:static} }
+@media(max-width:600px){ body{font-size:15px} .wrap{padding:0 16px 70px} .topbar{margin:0 -16px} .summary{position:static} select.tier{width:100%} .ctrl{align-items:stretch; width:100%} }
 @media (prefers-reduced-motion: reduce){ *{transition:none!important} html{scroll-behavior:auto} }
-/* ── cohesive elevation (matches ovae.ai v7) ── */
-html{scroll-behavior:smooth}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
-body::after{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
- background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.92 0 0 0 0 0.89 0 0 0 0 0.86 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
-.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);will-change:opacity,transform}
-.reveal.in{opacity:1;transform:none}
-table,blockquote{transition:border-color .25s,box-shadow .25s,transform .25s}
-table:hover,blockquote:hover{box-shadow:0 22px 48px -30px rgba(0,0,0,.8)}
-a{transition:color .2s,border-color .2s}
-.btn-press:active{transform:translateY(1px) scale(.99)}
-.spotlight{position:relative;isolation:isolate}
-.spotlight::before{content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;opacity:0;transition:opacity .3s;
- background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(123,201,196,.09),transparent 62%)}
-.spotlight:hover::before{opacity:1}
-@media (prefers-reduced-motion: reduce){
- html{scroll-behavior:auto}
- .reveal{opacity:1!important;transform:none!important;transition:none}
- .spotlight::before{display:none}
-}
 </style>
 </head><body>
 <div class="wrap">
@@ -111,138 +120,233 @@ a{transition:color .2s,border-color .2s}
   <div class="head">
     <div class="kicker">Pricing model</div>
     <h1>Configure an <em>engagement</em>.</h1>
-    <p class="lede">Pricing is per component. A Build or an Embed is just how many catalog services you install on top of the Brain — the price is the sum, and it flexes to exactly what a company needs. Toggle services to see the number move.</p>
+    <p class="lede">Pricing is per component, by complexity tier. A Build or an Embed is which catalog services you install on top of the Brain — and at what tier — so the price flexes to exactly what a company needs. The monthly is auto-calculated from the real cost to keep the system running and dialed in.</p>
+    <div class="wiz-lbl">Start from a vertical — then adjust every tier</div>
+    <div class="presets" id="presets"></div>
   </div>
 
   <div class="grid">
-    <div class="panel spotlight" id="catalog"></div>
-    <div class="summary spotlight">
+    <div class="panel" id="catalog"></div>
+    <div class="summary">
       <div class="tier">
         <div class="t-lbl">This composition is a</div>
-        <div class="t-name" id="tierName">Land</div>
-        <div class="t-sub" id="tierSub">Audit + Brain — the entry point</div>
+        <div class="t-name" id="tierName">Build</div>
+        <div class="t-sub" id="tierSub">Done-with-you — a focused composition</div>
       </div>
       <div class="totals">
-        <div class="tt"><span class="k">One-time</span><span class="v" id="vOne">$0</span></div>
-        <div class="tt"><span class="k">Recurring</span><span class="v" id="vMo">$0/mo</span></div>
-        <div class="tt big"><span class="k">First-year total</span><span class="v" id="vYr">$0</span></div>
+        <div class="tt"><span class="k">One-time build</span><span class="v" id="vOne">$0</span></div>
+        <div class="tt big"><span class="k">Recommended monthly<span class="sub" id="vMoTier">—</span></span><span class="v" id="vMo">$0</span></div>
+        <div class="tt"><span class="k">First-year total</span><span class="v" id="vYr">$0</span></div>
       </div>
+      <div class="bd" id="bd"></div>
+      <div class="retsel">
+        <label>Retainer tier</label>
+        <select id="retsel"></select>
+      </div>
+      <div class="chip" id="sanity">—</div>
+      <div class="roi" id="roi"></div>
       <div class="lines" id="lines"></div>
-      <div class="note">The audit ($7,500) is credited forward into the build. Builds/Embeds are then <em>value-priced</em> on top of this component cost — a fraction of the ROI uncovered in discovery. <a href="/partnership/one-pager/">← back to the one-pager</a></div>
+      <div class="note">The Land (Audit + Brain, $17,500) credits <em>100% forward</em> into the build if they proceed within 30 days. The monthly = platform run-cost (keeping the Brain fresh, anti-decay) + per-service maintenance + your team — never below the real cost to run it. <a href="/partnership/one-pager/">← back to the one-pager</a></div>
     </div>
   </div>
 
-  <div class="foot">Confidential — do not distribute.</div>
+  <div class="selfserve">
+    <h3>How clients come in — the funnel</h3>
+    <div class="ssgrid">
+      <div class="sscard"><div class="ssn">1 · Readiness Snapshot</div><div class="ssp">Free</div><div class="ssd">A short adaptive quiz returns a readiness score + named gaps. They leave informed — we follow up to book a call.</div></div>
+      <div class="sscard"><div class="ssn">2 · Audit + Brain — the Land</div><div class="ssp">$17,500 · 100% credited forward</div><div class="ssd">The roadmap + installed Brain V1. Credits fully into the build if they proceed within 30 days. The primary path.</div></div>
+      <div class="sscard"><div class="ssn">Downsell · Self-Serve Starter</div><div class="ssp">$1,500 + $299/mo · DIY</div><div class="ssd">Not ready for the audit? They install &amp; run a templated Orectic themselves. Fee credits forward when they upgrade.</div></div>
+    </div>
+  </div>
+
+  <div class="foot">Ovae × Orectic · Configure an engagement · <a href="/partnership/one-pager/">One-pager</a> · <a href="/partnership/proposal/">Proposal</a><br/>Confidential — do not distribute.</div>
 </div>
 
 <script>
 (function(){
   var CHK='<svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#14101A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  // catalog: one = one-time $, mo = monthly recurring $, yr = annual recurring $
-  // Everything is selectable — nothing is forced. Foundation defaults on but can be deselected.
-  var foundation = [
-    {id:'audit', nm:'Readiness Audit', ds:'The land — 100% credited forward into a Build', one:7500, toggle:true},
-    {id:'brain', nm:'The Brain (installed foundation)', ds:'Searchable second brain + visibility', one:10000, yr:299, toggle:true}
-  ];
-  var services = [
-    {id:'dash', nm:'Dashboards', ds:'Live profit / AR / utilization', one:30000, mo:2000, toggle:true},
-    {id:'auto', nm:'Automations', ds:'Quote-to-invoice, AR chase, routing…', each:10000, qty:true, max:8},
-    {id:'onb',  nm:'Onboarding / SOP', ds:'New-hire AI trainer', one:15000, toggle:true},
-    {id:'intg', nm:'Systems integration', ds:'Connect their existing tools', one:30000, toggle:true},
-    {id:'port', nm:'Portals', ds:'Customer + team portals', one:50000, mo:1500, toggle:true},
-    {id:'plat', nm:'Custom platform', ds:'Bespoke engine on their own data', one:95000, mo:1000, toggle:true}
-  ];
-  var retainers = [{v:0,n:'None'},{v:1500,n:'Maintain — $1.5K/mo'},{v:2250,n:'Optimize — $2.25K/mo'},{v:3000,n:'Scale — $3K/mo'}];
-  var state = {audit:true, brain:true, dash:false, auto:0, onb:false, intg:false, port:false, plat:false, ret:1500};
 
-  function money(n){ var neg=n<0; n=Math.abs(n); return (neg?'−$':'$')+Math.round(n).toLocaleString('en-US'); }
-  function row(item){
-    var div=document.createElement('div'); div.className='row';
-    if(item.qty ? state[item.id]>0 : state[item.id]) div.className+=' on';
-    var right;
-    if(item.qty){
-      right='<div class="qty"><button data-dec="'+item.id+'">−</button><input id="q_'+item.id+'" value="'+state[item.id]+'" readonly aria-label="quantity"><button data-inc="'+item.id+'">+</button></div>';
-    } else {
-      var p=item.one?money(item.one):''; var sub=item.mo?('+ '+money(item.mo)+'/mo'):(item.yr?('+ '+money(item.yr)+'/yr'):'');
-      right='<div class="price">'+p+(sub?'<span class="mo">'+sub+'</span>':'')+'</div>';
-    }
-    div.innerHTML='<div class="box">'+CHK+'</div><div class="meta"><div class="nm">'+item.nm+(item.each?' <span style="color:var(--ink-mute);font-size:12px">('+money(item.each)+' each)</span>':'')+'</div><div class="ds">'+item.ds+'</div></div>'+right;
-    if(item.toggle){
-      div.addEventListener('click', function(e){ if(e.target.closest('.qty'))return; state[item.id]=!state[item.id]; render(); });
-    }
+  // ── Service catalog: every line is a complexity tier (index 1..n; 0 = none) ──
+  // maint = annual maintenance % of build (the (b) layer); cogs = monthly platform COGS contribution (the (a) layer)
+  var CAT = {
+    audit:{name:'AI Readiness Audit', ds:'Paid diagnostic — credits 100% forward', bn:'The blueprint the Brain is built from', maint:0, oneTimeOnly:true,
+      tiers:[null,{l:'Single-Workflow',one:3500,c:'1 workflow · 1 system'},{l:'Multi-Workflow',one:7500,c:'3+ workflows · 2-4 systems'},{l:'Multi-Entity / Regulated',one:10000,c:'multi-location or regulated'}]},
+    brain:{name:'The Brain (AI-OS foundation)', ds:'Ingests every tool into one searchable second-brain', bn:'This IS the brain — everything reads from it', maint:0, cogs:350, license:299,
+      tiers:[null,{l:'Connected',one:10000,c:'2-4 structured / API sources'},{l:'Mixed',one:18000,c:'4-6 sources incl. spreadsheets'},{l:'Fragmented',one:28000,c:'6+ sources, paper logs, disconnected'}]},
+    dataprep:{name:'Data Ingestion & Cleanup', ds:'Dedup, pricebook & COA normalization, migration', bn:'Cleans source data to the Brain’s schema', maint:0.22,
+      tiers:[null,{l:'Light',one:5000,c:'1-3 clean sources, going-forward'},{l:'Standard',one:12000,c:'multi-system messy data (3-5yr shop)'},{l:'Heavy + Migration',one:25000,c:'5+ dirty sources + historical migration'}]},
+    intg:{name:'Systems / FSM Integration', ds:'Make ServiceTitan reconcile with the stack', bn:'Keeps the Brain’s data live & bidirectional', maint:0.20,
+      tiers:[null,{l:'Foundational',one:30000,c:'3 systems · batch · single entity'},{l:'Multi-System / Real-Time',one:45000,c:'4-5 systems · real-time bidirectional'},{l:'Enterprise / Regulated',one:65000,c:'multi-entity · RBAC · compliance · SLA'}]},
+    dash:{name:'Dashboards (visibility layer)', ds:'Live profit-per-job, AR aging, utilization', bn:'A read-surface on the Brain', maint:0.12,
+      tiers:[null,{l:'Lite',one:12000,c:'single source · 3-5 dashboards'},{l:'Standard',one:30000,c:'5-10 dashboards · 2-3 sources · RBAC'},{l:'Growth',one:45000,c:'+ predictive + ongoing build'}]},
+    port:{name:'Portals (customer + field-team)', ds:'Self-service customer portal + tech mobile app', bn:'External read/write surfaces on the Brain', maint:0.15,
+      tiers:[null,{l:'Lite (customer-only)',one:32000,c:'customer web portal · single role'},{l:'Full (+ tech app)',one:70000,c:'+ offline-first technician app · multi-role'},{l:'Enterprise',one:100000,c:'+ write-back · PII controls · multi-entity'}]},
+    plat:{name:'Custom Vertical Platform', ds:'AI estimating / job-costing engine on their data', bn:'Deepest extension — trains on the Brain’s data', maint:0.20, cogs:450,
+      tiers:[null,{l:'Focused Engine',one:65000,c:'one read-heavy engine · 3-5 sources'},{l:'Standard Orchestrator',one:115000,c:'autonomous write-back · 5-8 sources · RBAC'},{l:'Regulated / Multi-Entity',one:175000,c:'compliance · auditability · drift monitoring'}]},
+    onb:{name:'AI-OS Onboarding & Change Mgmt', ds:'Adoption, SOPs, runbook, 90-day rollout', bn:'Drives human adoption of the Brain', maint:0, oneTimeOnly:true,
+      tiers:[null,{l:'Standard',one:20000,c:'existing SOPs · single location'},{l:'Greenfield SOP',one:28000,c:'undocumented processes'},{l:'Multi-Role / Regulated',one:35000,c:'5+ roles or multi-location'}]}
+  };
+  // service display order in the two sections
+  var FOUNDATION=['audit','brain','dataprep'];
+  var BUILD=['auto','intg','dash','port','plat','onb'];
+
+  // Automations: quantity steppers per complexity class
+  var AUTO_CLASSES=[{k:'simple',l:'Simple',one:5000},{k:'standard',l:'Standard',one:10000},{k:'complex',l:'Complex',one:25000}];
+  var AUTO_MAINT=0.18, AUTO_COGS=60;
+
+  // Recurring engine constants (from the COGS analysis)
+  var TARGET_MARGIN=0.55, COGS_MULT=1/(1-TARGET_MARGIN), ORCH_COGS=100;
+  var RETAINERS=[{k:'watchtower',l:'Watchtower',floor:1500,d:'monitoring + break-fix; brain stays fresh'},
+                 {k:'living',l:'Living Asset',floor:5000,d:'active monthly build + data-moat curation'},
+                 {k:'caio',l:'Fractional CAIO',floor:9500,d:'+ exec AI ownership, exit-readiness'}];
+
+  var PRESETS={
+    hvac:{label:'HVAC',roi:'A $17M HVAC shop on ServiceTitan. Anchored against <b>$500–750K/yr recoverable</b> — $1.5–3M trapped AR, $45–125K/yr missed calls, 5–10% lost to rework.',
+      s:{audit:2,brain:1,dataprep:2,auto:{simple:0,standard:2,complex:0},intg:1,dash:2,port:0,plat:0,onb:1}},
+    plumbing:{label:'Plumbing',roi:'A $17M plumbing contractor on ServiceTitan. Adds a job-cost variance write-back automation. Anchored against <b>$500–750K/yr recoverable</b>.',
+      s:{audit:2,brain:1,dataprep:2,auto:{simple:0,standard:2,complex:1},intg:1,dash:2,port:0,plat:0,onb:1}},
+    paving:{label:'Paving',roi:'A $18M paving / site-work contractor — fragmented stack, the crown is an AI estimating engine trained on their bid-vs-actual history. Anchored against <b>$700K–$1M+ over 3 yrs</b>.',
+      s:{audit:2,brain:3,dataprep:3,auto:{simple:0,standard:2,complex:1},intg:2,dash:0,port:0,plat:2,onb:2}},
+    custom:{label:'Custom',roi:'Build from scratch. Pricing principle: anchor on recovered margin and displaced labor, <b>never the IT budget</b>.',
+      s:{audit:2,brain:1,dataprep:0,auto:{simple:0,standard:0,complex:0},intg:0,dash:0,port:0,plat:0,onb:0}}
+  };
+
+  var state, activePreset='hvac', retOverride='auto';
+  function loadPreset(k){ var p=PRESETS[k]; state=JSON.parse(JSON.stringify(p.s)); state.auto=state.auto||{simple:0,standard:0,complex:0}; activePreset=k; retOverride='auto'; render(); }
+
+  function money(n){ var neg=n<0; n=Math.abs(Math.round(n)); return (neg?'−$':'$')+n.toLocaleString('en-US'); }
+  function autoCount(){ return state.auto.simple+state.auto.standard+state.auto.complex; }
+  function autoOneTime(){ return AUTO_CLASSES.reduce(function(s,c){return s+state.auto[c.k]*c.one;},0); }
+
+  function tierRow(id){
+    var it=CAT[id], sel=state[id]||0, on=sel>0;
+    var div=document.createElement('div'); div.className='row'+(on?' on':'');
+    var opts='<option value="0">— None —</option>';
+    for(var i=1;i<it.tiers.length;i++){ opts+='<option value="'+i+'"'+(sel===i?' selected':'')+'>'+it.tiers[i].l+' · '+money(it.tiers[i].one)+'</option>'; }
+    var crit=on?it.tiers[sel].c:'';
+    div.innerHTML='<div class="box">'+CHK+'</div>'+
+      '<div class="meta"><div class="nm">'+it.name+'</div><div class="ds">'+it.ds+'</div><div class="bn">'+it.bn+'</div><div class="crit">'+crit+'</div></div>'+
+      '<div class="ctrl"><select class="tier" data-svc="'+id+'">'+opts+'</select></div>';
+    div.querySelector('select').addEventListener('change',function(e){ state[id]=+e.target.value; activePreset='custom'; render(); });
     return div;
   }
+
+  function autoRow(){
+    var on=autoCount()>0;
+    var div=document.createElement('div'); div.className='row'+(on?' on':'');
+    var cells=AUTO_CLASSES.map(function(c){
+      return '<div class="qcell"><span class="ql">'+c.l+'</span><div class="qty"><button data-adec="'+c.k+'">−</button><span class="qv" id="qv_'+c.k+'">'+state.auto[c.k]+'</span><button data-ainc="'+c.k+'">+</button></div><div class="qprice">'+money(c.one)+'</div></div>';
+    }).join('');
+    div.innerHTML='<div class="box">'+CHK+'</div>'+
+      '<div class="meta"><div class="nm">Automations</div><div class="ds">Missed-call recovery, AR chase, job-cost variance, dispatch…</div><div class="bn">Each reads & acts on the Brain’s unified data</div><div class="crit">Simple = rules · Standard = +LLM · Complex = +autonomous write-back</div></div>'+
+      '<div class="ctrl"><div class="qty3">'+cells+'</div></div>';
+    div.querySelectorAll('[data-ainc]').forEach(function(b){ b.addEventListener('click',function(){ var k=b.getAttribute('data-ainc'); state.auto[k]=Math.min(8,state.auto[k]+1); activePreset='custom'; render(); }); });
+    div.querySelectorAll('[data-adec]').forEach(function(b){ b.addEventListener('click',function(){ var k=b.getAttribute('data-adec'); state.auto[k]=Math.max(0,state.auto[k]-1); activePreset='custom'; render(); }); });
+    return div;
+  }
+
   function render(){
+    // presets
+    var pc=document.getElementById('presets'); pc.innerHTML='';
+    Object.keys(PRESETS).forEach(function(k){ var b=document.createElement('button'); b.className='preset-btn'+(activePreset===k?' active':''); b.textContent=PRESETS[k].label; b.addEventListener('click',function(){ loadPreset(k); }); pc.appendChild(b); });
+    // catalog
     var c=document.getElementById('catalog'); c.innerHTML='';
-    var l1=document.createElement('div'); l1.className='sec-lbl'; l1.textContent='Foundation — recommended (deselectable)'; c.appendChild(l1);
-    foundation.forEach(function(it){ c.appendChild(row(it)); });
-    var l2=document.createElement('div'); l2.className='sec-lbl'; l2.textContent='Service catalog — pick what they need'; c.appendChild(l2);
-    services.forEach(function(it){ c.appendChild(row(it)); });
-    var l3=document.createElement('div'); l3.className='sec-lbl'; l3.textContent='Ongoing retainer (the annuity)'; c.appendChild(l3);
-    var sel=document.createElement('select'); retainers.forEach(function(r){ var o=document.createElement('option'); o.value=r.v; o.textContent=r.n; if(r.v===state.ret)o.selected=true; sel.appendChild(o); });
-    sel.addEventListener('change', function(){ state.ret=+sel.value; render(); }); c.appendChild(sel);
-    // wire qty buttons
-    c.querySelectorAll('[data-inc]').forEach(function(b){ b.addEventListener('click',function(){ var id=b.getAttribute('data-inc'); state[id]=Math.min(8,state[id]+1); render(); }); });
-    c.querySelectorAll('[data-dec]').forEach(function(b){ b.addEventListener('click',function(){ var id=b.getAttribute('data-dec'); state[id]=Math.max(0,state[id]-1); render(); }); });
+    var l1=document.createElement('div'); l1.className='sec-lbl'; l1.textContent='Foundation — the Brain everything reads from'; c.appendChild(l1);
+    FOUNDATION.forEach(function(id){ c.appendChild(tierRow(id)); });
+    // soft nudge if Brain off but build services on
+    var buildOn = autoCount()>0||BUILD.some(function(id){return id!=='auto' && (state[id]||0)>0;})||((state.dataprep||0)>0);
+    if(!state.brain && buildOn){ var w=document.createElement('div'); w.className='warnrow'; w.textContent='Most services read from the Brain. Without it, these run blind — we recommend keeping the Brain on.'; c.appendChild(w); }
+    var l2=document.createElement('div'); l2.className='sec-lbl'; l2.textContent='Service catalog — pick what they need, at the right tier'; c.appendChild(l2);
+    c.appendChild(autoRow());
+    BUILD.filter(function(id){return id!=='auto';}).forEach(function(id){ c.appendChild(tierRow(id)); });
     compute();
   }
+
   function compute(){
-    var one=0, mo=0, yr=0, lines=[];
-    if(state.audit){ one+=7500; lines.push(['Readiness Audit', money(7500)]); }
-    if(state.brain){ one+=10000; yr+=299; lines.push(['The Brain', money(10000)+' + $299/yr']); }
-    if(state.dash){ one+=30000; mo+=2000; lines.push(['Dashboards', money(30000)]); }
-    if(state.auto>0){ one+=10000*state.auto; lines.push(['Automations ×'+state.auto, money(10000*state.auto)]); }
-    if(state.onb){ one+=15000; lines.push(['Onboarding / SOP', money(15000)]); }
-    if(state.intg){ one+=30000; lines.push(['Systems integration', money(30000)]); }
-    if(state.port){ one+=50000; mo+=1500; lines.push(['Portals', money(50000)]); }
-    if(state.plat){ one+=95000; mo+=1000; lines.push(['Custom platform', money(95000)]); }
-    if(state.ret>0){ mo+=state.ret; lines.push(['Retainer', money(state.ret)+'/mo']); }
-    // Audit credits 100% forward once any Build/Embed service is added.
-    var buildSel = state.dash||state.auto>0||state.onb||state.intg||state.port||state.plat;
-    var gross = one;
-    if(state.audit && buildSel){ one-=7500; lines.push(['Audit credited forward', money(-7500)]); }
-    var firstYr = one + mo*12 + yr;
-    document.getElementById('vOne').textContent=money(one);
-    document.getElementById('vMo').textContent= mo? money(mo)+'/mo' : '$0';
+    var lines=[], grossOne=0, cogs=0, maintAnnual=0;
+    function add(id){ var sel=state[id]||0; if(!sel)return; var t=CAT[id].tiers[sel]; grossOne+=t.one; lines.push([CAT[id].name+' · '+t.l, money(t.one), false]);
+      if(CAT[id].cogs) cogs+=CAT[id].cogs; if(CAT[id].maint) maintAnnual+=t.one*CAT[id].maint; }
+    add('audit'); add('brain'); add('dataprep');
+    // automations
+    var ac=autoCount(), aot=autoOneTime();
+    if(ac>0){ grossOne+=aot; cogs+=ac*AUTO_COGS; maintAnnual+=aot*AUTO_MAINT;
+      var label='Automations ×'+ac+' ('+AUTO_CLASSES.filter(function(c){return state.auto[c.k]>0;}).map(function(c){return state.auto[c.k]+' '+c.l.toLowerCase();}).join(', ')+')';
+      lines.push([label, money(aot), false]); }
+    ['intg','dash','port','plat','onb'].forEach(add);
+
+    // audit credits forward once any build service is selected
+    var auditSel=state.audit||0, brainSel=state.brain||0;
+    var buildSel = (state.dataprep||0)>0 || ac>0 || (state.intg||0)>0 || (state.dash||0)>0 || (state.port||0)>0 || (state.plat||0)>0 || (state.onb||0)>0;
+    var netOne=grossOne;
+    if(buildSel){
+      var landCredit=0;
+      if(auditSel) landCredit+=CAT.audit.tiers[auditSel].one;
+      if(brainSel) landCredit+=CAT.brain.tiers[brainSel].one;
+      if(landCredit>0){ netOne-=landCredit; lines.push(['Land (Audit + Brain) credited forward', money(-landCredit), true]); }
+    }
+
+    // ── recurring engine: monthly = max(tier floor, platformRun + maintenance) ──
+    var anyActive = grossOne>0;
+    if(anyActive && (cogs>0)) cogs+=ORCH_COGS;            // orchestration/monitoring baseline when anything live
+    var platformRun = cogs>0 ? Math.round(cogs*COGS_MULT) : 0;
+    var maintMonthly = Math.round(maintAnnual/12);
+    var floorCost = platformRun + maintMonthly;           // the (a)+(b) cost floor
+    // auto-recommend smallest tier whose floor >= floorCost
+    var autoTier = RETAINERS[RETAINERS.length-1];
+    for(var i=0;i<RETAINERS.length;i++){ if(RETAINERS[i].floor>=floorCost){ autoTier=RETAINERS[i]; break; } }
+    var chosen = retOverride==='auto' ? autoTier : RETAINERS.filter(function(r){return r.k===retOverride;})[0];
+    var monthly = anyActive ? Math.max(chosen.floor, floorCost) : 0;
+    var labor = Math.max(0, monthly - floorCost);
+    var license = state.brain ? CAT.brain.license : 0;
+    var firstYr = netOne + monthly*12 + license;
+
+    // write totals
+    document.getElementById('vOne').textContent=money(netOne);
+    document.getElementById('vMo').textContent= monthly? money(monthly)+'/mo' : '$0';
+    document.getElementById('vMoTier').textContent= monthly? chosen.l : '';
     document.getElementById('vYr').textContent=money(firstYr);
+
+    // recurring breakdown
+    var bd=document.getElementById('bd'); bd.innerHTML='';
+    if(monthly>0){
+      var rows=[['Platform run-cost (keep the Brain fresh)', money(platformRun)+'/mo','head'],
+                ['Per-service maintenance', money(maintMonthly)+'/mo',''],
+                ['Team / active build (the retainer)', money(labor)+'/mo','']];
+      if(license) rows.push(['Brain license', money(license)+'/yr','']);
+      rows.forEach(function(r){ var d=document.createElement('div'); d.className='li'+(r[2]?' '+r[2]:''); d.innerHTML='<span>'+r[0]+'</span><span>'+r[1]+'</span>'; bd.appendChild(d); });
+    }
+
+    // retainer selector
+    var rs=document.getElementById('retsel'); rs.innerHTML='';
+    var o0=document.createElement('option'); o0.value='auto'; o0.textContent='Auto — '+autoTier.l+' (recommended)'; if(retOverride==='auto')o0.selected=true; rs.appendChild(o0);
+    RETAINERS.forEach(function(r){ var o=document.createElement('option'); o.value=r.k; o.textContent=r.l+' · '+money(r.floor)+'/mo floor'; if(retOverride===r.k)o.selected=true; rs.appendChild(o); });
+    rs.onchange=function(){ retOverride=rs.value; compute(); };
+
+    // sanity chip: monthly as % of one-time build per year
+    var sc=document.getElementById('sanity');
+    if(monthly>0 && netOne>0){
+      var pct=Math.round(monthly*12/netOne*100), floorPct=Math.round(floorCost*12/netOne*100);
+      sc.textContent='≈ '+pct+'% of build / yr'+(netOne<25000?' · platform floor (small build)':' · '+floorPct+'% cost-floor');
+    }
+    else sc.textContent='—';
+
+    // ROI note
+    document.getElementById('roi').innerHTML = PRESETS[activePreset] ? PRESETS[activePreset].roi : PRESETS.custom.roi;
+
+    // line items
     var ll=document.getElementById('lines'); ll.innerHTML='';
-    lines.forEach(function(p){ var d=document.createElement('div'); d.className='li'; d.innerHTML='<span>'+p[0]+'</span><span>'+p[1]+'</span>'; ll.appendChild(d); });
-    // tier by gross one-time component scope (before the audit credit)
+    lines.forEach(function(p){ var d=document.createElement('div'); d.className='li'; d.innerHTML='<span'+(p[2]?' class="cr"':'')+'>'+p[0]+'</span><span'+(p[2]?' class="cr"':'')+'>'+p[1]+'</span>'; ll.appendChild(d); });
+
+    // tier name by gross one-time scope
     var name,sub;
-    if(gross < 30000){ name='Land'; sub='Audit + Brain — the entry point'; }
-    else if(gross < 150000){ name='Build'; sub='Done-with-you — a focused composition'; }
+    if(grossOne < 30000){ name='Land'; sub='Audit + Brain — the entry point'; }
+    else if(grossOne < 150000){ name='Build'; sub='Done-with-you — a focused composition'; }
     else { name='Embed'; sub='Done-for-you flagship — the 90-day transformation'; }
     document.getElementById('tierName').textContent=name;
     document.getElementById('tierSub').textContent=sub;
   }
-  render();
-})();
-</script>
-<script>
-(function(){
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var sel = 'h2, h3, table, blockquote, .reveal-group > *';
-  var nodes = Array.prototype.slice.call(document.querySelectorAll(sel));
-  if (!reduce) {
-    nodes.forEach(function(el,i){ el.classList.add('reveal'); el.style.transitionDelay=((i%6)*60)+'ms'; });
-    var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold:.12, rootMargin:'0px 0px -8% 0px' });
-    nodes.forEach(function(el){ io.observe(el); });
-  }
-  document.querySelectorAll('.spotlight').forEach(function(c){
-    c.addEventListener('pointermove', function(e){
-      var r=c.getBoundingClientRect();
-      c.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100)+'%');
-      c.style.setProperty('--my', ((e.clientY-r.top)/r.height*100)+'%');
-    });
-  });
-  document.querySelectorAll('[data-chart]').forEach(function(c){
-    var io2 = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('chart-in'); io2.unobserve(e.target); } });
-    }, { threshold:.3 });
-    io2.observe(c);
-  });
+
+  loadPreset('hvac');
 })();
 </script>
 </body></html>
