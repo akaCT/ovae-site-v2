@@ -65,7 +65,13 @@ body{
 .content code{font-family:'DM Mono',monospace; font-size:.85em; background:var(--bg-soft); border:1px solid var(--rule); border-radius:5px; padding:1px 6px; color:var(--accent)}
 .content blockquote{margin:1.2em 0; padding:.5em 0 .5em 1.2em; border-left:2px solid var(--rust); color:var(--ink); font-style:italic; background:linear-gradient(90deg, rgba(201,125,92,0.06), transparent 70%)}
 .content blockquote p{color:var(--ink)}
-.content table{width:100%; border-collapse:collapse; margin:1.2em 0; font-size:14.5px; display:block; overflow-x:auto}
+.content table{width:100%; border-collapse:collapse; margin:1.2em 0; font-size:14.5px; display:block; overflow-x:auto; -webkit-overflow-scrolling:touch;
+  background:
+    linear-gradient(to right, var(--bg) 35%, rgba(20,16,26,0)) 0 0 / 32px 100% no-repeat,
+    linear-gradient(to left, var(--bg) 35%, rgba(20,16,26,0)) 100% 0 / 32px 100% no-repeat,
+    radial-gradient(farthest-side at 0 50%, rgba(123,201,196,0.32), rgba(123,201,196,0)) 0 0 / 14px 100% no-repeat,
+    radial-gradient(farthest-side at 100% 50%, rgba(123,201,196,0.32), rgba(123,201,196,0)) 100% 0 / 14px 100% no-repeat;
+  background-attachment: local, local, scroll, scroll;}
 .content thead{background:linear-gradient(180deg, rgba(123,201,196,0.08), transparent)}
 .content th{text-align:left; font-family:'DM Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:500; padding:11px 14px; border-bottom:1px solid var(--rule-strong); vertical-align:top}
 .content td{padding:11px 14px; border-bottom:1px solid var(--rule); color:var(--ink-dim); vertical-align:top}
@@ -165,26 +171,28 @@ a{transition:color .2s,border-color .2s}
 </tr>
 </tbody>
 </table>
-<p>The three objective lenses converge at <strong>52–55 Isaiah / 45–48 CT</strong>, center ~54/46. 55/45 sits at the edge most favorable to Isaiah — which is exactly where you want to be when <em>he</em> has the leverage.</p>
+<p>The three objective lenses converge at <strong>52–53 Isaiah / 47–48 CT</strong>, center ~53/47. 55/45 sits <em>past</em> that center on the side most favorable to Isaiah — CT is conceding earned points, which is exactly where you want to be when <em>he</em> has the leverage.</p>
 
 <h2>The detailed founder-pie calculation (behind the first lens)</h2>
-<p>The Frank Demmler Founder-Pie method, weighted for this specific pair (100 points). Each factor is weighted by how much it matters to the company, then split between the two of you:</p>
+<p>The Frank Demmler Founder-Pie method, weighted for this specific pair (100 points). Each factor is weighted by how much it matters to the company, then split between the two of you. Two factors were added so the model captures <em>accumulated assets on both sides</em>, not just Isaiah's: <strong>Operating playbooks &amp; company-building</strong> (CT's cross-functional execution IP — org design, hiring, operational systems, client-delivery method — the operational mirror of Isaiah's product IP) and <strong>Existing client relationship</strong> (the one proven, owned customer asset, which is Isaiah's). GTM is held at 80/20 — the existing client is exactly why Isaiah keeps 20% there. The new factors are funded by trimming the cells they were previously buried inside (idea, domain, forward value), not by inflating CT's strong cells:</p>
 <table class="spotlight">
 <thead>
 <tr><th>Factor</th><th>Weight</th><th>Isaiah</th><th>CT</th><th>Isaiah score</th><th>CT score</th></tr>
 </thead>
 <tbody>
-<tr><td>Idea / IP</td><td>10</td><td>70%</td><td>30%</td><td>7.0</td><td>3.0</td></tr>
+<tr><td>Idea / IP</td><td>5</td><td>70%</td><td>30%</td><td>3.5</td><td>1.5</td></tr>
 <tr><td>Product / tech work</td><td>20</td><td>90%</td><td>10%</td><td>18.0</td><td>2.0</td></tr>
-<tr><td>Domain expertise</td><td>15</td><td>75%</td><td>25%</td><td>11.3</td><td>3.7</td></tr>
+<tr><td>Domain expertise</td><td>12</td><td>75%</td><td>25%</td><td>9.0</td><td>3.0</td></tr>
 <tr><td>Commitment / risk</td><td>15</td><td>60%</td><td>40%</td><td>9.0</td><td>6.0</td></tr>
 <tr><td>GTM / BD / sales</td><td>20</td><td>20%</td><td>80%</td><td>4.0</td><td>16.0</td></tr>
 <tr><td>Capital raising / strategy</td><td>10</td><td>20%</td><td>80%</td><td>2.0</td><td>8.0</td></tr>
-<tr><td>Ongoing role (forward value)</td><td>10</td><td>55%</td><td>45%</td><td>5.5</td><td>4.5</td></tr>
-<tr><td><strong>Raw total</strong></td><td><strong>100</strong></td><td></td><td></td><td><strong>56.8</strong></td><td><strong>43.2</strong></td></tr>
+<tr><td>Operating playbooks &amp; company-building <span style="color:var(--rust)">(new)</span></td><td>10</td><td>25%</td><td>75%</td><td>2.5</td><td>7.5</td></tr>
+<tr><td>Existing client relationship <span style="color:var(--rust)">(new)</span></td><td>4</td><td>80%</td><td>20%</td><td>3.2</td><td>0.8</td></tr>
+<tr><td>Ongoing role (forward value)</td><td>4</td><td>55%</td><td>45%</td><td>2.2</td><td>1.8</td></tr>
+<tr><td><strong>Raw total</strong></td><td><strong>100</strong></td><td></td><td></td><td><strong>53.4</strong></td><td><strong>46.6</strong></td></tr>
 </tbody>
 </table>
-<p><strong>Founder-pie result: Isaiah 57 / CT 43.</strong> You dominate GTM/BD/sales (80%) and capital raising/strategy (80%), you sit near even on forward value, and Isaiah dominates product/tech (90%) and idea/IP (70%). Reconciled with the replacement-cost / opportunity-cost view (Isaiah 52–55 / CT 43–45), the band is ~54–58 Isaiah / 42–46 CT, midpoint ~56/44. That is why 55/45 is the clean, Isaiah-favorable rounding.</p>
+<p><strong>Founder-pie result: Isaiah 53 / CT 47.</strong> You dominate GTM/BD/sales (80%), capital raising/strategy (80%), and operating playbooks (75%); Isaiah dominates product/tech (90%), idea/IP (70%), and the existing client (80%); you sit near even on forward value. Naming CT's operating-IP asset (previously buried inside "forward value" and "domain") is what moves the pie from the old 57/43 to 53/47 — and it now lands <em>in line</em> with the replacement-cost lens (52/48) instead of above it. The objective lenses converge tightly at <strong>~52–53 Isaiah / 47–48 CT</strong>. That makes 55/45 not just a rounding — it's CT <em>conceding</em> 2–3 earned points for relationship and leverage reasons, which is the strongest possible posture to walk in with.</p>
 <hr />
 <h2>Why 55/45 is the number — the forces</h2>
 <table class="spotlight">
