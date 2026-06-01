@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Founders' Framework — Ovae × Orectic</title>
+<meta name="robots" content="noindex, nofollow"/>
+<meta name="theme-color" content="#14101A"/>
+<meta name="color-scheme" content="dark"/>
+<link rel="canonical" href="https://ovae.ai/partnership/founder-packet/"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2314101A'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%237BC9C4'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%237BC9C4' stroke-opacity='0.4' stroke-width='1'/%3E%3C/svg%3E"/>
+<meta property="og:type" content="article"/>
+<meta property="og:site_name" content="Ovae"/>
+<meta property="og:title" content="Founders' Framework — Ovae × Orectic"/>
+<meta property="og:description" content="A shared framework for building Ovae on Orectic together: vision, fair structure, and a 90-day first sprint. Powered by Orectic, sold by Ovae, owned together."/>
+<meta property="og:image" content="https://ovae.ai/assets/og-image.jpg"/>
+<meta property="og:url" content="https://ovae.ai/partnership/founder-packet/"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#14101A; --bg-elev:#1A1622; --bg-soft:#1F1A28;
+  --ink:#E8E4DC; --ink-dim:#A39E96; --ink-mute:#6F6A63;
+  --rule:rgba(232,228,220,0.08); --rule-strong:rgba(232,228,220,0.16);
+  --accent:#7BC9C4; --rust:#C97D5C; --warn:#D9B26B;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'DM Sans',system-ui,sans-serif; font-weight:300;
+  line-height:1.72; font-size:16.5px;
+  -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1200px 600px at 80% -10%, rgba(123,201,196,0.06), transparent 60%),
+                   radial-gradient(900px 500px at -10% 20%, rgba(201,125,92,0.05), transparent 55%);
+  background-attachment:fixed;
+}
+.wrap{max-width:860px; margin:0 auto; padding:0 28px 120px}
+.topbar{
+  position:sticky; top:0; z-index:10; backdrop-filter:blur(10px);
+  background:rgba(20,16,26,0.82); border-bottom:1px solid var(--rule);
+  margin:0 -28px 0; padding:11px 28px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.topbar .brand{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-dim)}
+.topbar .brand b{color:var(--accent); font-weight:500}
+.conf{font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--rust); border:1px solid rgba(201,125,92,0.4); border-radius:999px; padding:4px 11px; white-space:nowrap}
+.head{padding:54px 0 8px}
+.kicker{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:18px; display:flex; align-items:center; gap:9px}
+.kicker::before{content:""; width:22px; height:1px; background:var(--accent)}
+.content h1{font-size:clamp(30px,5vw,46px); font-weight:300; letter-spacing:-0.02em; line-height:1.08; margin:.1em 0 .5em}
+.content h1 em{font-style:italic; color:var(--accent)}
+.content h2{font-size:clamp(20px,3vw,25px); font-weight:400; letter-spacing:-0.012em; color:var(--ink); margin:2.4em 0 .7em; padding-top:1.5em; border-top:1px solid var(--rule)}
+.content h2 em{font-style:italic; color:var(--accent); font-weight:300}
+.content h3{font-size:17px; font-weight:500; color:var(--ink); margin:1.8em 0 .5em; letter-spacing:-0.005em}
+.content h3 em{font-style:italic; color:var(--accent); font-weight:400}
+.content p{color:var(--ink-dim); margin:.7em 0}
+.content strong{color:var(--ink); font-weight:600}
+.content em{color:var(--ink); font-style:italic}
+.content a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(123,201,196,0.3)}
+.content ul,.content ol{color:var(--ink-dim); padding-left:1.25em; margin:.7em 0}
+.content li{margin:.42em 0}
+.content li::marker{color:var(--rust)}
+.content hr{border:none; border-top:1px solid var(--rule); margin:2.4em 0}
+.content code{font-family:'DM Mono',monospace; font-size:.85em; background:var(--bg-soft); border:1px solid var(--rule); border-radius:5px; padding:1px 6px; color:var(--accent)}
+.content blockquote{margin:1.2em 0; padding:.5em 0 .5em 1.2em; border-left:2px solid var(--rust); color:var(--ink); font-style:italic; background:linear-gradient(90deg, rgba(201,125,92,0.06), transparent 70%)}
+.content blockquote p{color:var(--ink)}
+.content table{width:100%; border-collapse:collapse; margin:1.2em 0; font-size:14.5px; display:block; overflow-x:auto}
+.content thead{background:linear-gradient(180deg, rgba(123,201,196,0.08), transparent)}
+.content th{text-align:left; font-family:'DM Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:500; padding:11px 14px; border-bottom:1px solid var(--rule-strong); vertical-align:top}
+.content td{padding:11px 14px; border-bottom:1px solid var(--rule); color:var(--ink-dim); vertical-align:top}
+.content td strong{color:var(--ink)}
+.content tr:last-child td{border-bottom:none}
+.part{font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.22em; text-transform:uppercase; color:var(--rust); text-align:center; margin:3.4em 0 .2em; display:flex; align-items:center; gap:16px}
+.part::before,.part::after{content:""; height:1px; background:var(--rule-strong); flex:1}
+.meta{font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.02em; color:var(--ink-mute); line-height:1.9; margin:.2em 0 0}
+.meta b{color:var(--ink-dim); font-weight:400}
+.foot{margin-top:60px; padding-top:22px; border-top:1px solid var(--rule); font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.04em; color:var(--ink-mute); line-height:1.7}
+.foot .rust{color:var(--rust)}
+.foot a{color:var(--ink-dim); border-bottom:1px solid var(--rule-strong)}
+@media (max-width:600px){ body{font-size:15.5px} .wrap{padding:0 18px 80px} .topbar{margin:0 -18px} }
+/* ── cohesive elevation (matches ovae.ai v7) ── */
+html{scroll-behavior:smooth}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+body::after{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.92 0 0 0 0 0.89 0 0 0 0 0.86 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);will-change:opacity,transform}
+.reveal.in{opacity:1;transform:none}
+table,blockquote{transition:border-color .25s,box-shadow .25s,transform .25s}
+table:hover,blockquote:hover{box-shadow:0 22px 48px -30px rgba(0,0,0,.8)}
+a{transition:color .2s,border-color .2s}
+.spotlight{position:relative;isolation:isolate}
+.spotlight::before{content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;opacity:0;transition:opacity .3s;
+ background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(123,201,196,.09),transparent 62%)}
+.spotlight:hover::before{opacity:1}
+.ovchart{margin:22px 0 8px}
+.ovchart .lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
+.ovgrid{display:grid;gap:14px}
+@media(min-width:640px){.ovgrid.cols2{grid-template-columns:1fr 1fr}}
+.ovdonut circle.val{stroke-dasharray:var(--c);stroke-dashoffset:var(--c);transition:stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1)}
+[data-chart].chart-in .ovdonut circle.val{stroke-dashoffset:var(--off)}
+@media (prefers-reduced-motion: reduce){
+ html{scroll-behavior:auto}
+ .reveal{opacity:1!important;transform:none!important;transition:none}
+ .spotlight::before{display:none}
+ .ovdonut circle.val{transition:none}
+}
+</style>
+</head><body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="brand">Ovae <b>×</b> Orectic &nbsp;·&nbsp; Powered by Orectic</span>
+    <span class="conf">Confidential — for Isaiah &amp; CT</span>
+  </div>
+  <div class="head"><div class="kicker">Founders' framework</div></div>
+  <div class="content">
+<h1>Ovae × Orectic — <em>A Shared Founders' Framework</em></h1>
+<p class="meta">
+  <b>For Isaiah &amp; CT — building Ovae on Orectic, together</b><br/>
+  June 2026 · 90-day window ≈ through ~Aug 30, 2026<br/>
+  A working draft for us to refine together — not legal advice, not binding. Counsel reviews before signing.
+</p>
+<blockquote>
+<p>This is a shared starting point, not a position. The aim is a structure that's fair enough and fast enough for both of us to go all-in — one that builds the upside together and protects each of us on the downside. Every figure here is to anchor the conversation; nothing is final.</p>
+</blockquote>
+
+<h2>A note from CT</h2>
+<p>Isaiah — I've taken four consumer brands from early concept toward category leadership, and I know the feeling when the two halves of a company, deep product and real distribution, finally lock together. Orectic is the most serious platform I've seen to build that motion around, and I want to go all-in with you on it. None of what follows is about a number. It's about getting the structure clean and fair enough that I can commit fully — and that you never have to worry about losing what you spent years building. If we get the frame right, what we're walking toward is bigger than either of us reaches alone.</p>
+
+<div class="part">Part I — What we're building</div>
+
+<h2>1. The vision: a venture-studio holding company</h2>
+<p>Not "Orectic plus a marketing wrapper." Something bigger and cleaner:</p>
+<ul>
+<li><strong>Orectic — the platform.</strong> The AI-native operating substrate every engagement runs on, proudly carried as <strong>"Powered by Orectic"</strong> on everything we ship. Isaiah's life's work becomes the durable moat of a studio, not a single founder's solo product.</li>
+<li><strong>Ovae — the operating company.</strong> The single front door that signs clients across verticals, installs the platform, runs the transformation, and owns the GTM, brand, and delivery motion. The engine.</li>
+<li><strong>The HoldCo — the compounding machine.</strong> Owns Orectic as flagship IP, owns the co-created vertical runbook moat, and — the real prize — can build an <strong>equity portfolio of the companies it transforms</strong> (equity-for-services and exit-tails alongside cash). We don't just bill installs; we accumulate ownership in the businesses we make more valuable.</li>
+</ul>
+<p>This is the model the one-pager already points at: the runbook is at once the client lock-in, the productization engine, and the owned IP that re-rates the firm from a services multiple to a platform multiple. The studio frame is what makes that triple payoff structural instead of incidental.</p>
+
+<h2>2. The prize — <em>and the one assumption it rests on</em></h2>
+<p>A founder-owned $15–20M trades company yields ~$130–200K blended 3-year ACV. <strong>10–12 core clients on retainer + build clears ~$1M in firm billings</strong> (reachable for two founders in 18–24 months). The 5-year target is <strong>$8–15M firm revenue at 35–40% EBITDA, 50%+ recurring → a ~$100M+ enterprise value</strong> at a platform multiple — before any equity stakes the HoldCo takes in the clients it transforms.</p>
+<p><strong>The honest caveat:</strong> that's a <em>target conditioned on one number</em>, not a forecast. The model lives or dies on <strong>audit-to-build conversion</strong> — what share of $17,500 Land engagements convert up into $90K builds and $175–225K embeds. At a healthy 30–40% it's exceptional land economics; below that, the audit is just an expensive lead magnet. We don't know the real rate yet — which is exactly why we instrument it from client #1, and why the first 90 days matter.</p>
+<p>Naming the prize — and its one load-bearing assumption — first matters because, against a $100M+ build, the questions we have to settle between us are small by comparison. The fastest way there is to make the structure fair quickly, then go prove the conversion number together.</p>
+
+<h2>3. Why this is the best path for both of us</h2>
+<p>Each of us could take a separate route — CT could build Ovae on another platform with other technical partners; Isaiah could keep selling Orectic solo or find a different GTM partner. Both are real. But the honest read is that the combined path is stronger for both:</p>
+<ul>
+<li><strong>Two engines, not one.</strong> A great platform with no distribution is a feature list; distribution with no platform is a pitch deck. Together we have both — deep product plus a proven go-to-market and capital engine.</li>
+<li><strong>The math favors together.</strong> Apart, the realistic outcomes are modest; together — raising capital, landing clients, compounding a runbook moat and an equity portfolio — the target is an order of magnitude larger. It's less "what does each give up" and more "which bet would each of us rather hold."</li>
+<li><strong>Neither of us can lose what we brought.</strong> Because of reversion (Orectic returns to Isaiah on a failure) and its mirror (Ovae stays with CT), each of us keeps our half if it ever unwinds. That mutual exit-ramp is exactly what makes it safe enough to fully commit now.</li>
+</ul>
+
+<h2>Where the moat actually is</h2>
+<p>Worth being clear-eyed about together, because it shapes everything we build. In 2026, the platform itself isn't the moat — for anyone. The base Orectic runs on (Nous Research's Hermes, MIT-licensed) is one of the most popular open-source agent frameworks in the world, and Microsoft is shipping free governance tooling around the same problem. CT knows this first-hand — he built his own AI operating system on the same base to run OPUS. Orectic is the more advanced system today, but a layer on a commoditizing base, however good, isn't by itself a durable moat.</p>
+<p>That's not a knock; it's the market. What actually defends an AI company now is well-documented: deep vertical expertise, becoming the system of record in a niche, proprietary workflows and data, proven client outcomes, and speed of capture — in a space that's hot, crowded, and full of "agent-washing" (by one industry count, only ~130 of thousands of self-described agent vendors are the real thing).</p>
+<p>So the moat we're actually building is the combination only the two of us produce: <strong>Orectic kept on the cutting edge by Isaiah</strong> — with the engineering investment, likely including a dedicated CTO, that staying ahead requires — wrapped in <strong>chosen verticals, co-created runbooks, proven installs, a real go-to-market engine, and the holding company that compounds it.</strong> The platform is the foundation; the defensibility is what we build on top of it, fast. That's exactly why doing this together, quickly, is the winning move — and why most of the value is created forward.</p>
+
+<div class="part">Part II — The framework</div>
+
+<h2>4. Where things stand</h2>
+<p>Isaiah has built Orectic: an AI-native operating-infrastructure platform and methodology (company brain, evidence core, extraction pipeline, runtime/Oracle layer, knowledge graph, OrecticOS governance, sales-call dossier workflows) layered on an open-source base (MIT/Hermes), with a documented 1,104-artifact IP registry. It is pilot-real and architecturally deep, with founder-dependency and productization risk still ahead.</p>
+<p>CT has built the go-to-market: the Ovae name, website, a 200-agent / 108-competitor market study, a trades-vertical ICP ($15–20M HVAC/plumbing/electrical on ServiceTitan), a tiered offer ladder anchored on a $17,500 Land (audit + Brain), a live engagement configurator, and the partnership/deal architecture — plus a four-brand operating track record and 8–10 hours of recorded joint strategy with Isaiah.</p>
+<p>Both contributions are real. The only open question is how to structure ownership so neither the pre-existing platform nor the forward go-to-market value is mispriced.</p>
+
+<h2>5. What each of us brings — <em>proven, shared, and still to build</em></h2>
+<p>A fair map separates four things: what each of us already brings that's real, what we created together, and what still has to be built. Separating them matters because the structure should reward <em>proven</em> contribution and <em>earned-forward</em> contribution differently — and being honest about which is which is what keeps the split fair to both of us.</p>
+<h3>What Isaiah brings</h3>
+<p>The Orectic platform layered on the open-source base (architecture, code, runtime, knowledge/memory layer); the OrecticOS methodology (specs, sprint gates, AARs, verification doctrine, trust boundaries); the sales-call dossier and offer-OS workflow; a proven, owned client relationship; and the 1,104-artifact IP registry — years of deliberate, documented, sale-minded work. Product, platform, and technical governance are his to own. <em>Proven:</em> the depth and the documentation are real and pre-existing. <em>Still to prove:</em> that the platform lands commercially, productizes, and scales beyond founder-dependency — the exact risk this partnership is meant to retire. <em>(The MIT/Hermes base stays open-source underneath; Isaiah's contribution is the substantial, fundable work built on top of it.)</em></p>
+<h3>What CT brings</h3>
+<p>A proven operating and capital track record: four consumer brands built as operator, three to nine figures (Onnit → acquired by Unilever, 2021); $12M+ raised including a $3M Series A from M13; the full investor function (outreach, data rooms, decks, board/advisor management, strategic partnerships); and a full-stack commercial engine (DTC growth, the build-your-own configurator he built at Fleshlight, affiliate/influencer, email, paid, funnels, SEO, brand, launch). Plus the Ovae work product — name, site, market research, offer ladder and pricing model, the live configurator, and the deal architecture — assignable into the company. He's also built his own AI operating system on the same open-source Hermes/MIT base and run OPUS on it in production — hands-on proof of the category, the ability to contribute to the platform rather than only sell it, and a candid benchmark from someone who's done it: <em>Orectic is the more advanced system.</em> <em>Proven:</em> the capability and the assets are real and banked. <em>Still to prove:</em> that the engine transfers to a B2B-trades consultative motion, and that it converts to collected revenue inside the first 90 days.</p>
+<p><strong>Why the pairing fits.</strong> The strongest cofounder pairs have near-zero overlap — each owns a half the other doesn't. Isaiah owns product, platform, and technical governance; CT owns capital, go-to-market, brand, partnerships, and commercial operations. Not one of us being "more" — the two halves of a fundable company locking together.</p>
+<h3>The map, at a glance</h3>
+<table class="spotlight">
+<thead><tr><th>Bucket</th><th>Proven / banked today</th><th>Still to be earned forward</th></tr></thead>
+<tbody>
+<tr><td><strong>Isaiah / Orectic</strong></td><td>Platform depth, methodology, 1,104-artifact registry, one owned client</td><td>Commercial landing, productization, less founder-dependency</td></tr>
+<tr><td><strong>CT</strong></td><td>0→9-figure operator track record, $12M+ raised, the Ovae assets</td><td>Transfer to trades B2B; collected revenue inside 90 days</td></tr>
+<tr><td><strong>Together</strong></td><td>8–10 hrs of joint strategy: offer, pricing, and funnel logic</td><td>The co-created runbook moat, built client by client</td></tr>
+<tr><td><strong>Forward (the bulk)</strong></td><td>—</td><td>Revenue, pipeline, playbooks, the client-equity portfolio</td></tr>
+</tbody>
+</table>
+<p>Roughly 70% of the enterprise value sits in that last row — built forward, by both of us — which is why the structure should reward what we build from here at least as much as what either of us walked in with.</p>
+
+<h2>6. Is the split fair? — <em>the analysis behind the number</em></h2>
+<p>Two things often get blurred together; it helps to separate them. One is <em>whether the equity split itself is fair</em>. The other is <em>how Isaiah's pre-existing platform gets recognized</em>. The notes Isaiah shared raised the second — fairly — and didn't really dispute the first. This section walks the analysis on both, rather than asserting a number.</p>
+
+<h3>The bottom-up split — a founder-pie</h3>
+<p>Using the Frank Demmler Founder-Pie method, weighted for this specific pairing (100 points; each factor weighted by how much it matters to the company, then split between us):</p>
+<table class="spotlight">
+<thead><tr><th>Factor</th><th>Weight</th><th>Isaiah</th><th>CT</th><th>Isaiah pts</th><th>CT pts</th></tr></thead>
+<tbody>
+<tr><td>Idea / IP</td><td>5</td><td>70%</td><td>30%</td><td>3.5</td><td>1.5</td></tr>
+<tr><td>Product / tech work</td><td>20</td><td>90%</td><td>10%</td><td>18.0</td><td>2.0</td></tr>
+<tr><td>Domain expertise</td><td>12</td><td>75%</td><td>25%</td><td>9.0</td><td>3.0</td></tr>
+<tr><td>Commitment / risk</td><td>15</td><td>60%</td><td>40%</td><td>9.0</td><td>6.0</td></tr>
+<tr><td>GTM / BD / sales</td><td>20</td><td>20%</td><td>80%</td><td>4.0</td><td>16.0</td></tr>
+<tr><td>Capital raising / strategy</td><td>10</td><td>20%</td><td>80%</td><td>2.0</td><td>8.0</td></tr>
+<tr><td>Operating playbooks &amp; company-building</td><td>10</td><td>25%</td><td>75%</td><td>2.5</td><td>7.5</td></tr>
+<tr><td>Existing client relationship</td><td>4</td><td>80%</td><td>20%</td><td>3.2</td><td>0.8</td></tr>
+<tr><td>Ongoing role (forward value)</td><td>4</td><td>55%</td><td>45%</td><td>2.2</td><td>1.8</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>100</strong></td><td></td><td></td><td><strong>53.4</strong></td><td><strong>46.6</strong></td></tr>
+</tbody>
+</table>
+<p>Bottom-up, the pie lands at <strong>Isaiah ~53 / CT ~47</strong>: Isaiah leads product/tech, idea/IP, and the existing client; CT leads GTM, capital/strategy, and operating playbooks; the forward role is near-even.</p>
+
+<h3>Pressure-tested, not asserted — five lenses</h3>
+<p>The same question run through independent lenses, including one that argues Isaiah's side as hard as it can:</p>
+<table class="spotlight">
+<thead><tr><th>Lens</th><th>Where it lands</th></tr></thead>
+<tbody>
+<tr><td>Founder-pie + replacement-cost</td><td>~53–55 / 45 — slightly generous to CT</td></tr>
+<tr><td>VC / fundability</td><td>55/45 (range 52–58 Isaiah); GTM-and-capital and deep-product are each scarce</td></tr>
+<tr><td>Value-creation / M&amp;A</td><td>52/48 — ~70% of value is built forward; past ~57/43 starts double-counting the head start</td></tr>
+<tr><td>Isaiah's advocate (devil's advocate)</td><td>63/37 with a milestone path — the honest counter-anchor</td></tr>
+</tbody>
+</table>
+<p>The objective lenses converge around <strong>52–53 Isaiah / 47–48 CT</strong>. <strong>55/45 sits just past that center, on Isaiah's side</strong> — CT conceding a couple of earned points for the head start and the relationship. The devil's-advocate 63/37 is here on purpose: it's the strongest case for Isaiah getting more, and the honest answer is that it's handled by structure (vesting, reversion, the clean break) rather than by moving the headline number.</p>
+
+<h3>The forces around the number</h3>
+<table class="spotlight">
+<thead><tr><th>Force</th><th>Effect on the split</th></tr></thead>
+<tbody>
+<tr><td>Open-source base underneath the platform</td><td>trims the IP premium a few points</td></tr>
+<tr><td>~70% of enterprise value built forward (GTM + co-created moat)</td><td>pulls toward 50/50</td></tr>
+<tr><td>Day-one de-risking — working product, a paying client, live inbound</td><td>a head-start premium toward Isaiah</td></tr>
+<tr><td>Reversion — Isaiah keeps Orectic on the downside</td><td>reduces his binary risk a touch</td></tr>
+<tr><td>Replaceability of each role</td><td>roughly balances</td></tr>
+</tbody>
+</table>
+<p>Netted out, the forces roughly cancel near <strong>~54/46</strong>, and 55/45 is the clean, Isaiah-favorable rounding. So the honest conclusion on the first question: <strong>55/45 is fair — slightly generous to Isaiah — and well-supported rather than asserted.</strong></p>
+
+<h3>Recognizing the head start — options, not a demand</h3>
+<p>The second question is how to recognize the pre-existing platform specifically. There's more than one fair way, and we'd rather put the options on the table than prescribe one. In every option, Orectic stays inside the HoldCo, protected by reversion.</p>
+<ul>
+<li><strong>Option 1 — through equity.</strong> The 55/45 already sits above the ~52/48 fair center; those extra points <em>are</em> the head-start premium. Add a documented §351 contribution value for Orectic when it goes in, and the recognition is complete in one clean number.</li>
+<li><strong>Option 2 — through a preference.</strong> Move equity to ~50/50 and give Isaiah an agreed amount off the top on any exit. The preference does the head-start recognition; the equity reflects what's built forward.</li>
+</ul>
+<p>Neither is better in the abstract; they suit different instincts about certainty and upside. §7 and §S1 run both at exit so the choice can be made on the numbers, together.</p>
+<div class="ovchart spotlight" data-chart aria-label="Founder equity split: 55% Isaiah, 45% CT, plus 10-12% option pool">
+  <div class="lbl">Founder equity — the working split</div>
+  <div class="ovgrid cols2" style="align-items:center">
+    <svg viewBox="0 0 120 120" width="150" height="150" class="ovdonut" style="--c:314;--off:141" aria-hidden="true">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="var(--rule-strong)" stroke-width="14"/>
+      <circle class="val" cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" stroke-width="14" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+      <text x="60" y="56" text-anchor="middle" fill="var(--ink)" font-size="20" font-weight="300">55/45</text>
+      <text x="60" y="74" text-anchor="middle" fill="var(--ink-mute)" font-size="8" font-family="DM Mono,monospace" letter-spacing="1">ISAIAH / CT</text>
+    </svg>
+    <div style="font-size:13px;color:var(--ink-dim);line-height:1.7">
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--accent);margin-right:8px"></span>Isaiah 55%</div>
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--rust);margin-right:8px"></span>CT 45%</div>
+      <div style="color:var(--ink-mute);margin-top:4px">+ ~10–12% option pool · both vesting</div>
+    </div>
+  </div>
+</div>
+
+<h2>7. What the split means at exit</h2>
+<p>Illustrative, so the equity is tangible rather than abstract — a straight 55/45 of founder proceeds (before the option pool and any financing):</p>
+<table class="spotlight">
+<thead>
+<tr><th>Exit</th><th>Isaiah (55%)</th><th>CT (45%)</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>$20M</strong></td><td>$11.0M</td><td>$9.0M</td></tr>
+<tr><td><strong>$50M</strong></td><td>$27.5M</td><td>$22.5M</td></tr>
+<tr><td><strong>$100M</strong></td><td>$55.0M</td><td>$45.0M</td></tr>
+</tbody>
+</table>
+<p>Both founders ride the same curve. The point of the structure is to make that curve as steep as possible together, then make sure neither of us is cut out of it. <em>(If we choose to recognize the head start through a contribution preference instead of the equity premium, §S1 shows how that variant plays out.)</em></p>
+
+<h2>8. The first 90 days — our opening sprint</h2>
+<p>A paid, shared first sprint with a clear decision at the end — not an audition.</p>
+<ul>
+<li><strong>Day 0 — clean paper before public selling:</strong> mutual NDA; CT assigns/licenses the Ovae name, site, research, and configurator into the entity; a role + decision-rights memo; conflict disclosure; a claim-control policy; and a contribution-ledger template. The contracting entity is decided up front.</li>
+<li><strong>A paid floor</strong> during the sprint — a modest retainer or commission against collected revenue — so the window is covered if deals slip.</li>
+<li><strong>A pre-agreed milestone:</strong> the day-90 grant and its triggers are written now — e.g., <em>first $17,500 Land closed + ≥$100–150K contracted → first equity tranche vests, 4-yr / 1-yr-cliff.</em></li>
+<li><strong>Days 1–30:</strong> operating rhythm, role clarity, funnel; build the buyer ledger.</li>
+<li><strong>Days 31–60:</strong> first vertical campaign; first paid engagement(s).</li>
+<li><strong>Days 61–90:</strong> turn delivery into a repeatable playbook; ratify the standing structure (§14).</li>
+</ul>
+
+<h2>9. Three ways to phase the economics</h2>
+<p>All keep the same architecture (HoldCo + reversion + vesting); they differ in how much equity moves up front versus on proof.</p>
+<ul>
+<li><strong>A — Conservative:</strong> the sprint is paid via commission + a small advisory option; HoldCo equity enters at day 90 on metrics, then full vesting and reversion. <em>Most proof first; most upside deferred.</em></li>
+<li><strong>B — Faster signal (our suggestion):</strong> paid floor; enter the 55/45 HoldCo at signing, with the <strong>first tranche vesting on first collected revenue</strong> and the rest milestone-gated. <em>Equity tracks real cash; the payout is defined up front for both.</em></li>
+<li><strong>C — Strong start:</strong> paid floor + full 55/45 granted at signing, 4-yr/1-yr-cliff, accelerating on financing/valuation milestones and fully on a sale. <em>Highest trust and speed.</em></li>
+</ul>
+
+<h2>10. A shared scorecard — day 30 / 60 / 90</h2>
+<p>Scored together, 1–5 each week; the number matters less than the conversation it forces. It scores the partnership, not either person.</p>
+<table class="spotlight">
+<thead>
+<tr><th>Dimension</th><th>Day 30 (signal)</th><th>Day 60 (traction)</th><th>Day 90 (decision)</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Collected revenue</strong></td><td>First cash or signed LOI</td><td>≥1 Land closed</td><td>Threshold met</td></tr>
+<tr><td><strong>Qualified pipeline</strong></td><td>Buyer ledger built</td><td>≥3 deals w/ dates &amp; budgets</td><td>Repeatable, not personality-dependent</td></tr>
+<tr><td><strong>GTM clarity</strong></td><td>ICP + offer holding</td><td>Tested funnel, conversion instrumented</td><td>Repeatable buyer narrative</td></tr>
+<tr><td><strong>Delivery fit</strong></td><td>Sold scope maps to platform</td><td>Manageable scoping friction</td><td>Clean offer→delivery map</td></tr>
+<tr><td><strong>Trust / boundaries</strong></td><td>No claim drift; assets assigned</td><td>Issues surfaced &amp; repaired</td><td>Clean decisions, no hidden assumptions</td></tr>
+<tr><td><strong>Leverage</strong></td><td>Coordination load dropping</td><td>Measurably faster together</td><td>Isaiah freed toward product</td></tr>
+<tr><td><strong>Durable assets</strong></td><td>Playbook drafts</td><td>Reusable scripts/templates</td><td>Playbooks that outlast any one of us</td></tr>
+</tbody>
+</table>
+<p><strong>Day-90 gate:</strong> continue / refine / formalize / cleanly part (reversion and the Ovae-stays-with-CT mirror protect both either way).</p>
+
+<h2>11. Questions worth answering before we sign</h2>
+<p><strong>For Isaiah:</strong> (1) Keep Orectic inside the HoldCo with reversion, or hold it separate — and if separate, what's the concern the reversion doesn't already cover? (2) Does the §351 contribution value feel right, or should we use the §S1 alternative? (3) How much of the registry is proprietary work versus the open-source base? (4) What's contributed versus expressly excluded? (5) What does founder-led sales support look like on the warm pipeline? (6) What pricing floors, claim-control, and decision rights do you need? (7) What in Orectic is actually protectable or patentable versus the open-source base, and how do we protect it? (8) What's the timeline to the first signed contract and the first fully-validated client install? (9) What's the engineering-investment and CTO/hiring plan to keep the platform ahead as the base commoditizes?</p>
+<p><strong>For CT:</strong> (1) Which named accounts can close on the Land inside 90 days, with amounts and dates? (2) Will the Ovae assets be assigned/licensed in day-one? (3) Hours per week, and how long is the free-agent window? (4) What revenue would feel like fair recognition — and what if it slips? (5) Decision rights expected, and where do you defer on product and claims? (6) Any existing obligations or conflicts to disclose?</p>
+
+<h2>12. Risks for each of us to watch</h2>
+<h3>Risks for CT</h3>
+<p>That forward value stays projected rather than collected; that selling runs ahead of what the platform can safely deliver; that the contracting entity gets decided by default before it's papered; that a cofounder commitment outpaces what the first 90 days actually prove. Each is handled by the structure — vesting, a paid floor, claim-control, the day-90 gate — rather than by anyone starting from a depressed position.</p>
+<h3>Risks for Isaiah</h3>
+<p>That the pre-existing platform gets under-recognized or its IP boundary erodes; that public copy leans on private or registry detail; that GTM momentum creates claims the platform has to honor; that a day-one split moves before contribution is proven. Each is handled by the structure too — the 55/45 premium, reversion, the §351 contribution value, claim-control, and clean assignment.</p>
+<h3>Risks we both carry — the product &amp; the market</h3>
+<p>Honest shared context, not a knock on what's built: Orectic isn't yet validated on a live client or under a signed contract; it runs on a commoditizing open-source base in a hot, crowded market full of "agent-washing"; and it needs continued engineering investment — likely a CTO — to stay ahead as the models and competitors move. The answer to all of it is the same, and it <em>is</em> the plan: the defensibility isn't the platform, it's the verticals, the co-created runbooks, becoming the system of record, proven installs, the GTM engine, and the speed we build them with. These are the case <em>for</em> moving fast together, not against it.</p>
+<p>The point of listing all of this is symmetry: every real concern — yours, mine, and the market's — has a structural answer, so none of us has to protect ourselves by holding back.</p>
+
+<h2>13. The next document</h2>
+<p>A one-page <strong>Structure Term Sheet</strong> (founders' alignment, pre-counsel) locking four things: <strong>(1) Entity</strong> — one DE C-corp HoldCo; Orectic in a severable sub; Ovae the operating brand. <strong>(2) Substrate</strong> — Orectic contributed in (§351) with automatic reversion on failure and the symmetric Ovae-stays-with-CT mirror. <strong>(3) Equity + vesting</strong> — 55/45 + a 10–12% option pool; 4-yr/1-yr-cliff, milestone-accelerated. <strong>(4) The 90-day sprint</strong> — paid floor + a pre-agreed grant on collected-revenue triggers. Counsel drafts the binding documents from there.</p>
+
+<div class="part">Appendix — options &amp; stress-tests</div>
+
+<h2>S1. Options 1 &amp; 2 at exit — <em>running the numbers (choose one, not both)</em></h2>
+<p>§6 put three recognition options on the table. Two of them — the equity premium and the preference — produce different exit outcomes worth seeing side by side. They're equivalent in spirit; the only thing to avoid is stacking both, which would pay for the same head start twice.</p>
+<ul>
+<li><strong>Option 1 — the equity premium.</strong> 55/45 in Isaiah's favor, no separate preference. The extra points above the ~52/48 fair center <em>are</em> the head-start recognition — one clean number.</li>
+<li><strong>Option 2 — a contribution preference + an even-er split.</strong> Isaiah takes an agreed amount ($1.5–3M) off the top on any exit, and the residual equity moves toward <strong>~50/50</strong> to reflect forward contribution. The preference does the head-start recognition; the equity reflects what's built from here.</li>
+</ul>
+<p>How each plays out for both of us:</p>
+<table class="spotlight">
+<thead>
+<tr><th>Exit</th><th>Option 1 — 55/45 (Isaiah / CT)</th><th>Option 2 — 50/50 + $3M pref (Isaiah / CT)</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>$20M</strong></td><td>$11.0M / $9.0M</td><td>$11.5M / $8.5M</td></tr>
+<tr><td><strong>$50M</strong></td><td>$27.5M / $22.5M</td><td>$26.5M / $23.5M</td></tr>
+<tr><td><strong>$100M</strong></td><td>$55.0M / $45.0M</td><td>$51.5M / $48.5M</td></tr>
+</tbody>
+</table>
+<p>The two cross over around a <strong>$30M</strong> exit. Below it, the 55/45 premium (A) is the better deal for CT and the preference is the safer one for Isaiah; above it — the range we're actually building toward — the preference structure (B) gives CT more while still handing Isaiah a guaranteed amount off the top. So the honest way to choose is to picture the exit we believe in, not to default to one.</p>
+
+<h2>S2. How the client-equity portfolio could work</h2>
+<p>The "equity in the companies we transform" idea needs real mechanics to be more than a slogan. The typical client (founder-owned $15–20M trades company, 3–5 years from a sale) is usually an S-corp or LLC, so direct equity is awkward. Practical instruments, easiest first:</p>
+<ul>
+<li><strong>Exit-tail / transaction right (best fit).</strong> A small share of the owner's eventual sale price. They're already heading toward an exit, so it aligns with their motive and needs no cap-table entry.</li>
+<li><strong>Synthetic equity / margin share.</strong> A contractual share of the incremental margin the transformation unlocks, for a fixed term — easy to accept, no dilution.</li>
+<li><strong>Sweat warrant.</strong> A warrant to buy a set stake at a set strike, earned on delivery — for the cleanest-books clients open to real equity.</li>
+<li><strong>An SPV under the HoldCo</strong> to hold the stakes, warrants, and tails as a portfolio.</li>
+</ul>
+<p>Guardrails that keep it from distracting from the core business: cash first (Land + build + retainer fund operations); equity/tail is an optional premium track that trades cash for upside, never mandatory; offered only to best-fit clients; start synthetic before real equity. Counsel reviews concentration risk, S-corp constraints, and securities treatment.</p>
+
+<h2>S3. Pre-mortem — <em>what could go wrong, and how the structure answers it</em></h2>
+<p>It helps to name the failure modes out loud. The reassuring part is that each already has a structural answer; the one to respect most is the first.</p>
+<table class="spotlight">
+<thead>
+<tr><th>What could go wrong</th><th>How the structure already answers it</th></tr>
+</thead>
+<tbody>
+<tr><td>Revenue is slower than hoped (a consultative trades sale takes longer than a consumer one)</td><td>Paid floor; the day-90 gate; conversion instrumented from client #1; a buyer ledger before commitments</td></tr>
+<tr><td>Delivery can't keep pace / Isaiah becomes the bottleneck</td><td>Claim-control; a certified-implementer track; scope discipline; selling inside deliverable lines</td></tr>
+<tr><td>Trust frays over the number or roles</td><td>Settle §S1 and a decision-rights memo early; revisit openly at the day-90 gate</td></tr>
+<tr><td>Bandwidth splits (CT's other commitments)</td><td>Honest hours and real free-agent-window dates, agreed up front</td></tr>
+<tr><td>The studio/equity vision distracts from closing installs</td><td>Equity is a kicker, not the plan (§S2): cash services first, portfolio second</td></tr>
+<tr><td>Legal/structural drag kills momentum</td><td>Term sheet now, counsel in parallel; don't let perfect paper block the first sprint</td></tr>
+</tbody>
+</table>
+
+<blockquote>
+<p><strong>Bottom line.</strong> We're not splitting a company — we're co-founding the holding company that turns Orectic into a portfolio. The protection that guarantees Isaiah never loses what he built is already designed in; the head start is recognized fairly; and the prize we're building toward is far bigger than anything we settle on the way in. The first 90 days starts the ten-year build. <em>Powered by Orectic, sold by Ovae, owned together.</em></p>
+</blockquote>
+  </div>
+  <div class="foot">
+    Confidential working draft — for Isaiah &amp; CT. Not a binding agreement; figures anchor the conversation, and final structure needs counsel.<br/>
+    <span class="rust">Ovae × Orectic</span> &nbsp;·&nbsp; June 2026 &nbsp;·&nbsp; Related: <a href="/partnership/one-pager/">one-pager</a> · <a href="/partnership/equity-split/">equity split</a> · <a href="/partnership/contribution-reversion/">contribution &amp; reversion</a> · <a href="/partnership/configure/">configurator</a>
+  </div>
+</div>
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sel = 'h2, h3, table, blockquote, .part';
+  var nodes = Array.prototype.slice.call(document.querySelectorAll(sel));
+  if (!reduce) {
+    nodes.forEach(function(el,i){ el.classList.add('reveal'); el.style.transitionDelay=((i%6)*60)+'ms'; });
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold:.12, rootMargin:'0px 0px -8% 0px' });
+    nodes.forEach(function(el){ io.observe(el); });
+  }
+  document.querySelectorAll('.spotlight').forEach(function(c){
+    c.addEventListener('pointermove', function(e){
+      var r=c.getBoundingClientRect();
+      c.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100)+'%');
+      c.style.setProperty('--my', ((e.clientY-r.top)/r.height*100)+'%');
+    });
+  });
+  document.querySelectorAll('[data-chart]').forEach(function(c){
+    var io2 = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('chart-in'); io2.unobserve(e.target); } });
+    }, { threshold:.3 });
+    io2.observe(c);
+  });
+})();
+</script>
+</body></html>
