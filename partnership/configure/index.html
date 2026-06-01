@@ -139,25 +139,26 @@ a{transition:color .2s,border-color .2s}
 (function(){
   var CHK='<svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#14101A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   // catalog: one = one-time $, mo = monthly recurring $, yr = annual recurring $
-  var fixed = [
-    {id:'audit', nm:'Readiness Audit', ds:'The land — credited forward', one:7500},
-    {id:'brain', nm:'The Brain (installed foundation)', ds:'Searchable second brain + visibility', one:10000, yr:299, toggle:true, on:true}
+  // Everything is selectable — nothing is forced. Foundation defaults on but can be deselected.
+  var foundation = [
+    {id:'audit', nm:'Readiness Audit', ds:'The land — 100% credited forward into a Build', one:7500, toggle:true},
+    {id:'brain', nm:'The Brain (installed foundation)', ds:'Searchable second brain + visibility', one:10000, yr:299, toggle:true}
   ];
   var services = [
     {id:'dash', nm:'Dashboards', ds:'Live profit / AR / utilization', one:30000, mo:2000, toggle:true},
-    {id:'auto', nm:'Automations', ds:'Quote-to-invoice, AR chase, routing…', each:10000, qty:true, max:8, n:4},
+    {id:'auto', nm:'Automations', ds:'Quote-to-invoice, AR chase, routing…', each:10000, qty:true, max:8},
     {id:'onb',  nm:'Onboarding / SOP', ds:'New-hire AI trainer', one:15000, toggle:true},
-    {id:'intg', nm:'Systems integration', ds:'Connect their existing tools', one:50000, toggle:true},
+    {id:'intg', nm:'Systems integration', ds:'Connect their existing tools', one:30000, toggle:true},
     {id:'port', nm:'Portals', ds:'Customer + team portals', one:50000, mo:1500, toggle:true},
     {id:'plat', nm:'Custom platform', ds:'Bespoke engine on their own data', one:95000, mo:1000, toggle:true}
   ];
-  var retainers = [{v:0,n:'None'},{v:1500,n:'Maintain — $1.5K/mo'},{v:3000,n:'Optimize — $3K/mo'},{v:5000,n:'Scale — $5K/mo'}];
-  var state = {brain:true, dash:false, auto:0, onb:false, intg:false, port:false, plat:false, ret:1500};
+  var retainers = [{v:0,n:'None'},{v:1500,n:'Maintain — $1.5K/mo'},{v:2250,n:'Optimize — $2.25K/mo'},{v:3000,n:'Scale — $3K/mo'}];
+  var state = {audit:true, brain:true, dash:false, auto:0, onb:false, intg:false, port:false, plat:false, ret:1500};
 
-  function money(n){ return '$'+Math.round(n).toLocaleString('en-US'); }
-  function row(item, kind){
-    var div=document.createElement('div'); div.className='row'+(kind==='fixed'?' fixed':'');
-    if(kind!=='fixed' && (item.qty ? state[item.id]>0 : state[item.id])) div.className+=' on';
+  function money(n){ var neg=n<0; n=Math.abs(n); return (neg?'−$':'$')+Math.round(n).toLocaleString('en-US'); }
+  function row(item){
+    var div=document.createElement('div'); div.className='row';
+    if(item.qty ? state[item.id]>0 : state[item.id]) div.className+=' on';
     var right;
     if(item.qty){
       right='<div class="qty"><button data-dec="'+item.id+'">−</button><input id="q_'+item.id+'" value="'+state[item.id]+'" readonly aria-label="quantity"><button data-inc="'+item.id+'">+</button></div>';
@@ -166,17 +167,17 @@ a{transition:color .2s,border-color .2s}
       right='<div class="price">'+p+(sub?'<span class="mo">'+sub+'</span>':'')+'</div>';
     }
     div.innerHTML='<div class="box">'+CHK+'</div><div class="meta"><div class="nm">'+item.nm+(item.each?' <span style="color:var(--ink-mute);font-size:12px">('+money(item.each)+' each)</span>':'')+'</div><div class="ds">'+item.ds+'</div></div>'+right;
-    if(kind!=='fixed' && item.toggle){
+    if(item.toggle){
       div.addEventListener('click', function(e){ if(e.target.closest('.qty'))return; state[item.id]=!state[item.id]; render(); });
     }
     return div;
   }
   function render(){
     var c=document.getElementById('catalog'); c.innerHTML='';
-    var l1=document.createElement('div'); l1.className='sec-lbl'; l1.textContent='Always included'; c.appendChild(l1);
-    fixed.forEach(function(it){ c.appendChild(row(it,'fixed')); });
+    var l1=document.createElement('div'); l1.className='sec-lbl'; l1.textContent='Foundation — recommended (deselectable)'; c.appendChild(l1);
+    foundation.forEach(function(it){ c.appendChild(row(it)); });
     var l2=document.createElement('div'); l2.className='sec-lbl'; l2.textContent='Service catalog — pick what they need'; c.appendChild(l2);
-    services.forEach(function(it){ c.appendChild(row(it, it.qty?'qty':'svc')); });
+    services.forEach(function(it){ c.appendChild(row(it)); });
     var l3=document.createElement('div'); l3.className='sec-lbl'; l3.textContent='Ongoing retainer (the annuity)'; c.appendChild(l3);
     var sel=document.createElement('select'); retainers.forEach(function(r){ var o=document.createElement('option'); o.value=r.v; o.textContent=r.n; if(r.v===state.ret)o.selected=true; sel.appendChild(o); });
     sel.addEventListener('change', function(){ state.ret=+sel.value; render(); }); c.appendChild(sel);
@@ -186,26 +187,30 @@ a{transition:color .2s,border-color .2s}
     compute();
   }
   function compute(){
-    var one=7500, mo=0, yr=0, lines=[];
-    lines.push(['Readiness Audit', money(7500)]);
+    var one=0, mo=0, yr=0, lines=[];
+    if(state.audit){ one+=7500; lines.push(['Readiness Audit', money(7500)]); }
     if(state.brain){ one+=10000; yr+=299; lines.push(['The Brain', money(10000)+' + $299/yr']); }
     if(state.dash){ one+=30000; mo+=2000; lines.push(['Dashboards', money(30000)]); }
     if(state.auto>0){ one+=10000*state.auto; lines.push(['Automations ×'+state.auto, money(10000*state.auto)]); }
     if(state.onb){ one+=15000; lines.push(['Onboarding / SOP', money(15000)]); }
-    if(state.intg){ one+=50000; lines.push(['Systems integration', money(50000)]); }
+    if(state.intg){ one+=30000; lines.push(['Systems integration', money(30000)]); }
     if(state.port){ one+=50000; mo+=1500; lines.push(['Portals', money(50000)]); }
     if(state.plat){ one+=95000; mo+=1000; lines.push(['Custom platform', money(95000)]); }
     if(state.ret>0){ mo+=state.ret; lines.push(['Retainer', money(state.ret)+'/mo']); }
+    // Audit credits 100% forward once any Build/Embed service is added.
+    var buildSel = state.dash||state.auto>0||state.onb||state.intg||state.port||state.plat;
+    var gross = one;
+    if(state.audit && buildSel){ one-=7500; lines.push(['Audit credited forward', money(-7500)]); }
     var firstYr = one + mo*12 + yr;
     document.getElementById('vOne').textContent=money(one);
     document.getElementById('vMo').textContent= mo? money(mo)+'/mo' : '$0';
     document.getElementById('vYr').textContent=money(firstYr);
     var ll=document.getElementById('lines'); ll.innerHTML='';
     lines.forEach(function(p){ var d=document.createElement('div'); d.className='li'; d.innerHTML='<span>'+p[0]+'</span><span>'+p[1]+'</span>'; ll.appendChild(d); });
-    // tier by one-time
+    // tier by gross one-time component scope (before the audit credit)
     var name,sub;
-    if(one < 30000){ name='Land'; sub='Audit + Brain — the entry point'; }
-    else if(one < 150000){ name='Build'; sub='Done-with-you — a focused composition'; }
+    if(gross < 30000){ name='Land'; sub='Audit + Brain — the entry point'; }
+    else if(gross < 150000){ name='Build'; sub='Done-with-you — a focused composition'; }
     else { name='Embed'; sub='Done-for-you flagship — the 90-day transformation'; }
     document.getElementById('tierName').textContent=name;
     document.getElementById('tierSub').textContent=sub;
