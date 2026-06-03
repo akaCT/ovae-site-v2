@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Ovae · Readiness Report</title>
+<style>
+  html,body{margin:0;height:100%;background:#14101A;color:#A39E96;
+    font-family:"DM Mono",ui-monospace,monospace;
+    display:flex;align-items:center;justify-content:center;text-align:center}
+  .pulse{letter-spacing:.16em;text-transform:uppercase;font-size:13px;color:#7BC9C4;animation:b 1.4s ease-in-out infinite}
+  @keyframes b{0%,100%{opacity:.4}50%{opacity:1}}
+</style>
+</head>
+<body>
+  <div id="state"><div class="pulse">Ovae · loading report…</div></div>
+  <script>
+  (function () {
+    var EDGE = "https://muguotipixphthfxjssu.supabase.co/functions/v1/readiness-report";
+    var qs = location.search || "";
+    if (qs.indexOf("id=") === -1) {
+      document.getElementById("state").innerHTML = '<div class="pulse">No report specified.</div>';
+      return;
+    }
+    fetch(EDGE + qs)
+      .then(function (r) { return r.text(); })
+      .then(function (html) { document.open(); document.write(html); document.close(); })
+      .catch(function () {
+        document.getElementById("state").innerHTML = '<div class="pulse">Could not load report.</div>';
+      });
+  })();
+  </script>
+</body>
+</html>
