@@ -4,12 +4,14 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex,nofollow" />
+<meta name="theme-color" content="#14101A" />
+<meta name="color-scheme" content="dark" />
 <title>Ovae × Mighty — A Private Proposal for Tommy Webber</title>
 <meta property="og:title" content="Ovae × Mighty Plumbing — A Private Proposal for Tommy Webber">
 <meta property="og:description" content="An intelligence layer for Mighty — and every business you buy next. What it does to close rate, profit, and exit value.">
 <meta property="og:image" content="https://ovae.ai/mighty/proposal/og-index.png">
 <meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="628">
+<meta property="og:image:height" content="630">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ovae.ai/mighty/proposal/">
 <meta name="twitter:card" content="summary_large_image">
@@ -18,327 +20,322 @@
 <meta name="twitter:image" content="https://ovae.ai/mighty/proposal/og-index.png">
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --bg:#050505;--ink:#f4f4f5;--muted:#8a8a93;--faint:#5a5a63;
-    --accent:#34d399;--accent-2:#a78bfa;--gold:#e8c97a;
-    --hair:rgba(255,255,255,0.08);--hair-strong:rgba(255,255,255,0.14);--glass:rgba(255,255,255,0.025);
-    --ease:cubic-bezier(0.32,0.72,0,1);
-    --display:'Space Grotesk',system-ui,sans-serif;--body:'Plus Jakarta Sans',system-ui,sans-serif;
+    --bg:#14101A; --bg-elev:#1A1622; --bg-soft:#1F1A28;
+    --ink:#E8E4DC; --ink-dim:#A39E96; --ink-mute:#6F6A63;
+    --rule:rgba(232,228,220,0.08); --rule-strong:rgba(232,228,220,0.16);
+    --accent:#7BC9C4; --accent-2:#C97D5C; --gold:#D9B27A;
+    --accent-dim:rgba(123,201,196,0.18); --accent-soft:rgba(123,201,196,0.06);
+    --rust-dim:rgba(201,125,92,0.16);
+    --ease:cubic-bezier(0.16,1,0.3,1); --maxw:1120px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-  body{font-family:var(--body);background:var(--bg);color:var(--ink);min-height:100dvh;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.55}
-  .orb{position:fixed;border-radius:50%;filter:blur(120px);opacity:0.20;pointer-events:none;z-index:0}
-  .orb.a{width:560px;height:560px;background:#10b981;top:-200px;right:-140px}
-  .orb.b{width:520px;height:520px;background:#7c3aed;top:60%;left:-180px}
-  .orb.c{width:420px;height:420px;background:#f59e0b;top:140%;left:60%;opacity:0.10}
-  .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:0.035;mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  body{font-family:'DM Sans',system-ui,sans-serif;font-weight:300;font-size:17px;line-height:1.6;
+    background:var(--bg);color:var(--ink);min-height:100dvh;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+    font-feature-settings:"ss01","cv11"}
+  body::before{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.92 0 0 0 0 0.89 0 0 0 0 0.86 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>")}
+  body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:radial-gradient(820px 620px at 82% -8%,rgba(123,201,196,.08),transparent 60%),
+               radial-gradient(900px 700px at -10% 108%,rgba(201,125,92,.06),transparent 60%)}
 
-  /* floating nav */
-  nav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:center;pointer-events:none}
-  .navpill{pointer-events:auto;margin-top:22px;display:flex;align-items:center;gap:22px;
-    background:rgba(12,12,14,0.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-    border:1px solid var(--hair);border-radius:999px;padding:9px 9px 9px 18px;box-shadow:0 10px 40px rgba(0,0,0,0.45)}
-  .navpill .nb{display:flex;align-items:center;gap:10px}
-  .navpill .bm{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));
-    display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;color:#04130d;font-size:13px;
-    box-shadow:inset 0 1px 1px rgba(255,255,255,0.35)}
-  .navpill .nm{font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:-0.01em}
-  .navlinks{display:flex;gap:20px}
-  .navlinks a{color:var(--muted);text-decoration:none;font-size:13px;transition:color .3s var(--ease)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px}
+  section{padding:104px 0;border-top:1px solid var(--rule);position:relative}
+  @media(max-width:760px){section{padding:72px 0}.wrap{padding:0 20px}}
+
+  /* type */
+  h1,h2,h3{margin:0;font-weight:300}
+  h1{letter-spacing:-.034em;line-height:1.02;font-size:clamp(40px,6.2vw,78px);text-wrap:balance}
+  h2{letter-spacing:-.028em;line-height:1.08;font-size:clamp(29px,3.8vw,46px);max-width:24ch;text-wrap:balance}
+  h3{font-weight:500;letter-spacing:-.005em;font-size:18px}
+  h1 em,h2 em{font-style:italic;color:var(--accent);font-weight:300}
+  .lede{font-size:clamp(17px,1.4vw,20px);line-height:1.62;color:var(--ink-dim);font-weight:300;max-width:62ch}
+  .mighty{font-style:normal;font-weight:400;
+    background:linear-gradient(100deg,#82C341 0%,#B6CF3F 42%,#E6D44A 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+  .eyebrow{font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-mute);display:flex;align-items:center;gap:14px;margin-bottom:26px}
+  .eyebrow .num{color:var(--accent)}
+  .eyebrow.rust .num{color:var(--accent-2)}
+  .eyebrow::after{content:"";flex:0 0 56px;height:1px;background:var(--rule-strong)}
+
+  /* nav */
+  .nav{position:sticky;top:0;z-index:40;backdrop-filter:blur(16px) saturate(120%);
+    background:linear-gradient(180deg,rgba(20,16,26,.86),rgba(20,16,26,.62));border-bottom:1px solid var(--rule)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .wordmark{display:flex;align-items:center;gap:11px;font-size:17px;letter-spacing:-.01em;color:var(--ink)}
+  .wordmark::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-dim);animation:pulse 3.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 4px var(--accent-dim)}50%{box-shadow:0 0 0 7px rgba(123,201,196,.06)}}
+  .navlinks{display:flex;gap:24px}
+  .navlinks a{color:var(--ink-mute);text-decoration:none;font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;transition:color .3s var(--ease)}
   .navlinks a:hover{color:var(--ink)}
-  .navcta{display:inline-flex;align-items:center;gap:9px;background:#fff;color:#0a0a0a;text-decoration:none;
-    font-weight:600;font-size:13px;padding:9px 9px 9px 16px;border-radius:999px;transition:transform .3s var(--ease)}
-  .navcta:hover{transform:scale(1.03)}
-  .navcta:active{transform:scale(0.97)}
-  .navcta .ic{width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;font-size:12px;transition:transform .4s var(--ease)}
-  .navcta:hover .ic{transform:translate(2px,-1px) scale(1.05)}
-  @media(max-width:760px){.navlinks{display:none}}
+  @media(max-width:820px){.navlinks{display:none}}
 
-  .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 28px}
-  section{padding:90px 0}
-  @media(max-width:760px){section{padding:64px 0}.wrap{padding:0 18px}}
-
-  .eyebrow{display:inline-block;border:1px solid var(--hair-strong);background:var(--glass);border-radius:999px;
-    padding:6px 14px;font-size:10.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
-  .eyebrow.green{color:#9af5cf;border-color:rgba(52,211,153,0.3)}
-  .eyebrow.gold{color:var(--gold);border-color:rgba(232,201,122,0.3)}
-  h1{font-family:var(--display);font-weight:600;letter-spacing:-0.035em;line-height:1.0;font-size:clamp(40px,7vw,82px)}
-  h2{font-family:var(--display);font-weight:600;letter-spacing:-0.03em;line-height:1.04;font-size:clamp(30px,4.6vw,52px)}
-  h3{font-family:var(--display);font-weight:600;letter-spacing:-0.02em;font-size:21px}
-  .grad{background:linear-gradient(110deg,var(--accent),var(--accent-2) 60%,var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-  p.lede{color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:640px;margin-top:20px}
-  .kicker{font-size:12.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--faint);margin-bottom:18px}
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:500;
+    font-size:14.5px;letter-spacing:-.005em;border:1px solid transparent;text-decoration:none;cursor:pointer;
+    font-family:'DM Sans',sans-serif;transition:transform .4s var(--ease),box-shadow .3s,background .2s,border-color .2s}
+  .btn-primary{background:var(--accent);color:var(--bg);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 1px 2px rgba(20,16,26,.4)}
+  .btn-primary:hover{background:#94d8d3;transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 22px -6px rgba(123,201,196,.32)}
+  .btn-secondary{background:transparent;color:var(--ink);border-color:var(--rule-strong)}
+  .btn-secondary:hover{border-color:var(--ink-dim)}
+  .btn .arr{font-family:'DM Mono',monospace;font-size:13px;transition:transform .2s ease}
+  .btn:hover .arr{transform:translateX(3px)}
+  .nav .btn{padding:10px 18px;font-size:13px}
 
   /* hero */
-  .hero{min-height:100dvh;display:flex;flex-direction:column;justify-content:center;padding-top:120px;padding-bottom:60px}
-  .hero .sig{margin-top:40px;display:flex;align-items:center;gap:14px;color:var(--muted);font-size:14px}
-  .hero .sig .av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1c1c22,#0c0c0e);border:1px solid var(--hair-strong);
-    display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:600;color:var(--ink)}
-  .scrollcue{margin-top:54px;display:inline-flex;align-items:center;gap:10px;color:var(--faint);font-size:12px;letter-spacing:0.1em;text-transform:uppercase}
-  .scrollcue .ln{width:34px;height:1px;background:linear-gradient(90deg,var(--faint),transparent)}
+  .hero{border-top:none;min-height:100dvh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 80px;overflow:hidden}
+  .hero-mesh{position:absolute;inset:-10% -5%;z-index:-1;opacity:.5;filter:blur(46px);pointer-events:none}
+  .hero-mesh i{position:absolute;width:58%;height:66%;border-radius:50%;display:block}
+  .blob1{top:-12%;left:6%;background:radial-gradient(circle at 30% 30%,rgba(123,201,196,.40),transparent 65%);animation:bd1 26s ease-in-out infinite alternate}
+  .blob2{bottom:-16%;right:2%;background:radial-gradient(circle at 50% 50%,rgba(201,125,92,.26),transparent 65%);animation:bd2 32s ease-in-out infinite alternate}
+  .blob3{top:24%;right:28%;background:radial-gradient(circle at 60% 40%,rgba(86,76,112,.30),transparent 65%);animation:bd3 38s ease-in-out infinite alternate}
+  @keyframes bd1{to{transform:translate3d(-8%,4%,0) scale(1.08)}}
+  @keyframes bd2{to{transform:translate3d(6%,-5%,0) scale(1.12)}}
+  @keyframes bd3{to{transform:translate3d(4%,-3%,0) scale(.92)}}
+  .hero .lede{margin-top:26px}
+  .hero .sig{margin-top:42px;display:flex;align-items:center;gap:14px;color:var(--ink-dim);font-size:14.5px}
+  .hero .sig .av{width:42px;height:42px;border-radius:50%;background:var(--bg-elev);border:1px solid var(--rule-strong);
+    display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:14px;color:var(--accent)}
+  .hero .sig b{color:var(--ink);font-weight:500}
+  .scrollcue{margin-top:52px;display:inline-flex;align-items:center;gap:12px;color:var(--ink-mute);
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+  .scrollcue .ln{width:36px;height:1px;background:linear-gradient(90deg,var(--ink-mute),transparent)}
 
-  /* double-bezel card */
-  .card{background:rgba(255,255,255,0.045);border:1px solid var(--hair);border-radius:26px;padding:6px;height:100%}
-  .card .in{background:linear-gradient(180deg,rgba(18,18,21,0.92),rgba(9,9,11,0.92));border-radius:21px;
-    box-shadow:inset 0 1px 1px rgba(255,255,255,0.08);padding:28px 26px;height:100%}
+  /* cards */
+  .card{border:1px solid var(--rule);border-radius:16px;padding:26px 24px;background:var(--bg-elev);
+    box-shadow:inset 0 1px 0 rgba(232,228,220,.05);height:100%}
+  .card.soft{background:rgba(20,16,26,.45)}
 
   /* what we heard */
-  .heard-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:44px}
-  .hc{grid-column:span 4}
-  .hc.wide{grid-column:span 6}
-  .hc .num{font-family:var(--display);font-weight:600;font-size:34px;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;line-height:1}
-  .hc .lab{color:var(--muted);font-size:14px;margin-top:12px}
-  .hc .tag{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
+  .heard-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:46px}
+  .hc{grid-column:span 4}.hc.wide{grid-column:span 6}
+  .hc .tag{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:16px}
+  .hc .num{font-size:clamp(34px,4vw,44px);font-weight:200;letter-spacing:-.03em;line-height:1;color:var(--accent);font-feature-settings:"tnum"}
+  .hc.alt .num{color:var(--ink)}
+  .hc .num .u{font-size:.5em;color:var(--ink-dim)}
+  .hc .lab{color:var(--ink-dim);font-size:14.5px;margin-top:14px;line-height:1.5}
   @media(max-width:760px){.heard-grid{grid-template-columns:1fr}.hc,.hc.wide{grid-column:span 1}}
 
-  /* opportunity leaks */
-  .leaks{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:46px}
-  .leak .in{display:flex;flex-direction:column;gap:14px}
-  .leak .ico{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:18px;
-    background:rgba(52,211,153,0.10);color:var(--accent);border:1px solid rgba(52,211,153,0.2)}
-  .leak:nth-child(2) .ico{background:rgba(167,139,250,0.10);color:var(--accent-2);border-color:rgba(167,139,250,0.2)}
-  .leak:nth-child(3) .ico{background:rgba(232,201,122,0.10);color:var(--gold);border-color:rgba(232,201,122,0.2)}
-  .leak p{color:var(--muted);font-size:14.5px;margin-top:2px}
-  .leak .stat{margin-top:auto;padding-top:14px;border-top:1px solid var(--hair);font-size:13px;color:var(--faint)}
-  .leak .stat b{color:var(--ink);font-family:var(--display);font-weight:600}
+  /* leaks */
+  .leaks{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+  .leak{display:flex;flex-direction:column;gap:14px}
+  .leak .n{font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.1em;color:var(--accent)}
+  .leak:nth-child(2) .n{color:var(--accent-2)}
+  .leak:nth-child(3) .n{color:var(--gold)}
+  .leak p{color:var(--ink-dim);font-size:14.5px}
+  .leak .stat{margin-top:auto;padding-top:16px;border-top:1px solid var(--rule);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:var(--ink-mute)}
+  .leak .stat b{color:var(--ink);font-weight:500}
   @media(max-width:760px){.leaks{grid-template-columns:1fr}}
 
-  /* generic glass section frame for calculator */
-  .calcframe .shell{background:rgba(255,255,255,0.045);border:1px solid var(--hair);border-radius:30px;padding:7px;margin-top:36px}
-  .calcframe .corepad{background:linear-gradient(180deg,rgba(16,16,19,0.9),rgba(8,8,10,0.92));border-radius:24px;padding:30px}
-  @media(max-width:760px){.calcframe .corepad{padding:20px}}
-
-  /* ===== calculator (embedded) ===== */
-  .console{margin:4px 0 0}
-  .c-shell{background:rgba(255,255,255,0.04);border:1px solid var(--hair);border-radius:24px;padding:7px}
-  .c-core{background:linear-gradient(180deg,rgba(22,22,26,0.9),rgba(10,10,12,0.9));border-radius:18px;box-shadow:inset 0 1px 1px rgba(255,255,255,0.10);padding:30px 28px}
+  /* ===== calculator ===== */
+  .console{margin-top:46px}
+  .c-shell{border:1px solid var(--rule-strong);border-radius:18px;background:linear-gradient(160deg,rgba(123,201,196,.06),rgba(20,16,26,.6) 80%);
+    box-shadow:inset 0 1px 0 rgba(232,228,220,.06),0 28px 60px -26px rgba(20,16,26,.7);padding:30px 28px}
   .twogrid{display:grid;grid-template-columns:1fr 1fr;gap:36px}
-  .multiplier{display:flex;align-items:baseline;gap:10px;justify-content:center;margin-top:28px;padding-top:24px;border-top:1px solid var(--hair)}
-  .multiplier .x{font-family:var(--display);font-weight:700;font-size:42px;letter-spacing:-0.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-variant-numeric:tabular-nums}
-  .multiplier .lbl{color:var(--muted);font-size:13px}
   .ctl-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
-  .ctl-label .t{font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted)}
-  .ctl-label .v{font-family:var(--display);font-weight:600;font-size:28px;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
+  .ctl-label .t{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute)}
+  .ctl-label .v{font-weight:200;font-size:30px;letter-spacing:-.03em;font-feature-settings:"tnum"}
   .ctl-label .v.goal{color:var(--accent)}
-  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;background:rgba(255,255,255,0.10);outline:none;cursor:pointer}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:5px solid #0c0c0e;box-shadow:0 0 0 1px var(--hair-strong),0 6px 18px rgba(0,0,0,0.5);transition:transform .25s var(--ease)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:999px;background:var(--rule-strong);outline:none;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--ink);border:5px solid var(--bg-elev);box-shadow:0 0 0 1px var(--rule-strong);transition:transform .25s var(--ease)}
   input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12)}
-  input[type=range].goal::-webkit-slider-thumb{box-shadow:0 0 0 1px rgba(52,211,153,0.6),0 0 22px rgba(52,211,153,0.5)}
-  input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:5px solid #0c0c0e}
-  input[type=range].goal{background:linear-gradient(90deg,rgba(52,211,153,0.35),rgba(52,211,153,0.10))}
-  .bento{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:16px}
-  .bcard{background:rgba(255,255,255,0.04);border:1px solid var(--hair);border-radius:22px;padding:5px}
-  .bcard .bin{background:linear-gradient(180deg,rgba(18,18,21,0.9),rgba(9,9,11,0.9));border-radius:18px;box-shadow:inset 0 1px 1px rgba(255,255,255,0.08);padding:22px 22px;height:100%}
+  input[type=range].goal::-webkit-slider-thumb{background:var(--accent);box-shadow:0 0 0 1px rgba(123,201,196,.5),0 0 20px rgba(123,201,196,.45)}
+  input[type=range].rust::-webkit-slider-thumb{background:var(--gold);box-shadow:0 0 0 1px rgba(217,178,122,.5),0 0 20px rgba(217,178,122,.4)}
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--ink);border:5px solid var(--bg-elev)}
+  input[type=range].goal{background:linear-gradient(90deg,rgba(123,201,196,.34),rgba(123,201,196,.08))}
+  .multiplier{display:flex;align-items:baseline;gap:12px;justify-content:center;margin-top:28px;padding-top:24px;border-top:1px solid var(--rule)}
+  .multiplier .x{font-weight:200;font-size:42px;letter-spacing:-.03em;color:var(--accent);font-feature-settings:"tnum"}
+  .multiplier .lbl{color:var(--ink-dim);font-size:14px}
+  .bento{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:14px}
+  .bcard{border:1px solid var(--rule);border-radius:14px;padding:22px;background:var(--bg-elev);box-shadow:inset 0 1px 0 rgba(232,228,220,.05)}
   .bcard.rev,.bcard.profit,.bcard.cac{grid-column:span 4}
-  .bcard.exit{grid-column:span 12}
-  .bcard.exit .bin{background:radial-gradient(120% 160% at 90% 0%,rgba(167,139,250,0.18),transparent 55%),radial-gradient(120% 160% at 0% 100%,rgba(52,211,153,0.16),transparent 55%),linear-gradient(180deg,rgba(20,18,26,0.92),rgba(9,9,11,0.92));display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
-  .k{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .bcard.exit{grid-column:span 12;background:linear-gradient(160deg,rgba(217,178,122,.08),rgba(20,16,26,.55) 75%);
+    border-color:rgba(217,178,122,.22);display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .k{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:14px;display:flex;align-items:center;gap:9px}
   .k .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
-  .bcard.profit .k .dot{background:var(--accent-2)}.bcard.cac .k .dot{background:var(--gold)}
-  .big{font-family:var(--display);font-weight:600;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;line-height:0.98}
-  .bcard .big{font-size:clamp(28px,4vw,42px)}
-  .bcard.exit .big{font-size:clamp(44px,8vw,92px);background:linear-gradient(110deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-  .sub{margin-top:11px;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
-  .delta{color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums}
-  .delta.up::before{content:"▲ ";font-size:9px;vertical-align:1px}
-  .down{color:var(--gold);font-weight:600;font-variant-numeric:tabular-nums}.down::before{content:"▼ ";font-size:9px;vertical-align:1px}
-  .strike{color:var(--faint);text-decoration:line-through;text-decoration-color:rgba(255,255,255,0.25)}
-  .exit-left{max-width:520px}.exit-note{font-size:14px;color:var(--muted);margin-top:10px}
-  .exit-right{text-align:right}.exit-right .emk{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+  .bcard.profit .k .dot{background:var(--accent-2)}.bcard.cac .k .dot{background:var(--accent-2)}.bcard.exit .k .dot{background:var(--gold)}
+  .big{font-weight:200;letter-spacing:-.03em;font-feature-settings:"tnum";line-height:1}
+  .bcard .big{font-size:clamp(30px,4vw,44px);color:var(--ink)}
+  .bcard.exit .big{font-size:clamp(46px,8vw,90px);background:linear-gradient(110deg,#E8E4DC,var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:200}
+  .sub{margin-top:12px;font-size:13.5px;color:var(--ink-dim);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-feature-settings:"tnum"}
+  .delta{color:var(--accent);font-weight:500}
+  .down{color:var(--accent-2);font-weight:500}
+  .strike{color:var(--ink-mute);text-decoration:line-through;text-decoration-color:rgba(232,228,220,.25)}
+  .exit-left{max-width:520px}.exit-note{font-size:14px;color:var(--ink-dim);margin-top:10px}
+  .exit-right{text-align:right}
+  .exit-right .emk{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);margin-top:6px}
   .strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
-  .mini{background:var(--glass);border:1px solid var(--hair);border-radius:18px;padding:18px 20px}
-  .mini .row{display:flex;align-items:baseline;gap:10px}
-  .mini .nm{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
-  details.assume{margin-top:16px;border:1px solid var(--hair);border-radius:18px;background:var(--glass)}
-  details.assume summary{list-style:none;cursor:pointer;padding:16px 20px;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;justify-content:space-between}
+  .mini{border:1px solid var(--rule);border-radius:14px;padding:18px 20px;background:rgba(20,16,26,.45)}
+  .mini .row{display:flex;align-items:baseline;gap:10px;margin-top:4px}
+  .mini .nm{font-weight:200;font-size:24px;letter-spacing:-.02em;font-feature-settings:"tnum"}
+  details.assume{margin-top:14px;border:1px solid var(--rule);border-radius:14px;background:rgba(20,16,26,.45)}
+  details.assume summary{list-style:none;cursor:pointer;padding:16px 20px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);display:flex;align-items:center;justify-content:space-between}
   details.assume summary::-webkit-details-marker{display:none}
   details.assume summary .chev{transition:transform .4s var(--ease)}
   details.assume[open] summary .chev{transform:rotate(180deg)}
   .fields{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:4px 20px 22px}
-  .field{background:rgba(255,255,255,0.02);border:1px solid var(--hair);border-radius:16px;padding:14px 16px}
-  .field label{display:block;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+  .field{border:1px solid var(--rule);border-radius:12px;padding:14px 16px;background:rgba(232,228,220,.02)}
+  .field label{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:8px}
   .field .ib{display:flex;align-items:center;gap:6px}
-  .field .pfx{color:var(--muted);font-family:var(--display);font-size:17px}
-  .field input{background:transparent;border:none;outline:none;color:var(--ink);font-family:var(--display);font-weight:600;font-size:19px;width:100%;font-variant-numeric:tabular-nums}
-  .field .hint{font-size:10.5px;color:var(--faint);margin-top:5px}
-  .field .rv{font-family:var(--display);font-weight:600;font-size:19px;font-variant-numeric:tabular-nums}
-  @media(max-width:760px){.twogrid{grid-template-columns:1fr;gap:26px}.bento{grid-template-columns:1fr}.bcard.rev,.bcard.profit,.bcard.cac,.bcard.exit{grid-column:span 1}.bcard.exit .bin{flex-direction:column;align-items:flex-start}.exit-right{text-align:left}.strip{grid-template-columns:1fr}.fields{grid-template-columns:1fr}}
+  .field .pfx{color:var(--ink-dim);font-size:17px}
+  .field input{background:transparent;border:none;outline:none;color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:500;font-size:19px;width:100%;font-feature-settings:"tnum"}
+  .field .hint{font-size:11px;color:var(--ink-mute);margin-top:5px}
+  .field .rv{font-weight:500;font-size:19px;color:var(--accent);font-feature-settings:"tnum"}
+  @media(max-width:760px){.twogrid{grid-template-columns:1fr;gap:26px}.bento{grid-template-columns:1fr}.bcard.rev,.bcard.profit,.bcard.cac,.bcard.exit{grid-column:span 1}.bcard.exit{flex-direction:column;align-items:flex-start}.exit-right{text-align:left}.strip{grid-template-columns:1fr}.fields{grid-template-columns:1fr}}
 
-  /* roll-up / exit */
-  .rollup{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;margin-top:30px}
-  @media(max-width:860px){.rollup{grid-template-columns:1fr;gap:28px}}
+  /* rollup */
+  .rollup{display:grid;grid-template-columns:1.1fr 1fr;gap:44px;align-items:center;margin-top:34px}
+  @media(max-width:860px){.rollup{grid-template-columns:1fr;gap:30px}}
+  .rollup .body p{color:var(--ink-dim);font-size:16px;line-height:1.7}
+  .rollup .body p+p{margin-top:16px}
+  .rollup .body b{color:var(--ink);font-weight:500}
+  .rollup .body em{color:var(--accent);font-style:italic}
   .portfolio{display:flex;flex-direction:column;gap:12px}
-  .pco{display:flex;align-items:center;gap:16px;background:var(--glass);border:1px solid var(--hair);border-radius:18px;padding:16px 20px}
-  .pco .badge{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,rgba(52,211,153,0.18),rgba(167,139,250,0.18));border:1px solid var(--hair-strong);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;color:var(--ink)}
+  .pco{display:flex;align-items:center;gap:16px;border:1px solid var(--rule);border-radius:14px;padding:16px 20px;background:rgba(20,16,26,.5)}
+  .pco .badge{width:46px;height:46px;border-radius:12px;background:var(--bg-soft);border:1px solid var(--rule-strong);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;color:var(--ink)}
   .pco .meta{flex:1}
-  .pco .meta .t{font-family:var(--display);font-weight:600;font-size:16px}
-  .pco .meta .s{color:var(--muted);font-size:13px}
-  .pco .pill{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(52,211,153,0.3);border-radius:999px;padding:5px 11px;white-space:nowrap}
-  .pco .pill.next{color:var(--gold);border-color:rgba(232,201,122,0.3)}
-  .pco .pill.soon{color:var(--faint);border-color:var(--hair)}
+  .pco .meta .t{font-weight:500;font-size:16px}
+  .pco .meta .s{color:var(--ink-mute);font-size:13.5px}
+  .pco .pill{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(123,201,196,.3);border-radius:999px;padding:5px 11px;white-space:nowrap}
+  .pco .pill.next{color:var(--gold);border-color:rgba(217,178,122,.3)}
+  .pco .pill.soon{color:var(--ink-mute);border-color:var(--rule)}
 
-  /* the land — timeline */
-  .land-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:44px}
+  /* audit steps */
+  .land-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:48px}
   @media(max-width:760px){.land-grid{grid-template-columns:1fr}}
-  .step .in{display:flex;gap:18px}
-  .step .no{font-family:var(--display);font-weight:700;font-size:15px;color:#04130d;background:linear-gradient(135deg,var(--accent),var(--accent-2));width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 1px 1px rgba(255,255,255,0.3)}
-  .step p{color:var(--muted);font-size:14px;margin-top:6px}
-  .deliverables{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px}
-  .chip{font-size:12.5px;color:var(--muted);background:var(--glass);border:1px solid var(--hair);border-radius:999px;padding:8px 14px}
-  .chip b{color:var(--ink);font-weight:600}
+  .step{display:flex;gap:18px}
+  .step .no{font-family:'DM Mono',monospace;font-size:13px;color:var(--accent);flex-shrink:0;padding-top:2px;letter-spacing:.05em}
+  .step p{color:var(--ink-dim);font-size:14.5px;margin-top:7px}
+  .step b{color:var(--ink);font-weight:500}
+  .deliverables{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+  .chip{font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:.03em;color:var(--ink-dim);border:1px solid var(--rule);border-radius:999px;padding:8px 14px}
+  .chip b{color:var(--accent);font-weight:500}
 
   /* investment */
-  .invest{background:rgba(255,255,255,0.045);border:1px solid var(--hair);border-radius:30px;padding:7px;margin-top:30px}
-  .invest .in{background:radial-gradient(130% 130% at 100% 0%,rgba(52,211,153,0.12),transparent 55%),linear-gradient(180deg,rgba(18,18,21,0.94),rgba(9,9,11,0.94));border-radius:24px;padding:42px 40px}
-  @media(max-width:760px){.invest .in{padding:30px 24px}}
+  .invest{margin-top:34px;border:1px solid var(--rule-strong);border-radius:18px;padding:42px 40px;
+    background:linear-gradient(160deg,rgba(123,201,196,.07),rgba(20,16,26,.55) 78%);
+    box-shadow:inset 0 1px 0 rgba(232,228,220,.06),0 28px 60px -28px rgba(20,16,26,.7)}
+  @media(max-width:760px){.invest{padding:30px 24px}}
   .invest .top{display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap}
-  .invest .price{font-family:var(--display);font-weight:600;font-size:clamp(52px,9vw,84px);letter-spacing:-0.04em;line-height:0.9}
-  .invest .price .cur{color:var(--muted);font-size:0.5em;vertical-align:0.35em;margin-right:2px}
-  .invest .price small{display:block;font-size:15px;font-family:var(--body);font-weight:500;color:var(--muted);letter-spacing:0;margin-top:14px}
-  .guarantee{display:inline-flex;align-items:center;gap:12px;background:rgba(52,211,153,0.10);border:1px solid rgba(52,211,153,0.3);border-radius:16px;padding:16px 20px;max-width:340px}
-  .guarantee .gi{width:34px;height:34px;border-radius:10px;background:rgba(52,211,153,0.18);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:17px;flex-shrink:0}
-  .guarantee .gt{font-size:13.5px;color:#cdeedd}
-  .guarantee .gt b{color:var(--accent);font-weight:600}
-  .incl{margin-top:34px;padding-top:28px;border-top:1px solid var(--hair);display:grid;grid-template-columns:repeat(2,1fr);gap:14px 30px}
+  .invest .price{font-weight:200;font-size:clamp(54px,9vw,88px);letter-spacing:-.04em;line-height:.9;font-feature-settings:"tnum"}
+  .invest .price .cur{color:var(--ink-dim);font-size:.5em;vertical-align:.35em;margin-right:2px}
+  .invest .price small{display:block;font-size:15px;font-weight:400;color:var(--ink-dim);letter-spacing:0;margin-top:16px;line-height:1.5}
+  .guarantee{display:flex;align-items:flex-start;gap:14px;border:1px solid rgba(123,201,196,.28);border-radius:14px;padding:18px 20px;max-width:360px;background:var(--accent-soft)}
+  .guarantee .gi{font-family:'DM Mono',monospace;color:var(--accent);font-size:18px;flex-shrink:0;line-height:1.3}
+  .guarantee .gt{font-size:14px;color:var(--ink-dim);line-height:1.55}
+  .guarantee .gt b{color:var(--accent);font-weight:500}
+  .incl{margin-top:36px;padding-top:30px;border-top:1px solid var(--rule);display:grid;grid-template-columns:repeat(2,1fr);gap:14px 32px}
   @media(max-width:760px){.incl{grid-template-columns:1fr}}
-  .incl .li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:var(--ink)}
-  .incl .li .ck{color:var(--accent);font-weight:700;flex-shrink:0}
-  .beyond{margin-top:28px;color:var(--muted);font-size:14px;line-height:1.7;background:var(--glass);border:1px solid var(--hair);border-radius:18px;padding:22px 24px}
-  .beyond b{color:var(--ink);font-weight:600}
-  .beyond .ladder{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-  .beyond .lr{font-size:12.5px;color:var(--muted);border:1px solid var(--hair);border-radius:10px;padding:7px 12px}
-  .beyond .lr span{color:var(--faint)}
+  .incl .li{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--ink)}
+  .incl .li .ck{color:var(--accent);flex-shrink:0;font-family:'DM Mono',monospace}
+  .incl .li b{font-weight:500}
+  .beyond{margin-top:28px;border:1px solid var(--rule);border-radius:14px;padding:22px 24px;background:rgba(20,16,26,.45);color:var(--ink-dim);font-size:14.5px;line-height:1.7}
+  .beyond b{color:var(--ink);font-weight:500}
+  .beyond .ladder{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .beyond .lr{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--ink-dim);border:1px solid var(--rule);border-radius:10px;padding:8px 13px}
 
-  /* why us */
-  .proof{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
-  @media(max-width:760px){.proof{grid-template-columns:1fr}}
-  .pf .in{display:flex;flex-direction:column;gap:8px}
-  .pf .pn{font-family:var(--display);font-weight:600;font-size:30px;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;background:linear-gradient(110deg,#fff,var(--muted));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-  .pf .pl{color:var(--muted);font-size:14px}
-  .pullquote{margin-top:46px;border-left:2px solid var(--accent);padding:6px 0 6px 26px;max-width:760px}
-  .pullquote .q{font-family:var(--display);font-weight:500;font-size:clamp(20px,2.8vw,28px);letter-spacing:-0.02em;line-height:1.25}
-  .pullquote .a{color:var(--muted);font-size:14px;margin-top:14px}
+  /* quote */
+  .pullquote{border-left:2px solid var(--accent);padding:6px 0 6px 28px;max-width:780px}
+  .pullquote .q{font-weight:300;font-size:clamp(22px,3vw,32px);letter-spacing:-.022em;line-height:1.24}
+  .pullquote .q em{font-style:italic;color:var(--accent)}
+  .pullquote .a{color:var(--ink-mute);font-family:'DM Mono',monospace;font-size:12.5px;letter-spacing:.04em;margin-top:18px}
 
   /* cta */
-  .ctasec .in{background:radial-gradient(120% 140% at 50% 0%,rgba(167,139,250,0.16),transparent 60%),linear-gradient(180deg,rgba(18,18,21,0.94),rgba(9,9,11,0.94));border-radius:30px;padding:64px 40px;text-align:center}
-  .ctasec .card{border-radius:34px}
-  .btnrow{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:34px}
-  .btn{display:inline-flex;align-items:center;gap:12px;text-decoration:none;font-weight:600;font-size:15px;border-radius:999px;padding:14px 14px 14px 24px;transition:transform .3s var(--ease)}
-  .btn.primary{background:#fff;color:#0a0a0a}
-  .btn.ghost{background:rgba(255,255,255,0.05);border:1px solid var(--hair-strong);color:var(--ink);padding:14px 24px}
-  .btn:hover{transform:scale(1.03)}.btn:active{transform:scale(0.97)}
-  .btn .ic{width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;transition:transform .4s var(--ease)}
-  .btn.primary:hover .ic{transform:translate(2px,-1px) scale(1.05)}
+  .ctasec{text-align:center}
+  .ctasec h2{margin:0 auto}
+  .ctasec .lede{margin:18px auto 0;text-align:center}
+  .ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:36px}
 
-  footer{border-top:1px solid var(--hair);padding:40px 0 60px;color:var(--faint);font-size:12.5px;line-height:1.7}
+  footer{border-top:1px solid var(--rule);padding:40px 0 64px;color:var(--ink-mute);font-size:13px;line-height:1.7}
   footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
-  footer b{color:var(--muted);font-weight:600}
-  .disclaimer{max-width:760px;margin-top:18px;color:var(--faint);font-size:11.5px;line-height:1.7}
+  footer .powered b{color:var(--accent);font-weight:500}
+  .disclaimer{max-width:820px;margin-top:18px;color:var(--ink-mute);font-size:11.5px;line-height:1.7}
 
-  /* scroll reveal */
-  .r{opacity:0;transform:translateY(28px);filter:blur(8px);transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease)}
-  .r.in-view{opacity:1;transform:none;filter:none}
-  @media(prefers-reduced-motion:reduce){.r{opacity:1;transform:none;filter:none;transition:none}}
+  /* reveal */
+  .r{opacity:0;transform:translateY(22px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  .r.in-view{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.r{opacity:1;transform:none;transition:none}}
 </style>
-<noscript><style>.r{opacity:1!important;transform:none!important;filter:none!important}</style></noscript>
+<noscript><style>.r{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
-  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
-  <div class="grain"></div>
-
-  <nav>
-    <div class="navpill">
-      <div class="nb"><div class="bm">O</div><div class="nm">Ovae</div></div>
-      <div class="navlinks">
-        <a href="#opportunity">Opportunity</a>
-        <a href="#model">ROI Model</a>
-        <a href="#land">The Audit</a>
-        <a href="#investment">Investment</a>
-      </div>
-      <a class="navcta" href="#investment">Start the audit <span class="ic">↗</span></a>
+  <nav class="nav"><div class="wrap">
+    <div class="wordmark">Ovae</div>
+    <div class="navlinks">
+      <a href="#opportunity">Opportunity</a>
+      <a href="#model">ROI Model</a>
+      <a href="#audit">The Audit</a>
+      <a href="#investment">Investment</a>
     </div>
-  </nav>
+    <a class="btn btn-primary" href="#investment">Start the audit <span class="arr">→</span></a>
+  </div></nav>
 
   <!-- HERO -->
-  <header class="hero"><div class="wrap r in-view">
-    <span class="eyebrow">Private proposal · prepared for Tommy Webber</span>
-    <h1>An intelligence layer for <span class="grad">Mighty</span> —<br>and every business you buy next.</h1>
-    <p class="lede">You already own the data, the trucks, and the deal flow. What's missing is a brain sitting on top of it — watching close rate, marketing waste, and every job, in real time, whether you're in Colorado or not. Here's exactly what it's worth, and how we'd prove it in 10 days.</p>
-    <div class="sig"><div class="av">CS</div><div>From CT Schenk · Founder, Ovae<br><span style="color:var(--faint)">Built on the same system I ran on my own company.</span></div></div>
-    <div class="scrollcue"><span class="ln"></span> Scroll</div>
-  </div></header>
+  <header class="hero"><div class="hero-mesh"><i class="blob1"></i><i class="blob2"></i><i class="blob3"></i></div>
+    <div class="wrap r in-view">
+      <div class="eyebrow"><span class="num">01</span> Private proposal · for Tommy Webber</div>
+      <h1>An intelligence layer for <span class="mighty">Mighty</span> —<br>and every business you buy next.</h1>
+      <p class="lede">You already own the data, the trucks, and the deal flow. What's missing is a brain sitting on top of it — watching close rate, marketing waste, and every job, in real time, whether you're in Colorado or not. Here's exactly what it's worth, and how we'd <em>prove it in 10 days</em>.</p>
+      <div class="sig"><div class="av">CS</div><div>From CT Schenk · <b>Founder, Ovae</b><br><span style="color:var(--ink-mute)">Built on the same system I ran on my own company.</span></div></div>
+      <div class="scrollcue"><span class="ln"></span> Scroll</div>
+    </div>
+  </header>
 
   <!-- WHAT WE HEARD -->
   <section><div class="wrap">
-    <div class="r"><div class="kicker">What we heard on the call</div>
-    <h2>We listened first.<br>Here's your business, in numbers.</h2>
-    <p class="lede">Before we propose anything, this is the picture you painted — the leverage points are already obvious.</p></div>
+    <div class="r"><div class="eyebrow"><span class="num">02</span> What we heard on the call</div>
+    <h2>We listened first. Here's your business, <em>in numbers</em>.</h2>
+    <p class="lede" style="margin-top:18px">Before we propose anything — this is the picture you painted. The leverage points are already obvious.</p></div>
 
     <div class="heard-grid">
-      <div class="hc card r"><div class="in"><div class="tag">Colorado revenue</div><div class="num">$17.5M</div><div class="lab">~$2,000 average ticket · 50% gross, 20% net when it's running right.</div></div></div>
-      <div class="hc card r"><div class="in"><div class="tag">Close rate</div><div class="num">45<span style="font-size:0.6em">%</span></div><div class="lab">Against a 60% target. Slipped when you went remote — the single most fixable number you have.</div></div></div>
-      <div class="hc card r"><div class="in"><div class="tag">Cost per booked call</div><div class="num">$250</div><div class="lab">Up from $50. Marketing is "the bigger burden" — ~$250K/mo across the three companies.</div></div></div>
-      <div class="hc card wide r"><div class="in"><div class="tag">The membership engine</div><div class="num">$100–200K</div><div class="lab">Lifetime value of the right customer — HVAC $15–20K, panels $10K, generators $20K — yet attach rate is low and acquisition keeps getting pricier.</div></div></div>
-      <div class="hc wide card r"><div class="in"><div class="tag">The real model</div><div class="num">Buy · Fix · Flip</div><div class="lab">CO, Orange County, and Tampa closing this month. T. Webber to PE in 2020. You're building EBITDA to sell at 7–15×. That changes what this is worth.</div></div></div>
+      <div class="hc card r"><div class="tag">Colorado revenue</div><div class="num">$17.5<span class="u">M</span></div><div class="lab">~$2,000 average ticket · 50% gross, 20% net when it's running right.</div></div>
+      <div class="hc card r"><div class="tag">Close rate</div><div class="num">45<span class="u">%</span></div><div class="lab">Against a 60% target. Slipped when you went remote — the most fixable number you have.</div></div>
+      <div class="hc card r"><div class="tag">Cost per booked call</div><div class="num">$250</div><div class="lab">Up from $50. Marketing is "the bigger burden" — ~$250K/mo across the three companies.</div></div>
+      <div class="hc wide card r alt"><div class="tag">The membership engine</div><div class="num">$100–200<span class="u">K</span></div><div class="lab">Lifetime value of the right customer — HVAC $15–20K, panels $10K, generators $20K — yet attach rate is low and acquisition keeps getting pricier.</div></div>
+      <div class="hc wide card r alt"><div class="tag">The real model</div><div class="num">Buy · Fix · Flip</div><div class="lab">CO, Orange County, and Tampa closing this month. T. Webber to PE in 2020. You're building EBITDA to sell at 7–15× — that changes what this is worth.</div></div>
     </div>
   </div></section>
 
   <!-- OPPORTUNITY -->
   <section id="opportunity"><div class="wrap">
-    <div class="r"><span class="eyebrow green">The opportunity — now</span>
-    <h2>Three leaks. All visible.<br>All recoverable without one new lead.</h2></div>
+    <div class="r"><div class="eyebrow"><span class="num">03</span> The opportunity — now</div>
+    <h2>Three leaks. All visible. All recoverable <em>without one new lead</em>.</h2></div>
 
     <div class="leaks">
-      <div class="leak card r"><div class="in">
-        <div class="ico">01</div>
-        <h3>Close rate, 45 → 60</h3>
-        <p>You're already paying $250 for every booked call. Converting more of the leads you've <em>already bought</em> is the highest-margin revenue in your business — no new spend attached.</p>
-        <div class="stat"><b>~$5.8M</b> more revenue on the same lead flow</div>
-      </div></div>
-      <div class="leak card r"><div class="in">
-        <div class="ico">02</div>
-        <h3>Marketing &amp; CSR blindness</h3>
-        <p>The Camp Digital "IQ" added ring latency and cost conversions. No one's scoring which CSRs, sources, and calls are burning the $250. A $10 SPIFF turned 3 calls into 14 before lunch — the demand is elastic.</p>
-        <div class="stat"><b>−25%</b> cost per won customer</div>
-      </div></div>
-      <div class="leak card r"><div class="in">
-        <div class="ico">03</div>
-        <h3>Remote blindness</h3>
-        <p>You can't "stop things in the moment" from out of state. The new GM needs the five numbers that matter, live — not stale reports. This is exactly what I built for my own company.</p>
-        <div class="stat"><b>80 → 20</b> hrs/week — what it did for me</div>
-      </div></div>
+      <div class="leak card r"><div class="n">/ 01</div><h3>Close rate, 45 → 60</h3><p>You're already paying $250 for every booked call. Converting more of the leads you've already bought is the highest-margin revenue in your business — no new spend attached.</p><div class="stat"><b>~$5.8M</b> more revenue on the same lead flow</div></div>
+      <div class="leak card r"><div class="n">/ 02</div><h3>Marketing &amp; CSR blindness</h3><p>The Camp Digital "IQ" added ring latency and cost conversions. No one's scoring which CSRs and sources are burning the $250. A $10 SPIFF turned 3 calls into 14 before lunch — demand is elastic.</p><div class="stat"><b>−25%</b> cost per won customer</div></div>
+      <div class="leak card r"><div class="n">/ 03</div><h3>Remote blindness</h3><p>You can't "stop things in the moment" from out of state. The new GM needs the five numbers that matter, live — not stale reports. Exactly what I built for my own company.</p><div class="stat"><b>80 → 20</b> hrs/week — what it did for me</div></div>
     </div>
   </div></section>
 
-  <!-- ROI MODEL (calculator embedded) -->
+  <!-- ROI MODEL -->
   <section id="model"><div class="wrap">
-    <div class="r"><span class="eyebrow">Interactive · move it yourself</span>
-    <h2>What one number does to the bottom line.</h2>
-    <p class="lede">Drag the green slider to your target close rate, and the gold slider to your exit multiple. Every figure recalculates live. The assumptions are yours to edit.</p></div>
+    <div class="r"><div class="eyebrow"><span class="num">04</span> Interactive · move it yourself</div>
+    <h2>What one number does to <em>the bottom line</em>.</h2>
+    <p class="lede" style="margin-top:18px">Drag the teal slider to your target close rate, and the gold slider to your exit multiple. Every figure recalculates live — the assumptions are yours to edit.</p></div>
 
-    <div class="calcframe r"><div class="corepad">
-      <div class="console">
-        <div class="c-shell"><div class="c-core">
-          <div class="twogrid">
-            <div><div class="ctl-label"><span class="t">Close rate today</span><span class="v"><span id="ccVal">45</span>%</span></div><input type="range" id="cc" min="20" max="85" step="1" value="45" /></div>
-            <div><div class="ctl-label"><span class="t">Target close rate</span><span class="v goal"><span id="tcVal">60</span>%</span></div><input type="range" id="tc" class="goal" min="20" max="90" step="1" value="60" /></div>
-          </div>
-          <div class="multiplier"><span class="x" id="multX">1.33×</span><span class="lbl">revenue multiplier on the same lead flow</span></div>
-        </div></div>
+    <div class="console r">
+      <div class="c-shell">
+        <div class="twogrid">
+          <div><div class="ctl-label"><span class="t">Close rate today</span><span class="v"><span id="ccVal">45</span>%</span></div><input type="range" id="cc" min="20" max="85" step="1" value="45" /></div>
+          <div><div class="ctl-label"><span class="t">Target close rate</span><span class="v goal"><span id="tcVal">60</span>%</span></div><input type="range" id="tc" class="goal" min="20" max="90" step="1" value="60" /></div>
+        </div>
+        <div class="multiplier"><span class="x" id="multX">1.33×</span><span class="lbl">revenue multiplier on the same lead flow</span></div>
       </div>
 
-      <div class="bento">
-        <div class="bcard rev r"><div class="bin"><div class="k"><span class="dot"></span>New annual revenue</div><div class="big" id="newRev">$23.3M</div><div class="sub"><span class="strike" id="oldRev">$17.5M</span><span class="delta up" id="revDelta">+$5.8M</span><span id="revPct">(+33%)</span></div></div></div>
-        <div class="bcard profit r"><div class="bin"><div class="k"><span class="dot"></span>Net profit · EBITDA</div><div class="big" id="newProfit">$6.0M</div><div class="sub"><span class="strike" id="oldProfit">$3.5M</span><span class="delta up" id="profitDelta">+$2.5M</span><span id="profitPct">(+73%)</span></div></div></div>
-        <div class="bcard cac r"><div class="bin"><div class="k"><span class="dot"></span>Cost per won customer</div><div class="big" id="cacNew">$417</div><div class="sub"><span class="strike" id="cacOld">$556</span><span class="down" id="cacDrop">−25%</span></div><div class="sub" style="margin-top:6px"><span style="color:var(--faint)">Cost per lead unchanged · <span id="leadCostEcho">$250</span></span></div></div></div>
-        <div class="bcard exit r"><div class="bin">
-          <div class="exit-left"><div class="k"><span class="dot" style="background:var(--gold)"></span>Enterprise value created at exit</div><div class="big" id="evCreated">$25M</div><div class="exit-note">What the close-rate lift alone adds to the sale price — <span id="evMath">$2.5M of new EBITDA × 10× multiple</span>.</div></div>
-          <div class="exit-right"><div class="ctl-label" style="justify-content:flex-end;gap:12px"><span class="t">Exit multiple</span><span class="v goal" style="color:var(--gold)"><span id="multVal">10</span>×</span></div><input type="range" id="mult" min="5" max="20" step="0.5" value="10" style="width:200px;max-width:100%" /><div class="emk">PE pays 7–15× · platforms 15–20×</div></div>
-        </div></div>
+      <div class="bento" style="margin-top:14px">
+        <div class="bcard rev r"><div class="k"><span class="dot"></span>New annual revenue</div><div class="big" id="newRev">$23.3M</div><div class="sub"><span class="strike" id="oldRev">$17.5M</span><span class="delta" id="revDelta">+$5.8M</span><span id="revPct">(+33%)</span></div></div>
+        <div class="bcard profit r"><div class="k"><span class="dot"></span>Net profit · EBITDA</div><div class="big" id="newProfit">$6.0M</div><div class="sub"><span class="strike" id="oldProfit">$3.5M</span><span class="delta" id="profitDelta">+$2.5M</span><span id="profitPct">(+73%)</span></div></div>
+        <div class="bcard cac r"><div class="k"><span class="dot"></span>Cost per won customer</div><div class="big" id="cacNew">$417</div><div class="sub"><span class="strike" id="cacOld">$556</span><span class="down" id="cacDrop">−25%</span></div><div class="sub" style="margin-top:6px"><span style="color:var(--ink-mute)">Cost per lead unchanged · <span id="leadCostEcho">$250</span></span></div></div>
+        <div class="bcard exit r">
+          <div class="exit-left"><div class="k"><span class="dot"></span>Enterprise value created at exit</div><div class="big" id="evCreated">$25M</div><div class="exit-note">What the close-rate lift alone adds to the sale price — <span id="evMath">$2.5M of new EBITDA × 10× multiple</span>.</div></div>
+          <div class="exit-right"><div class="ctl-label" style="justify-content:flex-end;gap:12px"><span class="t">Exit multiple</span><span class="v goal" style="color:var(--gold)"><span id="multVal">10</span>×</span></div><input type="range" id="mult" class="rust" min="5" max="20" step="0.5" value="10" style="width:200px;max-width:100%" /><div class="emk">PE pays 7–15× · platforms 15–20×</div></div>
+        </div>
       </div>
 
       <div class="strip">
@@ -358,23 +355,23 @@
           <div class="field"><label>Margin on new revenue · <span class="rv"><span id="imVal">44</span>%</span></label><input type="range" id="im" min="20" max="50" step="1" value="44" /><div class="hint">Higher — no new marketing, mostly fixed overhead</div></div>
         </div>
       </details>
-    </div></div>
+    </div>
   </div></section>
 
-  <!-- EXIT / ROLL-UP -->
+  <!-- ROLLUP -->
   <section id="rollup"><div class="wrap">
-    <div class="r"><span class="eyebrow gold">The upside — at exit</span>
-    <h2>Fix one company. Then clone it<br>into every business you buy.</h2>
-    <p class="lede">The close-rate lift is one company, one year. The real asset is the operating system itself — built once on Mighty, then installed into each acquisition as part of how you run it.</p></div>
+    <div class="r"><div class="eyebrow rust"><span class="num">05</span> The upside — at exit</div>
+    <h2>Fix one company. Then clone it into <em>every business you buy</em>.</h2>
+    <p class="lede" style="margin-top:18px">The close-rate lift is one company, one year. The real asset is the operating system itself — built once on Mighty, then installed into each acquisition as part of how you run it.</p></div>
 
     <div class="rollup">
-      <div class="r" style="color:var(--muted);font-size:15.5px;line-height:1.7">
-        <p>Every point of EBITDA you add gets multiplied at exit. At a 10× multiple, the close-rate fix alone is <b style="color:var(--ink)">~$25M</b> of enterprise value on Mighty.</p>
-        <p style="margin-top:16px">But a buyer pays a <em>higher multiple</em> for a business that runs on intelligence instead of one owner's presence. A proven AI ops layer — portable across the portfolio — is the difference between "another plumbing company" and "a platform." That's the story PE pays up for.</p>
-        <p style="margin-top:16px;color:var(--faint)">You said it yourself: you don't want to be Blockbuster. This is how you're Netflix.</p>
+      <div class="body r">
+        <p>Every point of EBITDA you add gets multiplied at exit. At a 10× multiple, the close-rate fix alone is <b>~$25M</b> of enterprise value on Mighty.</p>
+        <p>But a buyer pays a <em>higher multiple</em> for a business that runs on intelligence instead of one owner's presence. A proven AI ops layer — portable across the portfolio — is the difference between "another plumbing company" and "a platform." That's the story PE pays up for.</p>
+        <p style="color:var(--ink-mute)">You said it yourself: you don't want to be Blockbuster. This is how you're Netflix.</p>
       </div>
       <div class="portfolio r">
-        <div class="pco"><div class="badge">CO</div><div class="meta"><div class="t">Mighty · Colorado</div><div class="s">$17.5M · install #1, the proof</div></div><div class="pill">Start here</div></div>
+        <div class="pco"><div class="badge">CO</div><div class="meta"><div class="t"><span class="mighty">Mighty</span> · Colorado</div><div class="s">$17.5M · install #1, the proof</div></div><div class="pill">Start here</div></div>
         <div class="pco"><div class="badge">CA</div><div class="meta"><div class="t">Orange County</div><div class="s">Plumbing · HVAC · electrical</div></div><div class="pill next">Clone next</div></div>
         <div class="pco"><div class="badge">FL</div><div class="meta"><div class="t">Tampa · Fort Myers</div><div class="s">Closing this month</div></div><div class="pill next">Clone next</div></div>
         <div class="pco"><div class="badge">+</div><div class="meta"><div class="t">Every future acquisition</div><div class="s">Diligence + fix playbook, day one</div></div><div class="pill soon">On acquire</div></div>
@@ -382,17 +379,17 @@
     </div>
   </div></section>
 
-  <!-- THE LAND -->
-  <section id="land"><div class="wrap">
-    <div class="r"><span class="eyebrow green">The first step</span>
-    <h2>The 10-day audit:<br>find the money, in dollars.</h2>
-    <p class="lede">Start here — one contained engagement, no big commitment. In ten days we map exactly where the money leaks in Mighty and put hard numbers on it, then show you a live preview of the intelligence layer running on your own data at the readout. The findings scope everything that comes next.</p></div>
+  <!-- AUDIT -->
+  <section id="audit"><div class="wrap">
+    <div class="r"><div class="eyebrow"><span class="num">06</span> The first step</div>
+    <h2>The 10-day audit: <em>find the money</em>, in dollars.</h2>
+    <p class="lede" style="margin-top:18px">Start here — one contained engagement, no big commitment. In ten days we map exactly where the money leaks in Mighty and put hard numbers on it, then show you a live preview of the intelligence layer running on your own data at the readout. The findings scope everything that comes next.</p></div>
 
     <div class="land-grid">
-      <div class="step card r"><div class="in"><div class="no">1</div><div><h3>Five operator interviews</h3><p>You, the new CO GM, a top CSR, a top tech, and your marketing lead — to find what actually happens between "phone rings" and "invoice paid."</p></div></div></div>
-      <div class="step card r"><div class="in"><div class="no">2</div><div><h3>Six workflow maps</h3><p>Lead→booked, booked→dispatched, dispatch→sold (the close-rate lane), sold→paid, paid→review→membership, and member→re-engagement→upsell.</p></div></div></div>
-      <div class="step card r"><div class="in"><div class="no">3</div><div><h3>Source &amp; data-quality map</h3><p>ServiceTitan, Avoca, Camp Digital, accounting, and your phone system — what data exists, what's clean, and what's siloed.</p></div></div></div>
-      <div class="step card r"><div class="in"><div class="no">4</div><div><h3>Registry, roadmap &amp; live readout</h3><p>Every place a human is doing what AI should — ranked by recovered-margin-per-dollar — a 90-day build roadmap, and a <b>live preview of your brain</b> running on your data at the readout. Seeing it beats reading about it.</p></div></div></div>
+      <div class="step card r"><div class="no">01</div><div><h3>Five operator interviews</h3><p>You, the new CO GM, a top CSR, a top tech, and your marketing lead — to find what actually happens between "phone rings" and "invoice paid."</p></div></div>
+      <div class="step card r"><div class="no">02</div><div><h3>Six workflow maps</h3><p>Lead→booked, booked→dispatched, dispatch→sold (the close-rate lane), sold→paid, paid→review→membership, and member→re-engagement→upsell.</p></div></div>
+      <div class="step card r"><div class="no">03</div><div><h3>Source &amp; data-quality map</h3><p>ServiceTitan, Avoca, Camp Digital, accounting, and your phone system — what data exists, what's clean, and what's siloed.</p></div></div>
+      <div class="step card r"><div class="no">04</div><div><h3>Registry, roadmap &amp; live readout</h3><p>Every place a human is doing what AI should — ranked by recovered-margin-per-dollar — a 90-day build roadmap, and a <b>live preview of your brain</b> on your data. Seeing it beats reading about it.</p></div></div>
     </div>
 
     <div class="deliverables r">
@@ -406,10 +403,10 @@
 
   <!-- INVESTMENT -->
   <section id="investment"><div class="wrap">
-    <div class="r"><span class="eyebrow">Investment</span>
-    <h2>One small price.<br>Fully credited when you build.</h2></div>
+    <div class="r"><div class="eyebrow"><span class="num">07</span> Investment</div>
+    <h2>One small price. <em>Fully credited</em> when you build.</h2></div>
 
-    <div class="invest r"><div class="in">
+    <div class="invest r">
       <div class="top">
         <div class="price"><span class="cur">$</span>7,500<small>The 10-day audit, on Colorado</small></div>
         <div class="guarantee"><div class="gi">↺</div><div class="gt"><b>100% credited forward.</b> Move into the build within 30 days and the entire $7,500 comes off the price. Either it pays for itself in the build, or it hands you a dollar-ranked roadmap you own — you're ahead both ways.</div></div>
@@ -434,38 +431,37 @@
           <div class="lr">Portfolio clone</div>
         </div>
       </div>
-    </div></div>
+    </div>
   </div></section>
 
   <!-- CLOSING QUOTE -->
-  <section style="padding-top:0;padding-bottom:0"><div class="wrap">
-    <div class="pullquote r" style="margin-top:0">
-      <div class="q">"Your industry is the <span class="grad">safest</span> from AI — it can't be done remotely. The edge is being the operator who has the intelligence layer while everyone else is still guessing."</div>
+  <section style="padding-top:84px;padding-bottom:0;border-top:none"><div class="wrap">
+    <div class="pullquote r">
+      <div class="q">"Your industry is the <em>safest</em> from AI — it can't be done remotely. The edge is being the operator who has the intelligence layer while everyone else is still guessing."</div>
       <div class="a">— What I told you on the call. This proposal is how we build it.</div>
     </div>
   </div></section>
 
   <!-- CTA -->
-  <section class="ctasec"><div class="wrap"><div class="card r"><div class="in">
-    <span class="eyebrow green">Next step</span>
-    <h2>Let's prove it on Mighty in 10 days.</h2>
-    <p class="lede" style="margin-left:auto;margin-right:auto">Pick an audit week. We'll get read-access to ServiceTitan, run the maps, and put real dollars on the close-rate gap. Credited forward the moment you build.</p>
-    <div class="btnrow">
-      <a class="btn primary" href="mailto:itschris@gmail.com?subject=Mighty%20%C3%97%20Ovae%20%E2%80%94%20Let's%20start%20the%2010-day%20audit&body=CT%20%E2%80%94%20let's%20lock%20an%20audit%20week%20for%20Mighty.%20Here's%20what%20works%20for%20me%3A">Start the 10-day audit <span class="ic">↗</span></a>
-      <a class="btn ghost" href="#model">Replay the numbers</a>
-    </div>
-  </div></div></div></section>
+  <section class="ctasec"><div class="wrap">
+    <div class="r"><div class="eyebrow" style="justify-content:center"><span class="num">08</span> Next step</div>
+    <h2>Let's prove it on <span class="mighty">Mighty</span> in 10 days.</h2>
+    <p class="lede">Pick an audit week. We'll get read-access to ServiceTitan, run the maps, and put real dollars on the close-rate gap. Credited forward the moment you build.</p>
+    <div class="ctas">
+      <a class="btn btn-primary" href="mailto:itschris@gmail.com?subject=Mighty%20%C3%97%20Ovae%20%E2%80%94%20Let's%20start%20the%2010-day%20audit&body=CT%20%E2%80%94%20let's%20lock%20an%20audit%20week%20for%20Mighty.%20Here's%20what%20works%20for%20me%3A">Start the 10-day audit <span class="arr">→</span></a>
+      <a class="btn btn-secondary" href="#model">Replay the numbers</a>
+    </div></div>
+  </div></section>
 
   <footer><div class="wrap">
-    <div><b>Ovae</b> · Intelligence layer for operating businesses · Private proposal for Tommy Webber / Mighty Plumbing</div>
-    <div>Prepared by CT Schenk</div>
+    <div>Private proposal for Tommy Webber / <span class="mighty">Mighty</span> Plumbing · Prepared by CT Schenk</div>
+    <div class="powered">Powered by <b>Ovae</b></div>
   </div>
   <div class="wrap"><div class="disclaimer">Figures are modeled from numbers you shared on our call and are illustrative, not a guarantee — the audit converts them into your actuals via ServiceTitan read-access. The $2,000 average ticket is for service calls; larger installs distort exact job counts, so the model leans on the close-rate ratio (true regardless of ticket mix). Capacity exists at current staffing; beyond it, added technicians sit inside cost of goods, so the margin logic holds. Pricing beyond the audit is directional and scoped from audit findings.</div></div>
   </footer>
 
 <script>
 (function(){
-  var defaults={cc:45,tc:60,mult:10,rev:17500000,ticket:2000,lead:250,nm:20,mkt:12,im:44};
   var ids=['cc','tc','mult','rev','ticket','lead','nm','mkt','im'];
   function $(id){return document.getElementById(id);}
   function val(id){return parseFloat($(id).value)||0;}
@@ -485,11 +481,9 @@
     $('multVal').textContent=(mult%1===0)?mult.toFixed(0):mult.toFixed(1);
     $('imVal').textContent=Math.round(im);$('multX').textContent=ratio.toFixed(2)+'×';
     $('newRev').textContent=money(newRev);$('oldRev').textContent=money(rev);
-    $('revDelta').textContent=moneyDelta(revD);$('revDelta').className='delta '+(revD>=0?'up':'');
-    $('revPct').textContent='('+(revPct>=0?'+':'')+revPct.toFixed(0)+'%)';
+    $('revDelta').textContent=moneyDelta(revD);$('revPct').textContent='('+(revPct>=0?'+':'')+revPct.toFixed(0)+'%)';
     $('newProfit').textContent=money(newProfit);$('oldProfit').textContent=money(oldProfit);
-    $('profitDelta').textContent=moneyDelta(incProfit);$('profitDelta').className='delta '+(incProfit>=0?'up':'');
-    $('profitPct').textContent='('+(profPct>=0?'+':'')+profPct.toFixed(0)+'%)';
+    $('profitDelta').textContent=moneyDelta(incProfit);$('profitPct').textContent='('+(profPct>=0?'+':'')+profPct.toFixed(0)+'%)';
     $('cacNew').textContent=full(cacNew);$('cacOld').textContent=full(cacOld);
     $('cacDrop').textContent=(cacDrop>=0?'−':'+')+Math.abs(cacDrop).toFixed(0)+'%';
     $('leadCostEcho').textContent=full(lead);
@@ -501,10 +495,8 @@
   }
   ids.forEach(function(id){$(id).addEventListener('input',calc);});
   calc();
-
-  // scroll reveal
   if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target);}});},{threshold:0.12,rootMargin:'0px 0px -8% 0px'});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target);}});},{threshold:0.1,rootMargin:'0px 0px -8% 0px'});
     document.querySelectorAll('.r').forEach(function(el){io.observe(el);});
   } else { document.querySelectorAll('.r').forEach(function(el){el.classList.add('in-view');}); }
 })();
