@@ -138,10 +138,10 @@ h1.hook{ font-size:clamp(30px,7vw,46px); line-height:1.08; letter-spacing:-.02em
 .habit.not{ color:var(--ink-dim); }
 
 /* level-up prompt */
-.prompt-box{ border-radius:var(--r); border:1px dashed var(--accent-dim); background:var(--accent-soft); padding:18px; margin:14px 0; }
-.prompt-box .pb-h{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
-.prompt-box .pb-h .pb-t{ font-size:15px; font-weight:600; }
-.prompt-text{ font-family:'DM Mono',monospace; font-size:13px; line-height:1.6; color:var(--ink); white-space:pre-wrap; background:var(--bg); border:1px solid var(--rule); border-radius:var(--r-sm); padding:14px; max-height:240px; overflow:auto; }
+.prompt-box{ border-radius:var(--r); border:1px dashed var(--accent-dim); background:var(--accent-soft); padding:13px 14px; margin:10px 0; }
+.prompt-box .pb-h{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:9px; }
+.prompt-box .pb-h .pb-t{ font-size:13px; font-weight:600; color:var(--ink-dim); }
+.prompt-text{ position:relative; font-family:'DM Mono',monospace; font-size:12px; line-height:1.55; color:var(--ink); white-space:pre-wrap; background:var(--bg); border:1px solid var(--rule); border-radius:var(--r-sm); padding:11px 12px; max-height:78px; overflow:auto; -webkit-mask-image:linear-gradient(180deg,#000 70%,transparent); mask-image:linear-gradient(180deg,#000 70%,transparent); }
 .copybtn{ font-size:12.5px; padding:8px 14px; border-radius:8px; background:var(--accent); color:#0c1414; border:none; font-weight:600; flex:none; }
 .copybtn.done{ background:var(--green); }
 

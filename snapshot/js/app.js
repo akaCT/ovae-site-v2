@@ -525,21 +525,25 @@
   }
 
   function renderGate(s, go) {
-    var nameI = el("input", { class: "field", placeholder: "First name", type: "text" });
-    var emailI = el("input", { class: "field", placeholder: "Email", type: "email" });
+    var nameI = el("input", { class: "field", placeholder: "First name", type: "text", autocomplete: "given-name", enterkeyhint: "go" });
+    var emailI = el("input", { class: "field", placeholder: "Email", type: "email", autocomplete: "email", enterkeyhint: "go" });
     var err = el("div", { class: "fine", style: "color:var(--rust)", text: "" });
+    function submit() {
+      if (!nameI.value.trim() || !/.+@.+\..+/.test(emailI.value)) { err.textContent = "A first name and a valid email, please."; return; }
+      s.name = nameI.value.trim(); s.email = emailI.value.trim();
+      captureLead(s);
+      go();
+    }
+    // pressing Enter in either field submits (don't make people hunt for the button)
+    var onKey = function (e) { if (e.key === "Enter") { e.preventDefault(); submit(); } };
+    nameI.addEventListener("keydown", onKey); emailI.addEventListener("keydown", onKey);
     var node = el("div", { class: "gate" }, [
       el("div", { class: "gate-card" }, [
         el("h2", { class: "q-stem", text: (C.forkCopy && C.forkCopy.gate && C.forkCopy.gate.stem) || "Your result is ready." }),
         el("p", { class: "q-help", text: (C.forkCopy && C.forkCopy.gate && C.forkCopy.gate.sub) || "Where should we send your AI level, your shareable card, and your level-up move?" }),
         nameI, emailI,
         el("div", { class: "spacer" }),
-        el("button", { class: "btn btn-primary btn-block", html: ((C.forkCopy && C.forkCopy.gate && C.forkCopy.gate.button) || "Show me my level") + " &nbsp;→", onclick: function () {
-          if (!nameI.value.trim() || !/.+@.+\..+/.test(emailI.value)) { err.textContent = "A first name and a valid email, please."; return; }
-          s.name = nameI.value.trim(); s.email = emailI.value.trim();
-          captureLead(s);
-          go();
-        }}),
+        el("button", { class: "btn btn-primary btn-block", html: ((C.forkCopy && C.forkCopy.gate && C.forkCopy.gate.button) || "Show me my level") + " &nbsp;→", onclick: submit }),
         err,
         el("p", { class: "fine", text: "No spam, no list-selling. Your result, plus only what helps you level up." })
       ])
