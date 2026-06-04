@@ -672,7 +672,7 @@
       return el("div", { class: "cta-card" }, [
         el("div", { class: "cc-h", text: "This is exactly what we install." }),
         el("div", { class: "cc-b", text: "A 30-minute call with CT & Isaiah maps your constraint to the first build. We take on a handful of flagship engagements." }),
-        el("a", { class: "btn btn-primary", href: "https://calendly.com/isaiah-orectic/30min", target: "_blank", rel: "noopener", html: "Book a 30-min call &nbsp;→" })
+        el("a", { class: "btn btn-primary", href: "https://book.ovae.ai/team/ovae/strategy-call", target: "_blank", rel: "noopener", html: "Book a 30-min call &nbsp;→" })
       ]);
     }
     if (s.appetite === "convince") {
