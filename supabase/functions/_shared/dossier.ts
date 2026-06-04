@@ -69,7 +69,7 @@ export function renderClientHTML(row: PRow, readiness: any | null, notes: CNote[
 <style>
 :root{--bg:#14101A;--elev:#1A1622;--soft:#1F1A28;--ink:#E8E4DC;--dim:#A39E96;--mute:#6F6A63;--rule:rgba(232,228,220,.08);--rule2:rgba(232,228,220,.16);--accent:${ACCENT};--rust:${RUST};--warn:${WARN};--green:${GREEN}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;font-size:15px;line-height:1.5}
-.wrap{max-width:880px;margin:0 auto;padding:0 22px 90px}
+.wrap{max-width:880px;margin:0 auto;padding:0 22px 160px}
 .bar{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--rule)}
 .back{color:var(--dim);text-decoration:none;font:500 13px "DM Sans";display:inline-flex;gap:7px}.back:hover{color:var(--ink)}
 .wordmark{font-weight:600;letter-spacing:.16em;font-size:12px;text-transform:uppercase}.wordmark span{color:var(--accent)}
@@ -122,6 +122,16 @@ h1{font-size:30px;font-weight:600;letter-spacing:-.02em;margin:0}
 .art-i{font-size:18px}.art-main{flex:1}.art-main a{color:var(--accent);font-size:12.5px;text-decoration:none;word-break:break-all;display:inline-block;margin-top:4px}
 .art-body{color:var(--dim);font-size:13px;margin-top:4px}
 .soon{color:var(--mute);font-size:12px;border:1px dashed var(--rule2);border-radius:8px;padding:9px 12px;margin-top:8px}
+/* smart composer */
+.composer{position:fixed;left:0;right:0;bottom:0;z-index:40;background:linear-gradient(to top,var(--bg) 72%,transparent);padding:14px 22px 18px}
+.composer-in{max-width:880px;margin:0 auto;background:var(--elev);border:1px solid var(--rule2);border-radius:14px;padding:10px 12px;box-shadow:0 12px 44px rgba(0,0,0,.45)}
+.composer textarea{width:100%;border:none;background:transparent;color:var(--ink);font:400 14px "DM Sans",sans-serif;resize:none;min-height:42px;max-height:180px;padding:6px 4px;outline:none}
+.composer textarea::placeholder{color:var(--mute)}
+.composer-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:4px 2px 0}
+.composer-hint{font-size:11.5px;color:var(--mute)}
+.composer-go{background:var(--accent);color:#0F0C14;border:none;border-radius:9px;padding:9px 16px;font:600 13px "DM Sans",sans-serif;cursor:pointer;white-space:nowrap}
+.composer-go:disabled{opacity:.6;cursor:default}
+.composer-status{font-size:12px;color:var(--accent);padding:0 4px 5px;min-height:1px}
 /* modal */
 .ov{position:fixed;inset:0;background:rgba(10,8,14,.72);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}
 .ov.show{display:flex}
@@ -198,6 +208,17 @@ ${diag}
 
 </div>
 
+<div class="composer">
+  <div class="composer-in">
+    <div class="composer-status" id="ci-status"></div>
+    <textarea id="ci-text" placeholder="Drop anything about ${esc(row.name)} — paste a call transcript, notes, or an email (or dictate with Wispr Flow). AI files it as an artifact and updates the dossier."></textarea>
+    <div class="composer-bar">
+      <span class="composer-hint">✦ AI extracts key facts + logs activity · raw is saved as an artifact · ⌘⏎ to send</span>
+      <button class="composer-go" id="ci-go">Process with AI</button>
+    </div>
+  </div>
+</div>
+
 <div class="ov" id="ov"><div class="modal">
   <h2>Edit client</h2>
   <div class="frow"><div class="fg"><label>Name *</label><input id="e-name" value="${esc(row.name)}"></div><div class="fg"><label>Title</label><input id="e-title" value="${esc(row.contact_title || "")}"></div></div>
@@ -220,6 +241,20 @@ ${diag}
   function el(i){return document.getElementById(i);}
   function post(b){return fetch(EDIT+"?k="+encodeURIComponent(token),{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});});}
   function reloadOk(res){ if(res.ok)location.reload(); else alert("Failed: "+(res.j.error||"error")); }
+  // smart ingest composer
+  var ci=el("ci-text"), cig=el("ci-go"), cis=el("ci-status");
+  if(cig){
+    cig.addEventListener("click",function(){
+      var t=ci.value.trim(); if(!t){ci.focus();return;}
+      cig.disabled=true; cig.textContent="Processing…"; cis.textContent="";
+      fetch("https://muguotipixphthfxjssu.supabase.co/functions/v1/pipeline-ingest?k="+encodeURIComponent(token),{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({pipeline_id:ID,text:t})})
+        .then(function(r){return r.json();}).then(function(j){
+          if(j.ok){ cis.textContent = j.extracted ? ("✓ Filed · "+j.facts_added+" fact(s) added to the dossier") : "✓ Saved as an artifact"; setTimeout(function(){location.reload();},700); }
+          else { cig.disabled=false; cig.textContent="Process with AI"; cis.textContent="Failed: "+(j.error||"error"); }
+        }).catch(function(){cig.disabled=false;cig.textContent="Process with AI";cis.textContent="Network error";});
+    });
+    ci.addEventListener("keydown",function(e){ if((e.metaKey||e.ctrlKey)&&e.key==="Enter")cig.click(); });
+  }
   // toggle add forms
   [].forEach.call(document.querySelectorAll("[data-add]"),function(b){b.addEventListener("click",function(){
     var t=b.getAttribute("data-add"); var map={fact:"add-fact",note:"add-note",art:"add-art"};
