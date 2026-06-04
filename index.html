@@ -1,148 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Ovae — What's your AI level?</title>
-  <meta name="description" content="AI has 6 levels, from asking it questions like Google to running a system of agents. Find yours in 90 seconds, free, and get the one move that levels you up." />
-  <link rel="canonical" href="https://ovae.ai/" />
-  <meta name="theme-color" content="#14101A" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Ovae" />
-  <meta property="og:title" content="What's your AI level?" />
-  <meta property="og:description" content="AI has 6 levels. Find yours in 90 seconds — plus the one habit that gets you to the next." />
-  <meta property="og:image" content="https://ovae.ai/snapshot/og.png" />
-  <meta property="og:url" content="https://ovae.ai/" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="What's your AI level?" />
-  <meta name="twitter:description" content="AI has 6 levels. Find yours in 90 seconds — plus the one habit that gets you to the next." />
-  <meta name="twitter:image" content="https://ovae.ai/snapshot/og.png" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2314101A'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%237BC9C4'/%3E%3C/svg%3E" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    :root{
-      --bg:#14101A; --bg-elev:#1A1622; --bg-soft:#1F1A28;
-      --ink:#E8E4DC; --ink-dim:#A39E96; --ink-mute:#6F6A63;
-      --rule:rgba(232,228,220,0.08); --rule-strong:rgba(232,228,220,0.16);
-      --accent:#7BC9C4; --accent-dim:rgba(123,201,196,0.18); --accent-soft:rgba(123,201,196,0.06);
-      --rust:#C97D5C; --r:16px; --r-sm:12px; --ease:cubic-bezier(.4,0,.2,1);
-    }
-    *,*::before,*::after{ box-sizing:border-box; }
-    html{ scroll-behavior:smooth; }
-    html,body{ margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:'DM Sans',system-ui,sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased; }
-    body{ overflow-x:hidden; }
-    a{ color:inherit; text-decoration:none; }
-    body::before{ content:""; position:fixed; inset:0; z-index:60; pointer-events:none; opacity:.03; mix-blend-mode:overlay;
-      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.92 0 0 0 0 0.89 0 0 0 0 0.86 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>"); }
-    body::after{ content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
-      background:radial-gradient(800px 600px at 80% -10%,rgba(123,201,196,.07),transparent 60%),radial-gradient(900px 700px at -10% 110%,rgba(201,125,92,.04),transparent 60%); }
-    .wrap{ max-width:760px; margin:0 auto; padding:0 24px; }
-    .topbar{ display:flex; align-items:center; justify-content:space-between; padding:20px 0; }
-    .wordmark{ display:flex; align-items:center; gap:9px; font-weight:500; font-size:16px; }
-    .wordmark::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px var(--accent-dim); }
-    .topbar-link{ font-size:14px; color:var(--ink-dim); }
-    .topbar-link:hover{ color:var(--ink); }
-    .hero{ padding:54px 0 30px; }
-    .kicker{ font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:20px; }
-    h1{ font-size:clamp(38px,8vw,62px); line-height:1.04; letter-spacing:-.025em; font-weight:600; margin:0 0 20px; }
-    .sub{ font-size:clamp(17px,2.4vw,20px); color:var(--ink-dim); max-width:30em; margin:0 0 30px; }
-    .btn{ display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:16px 30px; border-radius:var(--r-sm); font-size:17px; font-weight:600; border:1px solid var(--accent); background:var(--accent); color:#0c1414; transition:all .2s var(--ease); box-shadow:0 8px 34px -10px var(--accent); }
-    .btn:hover{ transform:translateY(-2px); box-shadow:0 12px 44px -10px var(--accent); }
-    .btn-ghost{ background:transparent; color:var(--ink); border-color:var(--rule-strong); box-shadow:none; }
-    .btn-ghost:hover{ border-color:var(--ink-dim); }
-    .reassure{ display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
-    .reassure span{ display:flex; align-items:center; gap:8px; font-size:14.5px; font-weight:500; background:var(--bg-elev); border:1px solid var(--rule-strong); border-radius:999px; padding:9px 16px; }
-    .reassure span i{ color:var(--accent); font-style:normal; }
-    section{ padding:42px 0; border-top:1px solid var(--rule); }
-    h2{ font-size:clamp(24px,4.5vw,32px); line-height:1.15; letter-spacing:-.02em; font-weight:600; margin:0 0 10px; }
-    .lead{ font-size:16px; color:var(--ink-dim); max-width:34em; margin:0 0 26px; }
-    .levels{ display:flex; flex-direction:column; }
-    .level{ display:flex; gap:16px; align-items:flex-start; padding:15px 4px; border-top:1px solid var(--rule); }
-    .level:first-child{ border-top:none; }
-    .level .n{ flex:none; width:30px; height:30px; border-radius:8px; background:var(--accent-soft); color:var(--accent); display:flex; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-weight:500; font-size:14px; }
-    .level .nm{ font-weight:600; font-size:16px; }
-    .level .ln{ font-size:14.5px; color:var(--ink-dim); margin-top:2px; }
-    .cards{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
-    .card{ border:1px solid var(--rule-strong); border-radius:var(--r-sm); background:var(--bg-elev); padding:20px; }
-    .card .ct{ font-weight:600; margin-bottom:6px; }
-    .card .cx{ font-size:14px; color:var(--ink-dim); line-height:1.5; }
-    .ovae-band{ background:var(--accent-soft); border:1px solid var(--accent-dim); border-radius:var(--r); padding:28px; }
-    .ovae-band h2{ margin-bottom:12px; }
-    .timeline{ display:flex; flex-wrap:wrap; gap:8px 20px; font-family:'DM Mono',monospace; font-size:12.5px; color:var(--ink-dim); margin:16px 0 22px; }
-    .timeline span{ display:flex; align-items:center; gap:7px; }
-    .timeline span::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--accent); }
-    .final-cta{ text-align:center; padding:56px 0; }
-    .final-cta h2{ margin-bottom:22px; }
-    footer{ padding:34px 0; text-align:center; font-size:12.5px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:.05em; border-top:1px solid var(--rule); }
-    footer a{ color:var(--ink-dim); } footer a:hover{ color:var(--ink); }
-    @media(max-width:560px){ .cards{ grid-template-columns:1fr; } }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <header class="topbar">
-      <span class="wordmark">Ovae</span>
-      <a class="topbar-link" href="#work">Work with Ovae</a>
-    </header>
-
-    <div class="hero">
-      <div class="kicker">The AI Leverage Snapshot</div>
-      <h1>What's your AI level?</h1>
-      <p class="sub">AI has 6 levels — from asking it questions like Google to running a system of agents. Find yours in 90 seconds, free, and get the one move that levels you up.</p>
-      <a class="btn" href="/snapshot/">Find my level &nbsp;→</a>
-      <div class="reassure">
-        <span><i>◷</i> 90 seconds</span>
-        <span><i>✦</i> Instant result</span>
-        <span><i>✓</i> Free</span>
-      </div>
-    </div>
-
-    <section>
-      <h2>AI has 6 levels. Most people are one rung from the next.</h2>
-      <p class="lead">Read down the list. You'll spot yourself fast.</p>
-      <div class="levels">
-        <div class="level"><span class="n">0</span><div><div class="nm">Newcomer</div><div class="ln">You barely touch it on purpose.</div></div></div>
-        <div class="level"><span class="n">1</span><div><div class="nm">Searcher</div><div class="ln">You ask it like Google.</div></div></div>
-        <div class="level"><span class="n">2</span><div><div class="nm">Drafter</div><div class="ln">You paste real work in for a rewrite.</div></div></div>
-        <div class="level"><span class="n">3</span><div><div class="nm">Operator</div><div class="ln">It's in your day, across many tasks.</div></div></div>
-        <div class="level"><span class="n">4</span><div><div class="nm">Builder</div><div class="ln">You've set up AI that runs on its own.</div></div></div>
-        <div class="level"><span class="n">5</span><div><div class="nm">Conductor</div><div class="ln">You direct a system of AI agents.</div></div></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>What you walk away with</h2>
-      <div class="cards">
-        <div class="card"><div class="ct">Your level + style</div><div class="cx">One of six levels, plus whether you delegate, collaborate, or automate.</div></div>
-        <div class="card"><div class="ct">Your spot on the map</div><div class="cx">Plotted on the level-by-style grid. See where you stand at a glance.</div></div>
-        <div class="card"><div class="ct">A prompt to level up</div><div class="cx">One tailored prompt, written for your level. Use it in five minutes.</div></div>
-      </div>
-    </section>
-
-    <section id="work">
-      <div class="ovae-band">
-        <h2>When you're ready to go further</h2>
-        <p class="lead">The snapshot shows you where you stand. Ovae is the team that installs an AI-native operating system into your company and gets it used — so the business runs on it, not just you.</p>
-        <div class="timeline">
-          <span>Company Brain by Day 10</span>
-          <span>Operating layer by Day 30</span>
-          <span>Production workflows by Day 75</span>
-          <span>Governed handoff by Day 120</span>
-        </div>
-        <a class="btn btn-ghost" href="mailto:ct@ovae.ai?subject=Working%20with%20Ovae">Talk to us &nbsp;→</a>
-      </div>
-    </section>
-
-    <div class="final-cta">
-      <h2>Start with your level.</h2>
-      <a class="btn" href="/snapshot/">Find my level &nbsp;→</a>
-    </div>
-
-    <footer>
-      Ovae — Latin, plural of <i>ovum</i>: eggs, origins. &nbsp;·&nbsp; <a href="/snapshot/">The AI Leverage Snapshot</a>
-    </footer>
-  </div>
-</body>
-</html>
+<html lang="en"><head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ovae — Become AI-native in 90 days</title>
+<meta name="description" content="Ovae installs the AI-native operating system into your company and gets it used. Start by finding your AI level."/>
+<link rel="canonical" href="https://ovae.ai/"/>
+<meta name="theme-color" content="#14101A"/><meta name="color-scheme" content="dark"/><meta name="robots" content="noindex, nofollow"/>
+<meta property="og:type" content="website"/><meta property="og:site_name" content="Ovae"/>
+<meta property="og:title" content="Ovae — Become AI-native in 90 days"/>
+<meta property="og:description" content="The team that installs the AI-native operating system into your company and gets it used. Start by finding your AI level."/>
+<meta property="og:image" content="https://ovae.ai/v7/assets/og-image.jpg"/>
+<meta property="og:url" content="https://ovae.ai/"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://ovae.ai/v7/assets/og-image.jpg"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2314101A'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%237BC9C4'/%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script type="module" crossorigin src="/v7/assets/index-BlM_Y2OT.js"></script>
+  <link rel="stylesheet" crossorigin href="/v7/assets/index-DEsAIEdy.css">
+</head><body><div id="root"></div></body></html>
