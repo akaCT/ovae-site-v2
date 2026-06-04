@@ -1,6 +1,7 @@
 // pipeline — admin-only pipeline board (kanban by stage).
 // Requires ?k=<ADMIN_TOKEN>. Served via ovae.ai/pipeline/ wrapper.
-import { renderPipelineHTML, type PRow } from "../_shared/pipeline.ts";
+import { renderPipelineHTML } from "../_shared/pipeline.ts";
+import type { PRow } from "../_shared/pipeline-core.ts";
 
 const CORS = { "access-control-allow-origin": "*", "access-control-allow-methods": "GET, OPTIONS", "access-control-allow-headers": "*" };
 
