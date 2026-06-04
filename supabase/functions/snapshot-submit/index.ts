@@ -118,7 +118,7 @@ async function sb(method: string, path: string, body?: unknown) {
 
 async function emailCT(r: Record<string, any>, id: string) {
   const apiKey = Deno.env.get("RESEND_API_KEY"); if (!apiKey) return;
-  const from = Deno.env.get("NOTIFY_FROM") || "Ovae Snapshot <onboarding@resend.dev>";
+  const from = Deno.env.get("NOTIFY_FROM") || "Ovae Team <onboarding@resend.dev>";
   const to = (Deno.env.get("NOTIFY_TO") || "ct@ovae.ai").split(",").map((s) => s.trim());
   await fetch("https://api.resend.com/emails", {
     method: "POST",

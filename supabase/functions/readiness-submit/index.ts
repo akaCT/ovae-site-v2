@@ -36,7 +36,7 @@ async function insertRow(payload: Record<string, unknown>): Promise<Row> {
 async function sendEmail(row: Row, reportUrl: string): Promise<string> {
   const apiKey = Deno.env.get("RESEND_API_KEY");
   if (!apiKey) throw new Error("RESEND_API_KEY not set");
-  const from = Deno.env.get("NOTIFY_FROM") || "Ovae Readiness <onboarding@resend.dev>";
+  const from = Deno.env.get("NOTIFY_FROM") || "Ovae Team <onboarding@resend.dev>";
   const to = (Deno.env.get("NOTIFY_TO") || "ct@ovae.ai").split(",").map((s) => s.trim());
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
