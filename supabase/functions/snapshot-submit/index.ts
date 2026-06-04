@@ -1,7 +1,7 @@
 // snapshot-submit — capture an AI Leverage Snapshot lead.
-//   POST a payload with NO id  -> insert a new row, email CT, return { id }.
+//   POST a payload with NO id  -> insert a new row, email CT + the taker, return { id }.
 //   POST a payload WITH id     -> patch the existing row (enrich as they go deeper).
-// Emails CT on insert (every lead) and again on a business-complete row that turns hot.
+//   GET  ?id=                  -> PII-safe public identity for the shareable result page.
 // Deploy with --no-verify-jwt; called cross-origin from ovae.ai.
 
 const CORS = {
@@ -12,8 +12,31 @@ const CORS = {
 const json = (b: unknown, status = 200) =>
   new Response(JSON.stringify(b), { status, headers: { ...CORS, "content-type": "application/json" } });
 
-const RUNG = ["Unaware", "Searcher", "Drafter", "Operator", "Builder", "Conductor"];
-const STYLE: Record<string, string> = { centaur: "Centaur", cyborg: "Cyborg", self: "Self-Automator" };
+// ── Display nomenclature (MUST match the live site's scoring code, js/score.js + js/app.js) ──
+const RUNG = ["Newcomer", "Searcher", "Drafter", "Operator", "Builder", "Conductor"];
+const STYLE: Record<string, string> = { centaur: "Delegator", cyborg: "Collaborator", self: "Automator" };
+const PERSONA: Record<string, string> = {
+  bottlenecked_builder: "Bottlenecked", next_at_wheel: "Coasting", ground_floor: "Untapped", ai_native: "Compounding",
+};
+const DIM: Record<string, string> = {
+  BI: "Business Intelligence", KPD: "Key-Person Dependency", AUTO: "Workflow Automation",
+  DATA: "Data Infrastructure", TEAM: "Team Leverage", REV: "Revenue Engine",
+};
+const ROLE: Record<string, string> = {
+  owner: "Owner / founder", solo: "Solo operator", team: "Team lead", ic: "Individual contributor",
+};
+const APPETITE: Record<string, string> = {
+  build_now: "Ready to build now", want_help: "Wants help doing it", convince: "Needs convincing", curious: "Just curious",
+};
+
+const esc = (t: unknown) => String(t ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const styleName = (r: any) => (r?.style ? (STYLE[r.style] || r.style) : "");
+const rungName = (r: any) => r?.rung_name || (typeof r?.rung === "number" ? (RUNG[r.rung] || "") : "");
+const personaName = (r: any) => (r?.persona ? (PERSONA[r.persona] || r.persona) : "");
+const dimName = (k: any) => (k ? (DIM[k] || k) : "");
+const roleName = (r: any) => (r?.role ? (ROLE[r.role] || r.role) : "");
+const appetiteName = (r: any) => (r?.appetite ? (APPETITE[r.appetite] || r.appetite) : "");
+const identity = (r: any) => [styleName(r), rungName(r)].filter(Boolean).join(" "); // e.g. "Collaborator Operator"
 
 // map the client payload to table columns (note: `constraint` -> constraint_dim).
 // Only include keys PRESENT in the payload, so a partial PATCH never nulls
@@ -32,32 +55,52 @@ function toRow(b: Record<string, unknown>) {
   return row;
 }
 
+// ── CT lead-notification email (internal, for triage) ──
 function subjectFor(r: Record<string, any>): string {
-  const lvl = (typeof r.rung === "number" ? `L${r.rung} ${RUNG[r.rung] || ""}` : "—").trim();
-  const sty = r.style ? (STYLE[r.style] || r.style) : "";
-  const who = r.name || r.email || "—";
+  const who = r.name || r.email || "New lead";
+  const bits = [identity(r), personaName(r), r.band ? `${r.band} biz` : ""].filter(Boolean).join(" · ");
   const via = r.via ? ` · via ${r.via}` : "";
-  const tag = r.flag === "flagship" ? "★ [FLAGSHIP]" : r.flag === "qualified" ? "◇ [Qualified]" : "○ [Lead]";
-  return `${tag} ${who} · ${sty} ${lvl}${r.band ? " · biz " + r.band : ""}${via}`;
+  const tag = r.flag === "flagship" ? "★ Flagship" : r.flag === "qualified" ? "◇ Qualified" : "○ Lead";
+  return `${tag} · ${who}${bits ? " — " + bits : ""}${via}`;
 }
 
 function emailHTML(r: Record<string, any>, id: string): string {
+  const accent = "#7BC9C4";
+  const flagColor = r.flag === "flagship" ? "#D9B26B" : r.flag === "qualified" ? accent : "#A39E96";
+  const flagText = r.flag === "flagship" ? "★ FLAGSHIP LEAD" : r.flag === "qualified" ? "◇ QUALIFIED LEAD" : "○ NEW LEAD";
+  const site = Deno.env.get("SITE_URL") || "https://ovae.ai";
+  const idn = identity(r);
   const rows: [string, unknown][] = [
-    ["Name", r.name], ["Email", r.email], ["Company", r.company], ["Role", r.role], ["Industry", r.industry],
-    ["AI level", typeof r.rung === "number" ? `${r.rung} — ${RUNG[r.rung]}` : null],
-    ["AI style", r.style ? STYLE[r.style] : null], ["AI Leverage Index", r.ai_index],
-    ["Persona", r.persona], ["Business band", r.band], ["Business %", r.business_pct],
-    ["Constraint", r.constraint_dim], ["Appetite", r.appetite],
-    ["Revenue", r.revenue], ["Headcount", r.headcount], ["Flag", r.flag],
-    ["Via (attribution)", r.via], ["Referrer", r.referrer],
+    ["Appetite", appetiteName(r)],
+    ["Role", roleName(r)],
+    ["Industry", r.industry],
+    ["Revenue", r.revenue],
+    ["Headcount", r.headcount],
+    ["Business", r.band ? `${r.band}${r.business_pct != null ? ` · ${r.business_pct}%` : ""}` : null],
+    ["Biggest constraint", dimName(r.constraint_dim)],
+    ["AI Leverage Index", r.ai_index != null ? `${r.ai_index} / 100` : null],
+    ["Referred by", r.via],
+    ["Company", r.company],
   ];
   const body = rows.filter(([, v]) => v != null && v !== "")
-    .map(([k, v]) => `<tr><td style="padding:4px 14px 4px 0;color:#6F6A63;font-size:13px;">${k}</td><td style="padding:4px 0;color:#E8E4DC;font-size:13px;font-weight:500;">${String(v)}</td></tr>`).join("");
-  return `<div style="background:#14101A;padding:28px;font-family:system-ui,sans-serif;">
-    <div style="max-width:520px;margin:0 auto;background:#1A1622;border:1px solid rgba(232,228,220,0.1);border-radius:14px;padding:24px;">
-      <div style="color:#7BC9C4;font-size:12px;letter-spacing:.12em;text-transform:uppercase;">AI Leverage Snapshot · New lead</div>
-      <table style="margin-top:14px;border-collapse:collapse;">${body}</table>
-      <div style="margin-top:16px;color:#6F6A63;font-size:11px;">id: ${id}</div>
+    .map(([k, v]) => `<tr><td style="padding:6px 18px 6px 0;color:#6F6A63;font-size:13px;white-space:nowrap;vertical-align:top;">${k}</td><td style="padding:6px 0;color:#E8E4DC;font-size:13px;font-weight:500;">${esc(v)}</td></tr>`).join("");
+  return `<div style="background:#14101A;padding:28px;font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">
+    <div style="max-width:540px;margin:0 auto;background:#1A1622;border:1px solid rgba(232,228,220,0.1);border-radius:16px;overflow:hidden;">
+      <div style="padding:16px 24px;border-bottom:1px solid rgba(232,228,220,0.08);">
+        <span style="color:${accent};font-size:12px;letter-spacing:.18em;font-weight:700;">OVAE</span>
+        <span style="float:right;color:${flagColor};font-size:11px;letter-spacing:.1em;font-weight:600;">${flagText}</span>
+      </div>
+      <div style="padding:22px 24px 6px;">
+        <div style="color:#6F6A63;font-size:11px;letter-spacing:.14em;text-transform:uppercase;">AI Leverage Snapshot</div>
+        <div style="color:#E8E4DC;font-size:23px;font-weight:700;margin:7px 0 3px;">${esc(r.name || r.email || "New lead")}</div>
+        <div style="color:${accent};font-size:15px;font-weight:600;">${esc(idn || "—")}${personaName(r) ? ` <span style="color:#403a48;">·</span> <span style="color:#A39E96;">${esc(personaName(r))}</span>` : ""}</div>
+        ${r.email ? `<div style="margin-top:6px;"><a href="mailto:${esc(r.email)}" style="color:#A39E96;font-size:13px;text-decoration:none;">${esc(r.email)}</a></div>` : ""}
+      </div>
+      <table style="margin:10px 24px 18px;border-collapse:collapse;">${body}</table>
+      <div style="padding:0 24px 22px;">
+        <a href="${site}/snapshot/?id=${id}" style="display:inline-block;background:${accent};color:#08110f;font-size:13px;font-weight:600;text-decoration:none;padding:10px 18px;border-radius:9px;">Open their result →</a>
+      </div>
+      <div style="padding:11px 24px;border-top:1px solid rgba(232,228,220,0.06);color:#544f5c;font-size:10px;font-family:ui-monospace,monospace;">id ${id}</div>
     </div></div>`;
 }
 
@@ -84,7 +127,7 @@ async function emailCT(r: Record<string, any>, id: string) {
   }).catch((e) => console.error("resend:", e));
 }
 
-// email the TAKER their result + level-up prompt + a reply invite.
+// ── Taker result email (to the person) — their level + a level-up prompt + a reply invite ──
 // NOTE: only delivers once ovae.ai is verified at resend.com/domains; until then
 // Resend rejects sends to non-account addresses (caught, never blocks the submit).
 async function emailTaker(row: Record<string, any>, promptText: string, emailLine: string) {
@@ -92,26 +135,32 @@ async function emailTaker(row: Record<string, any>, promptText: string, emailLin
   const from = Deno.env.get("TAKER_FROM") || Deno.env.get("NOTIFY_FROM") || "CT at Ovae <onboarding@resend.dev>";
   const site = Deno.env.get("SITE_URL") || "https://ovae.ai";
   const name = row.name || "there";
-  const level = row.rung_name || "";
-  const style = row.style ? (STYLE[row.style] || row.style) : "";
+  const level = rungName(row);
+  const style = styleName(row);
+  const idn = identity(row);
+  const lvlNum = typeof row.rung === "number" ? ` <span style="color:#6F6A63;font-size:14px;font-weight:400;">level ${row.rung} of 5</span>` : "";
   const url = `${site}/snapshot/?id=${row.id}`;
-  const esc = (t: unknown) => String(t ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const html = `<div style="background:#14101A;padding:28px;font-family:system-ui,sans-serif;color:#E8E4DC;">
-    <div style="max-width:560px;margin:0 auto;line-height:1.6;">
-      <p>Hey ${esc(name)},</p>
-      <p>You finished the whole AI Leverage Snapshot, which most people don't. Here's where you landed:</p>
-      <p style="font-size:18px;margin:18px 0;"><b>Level: ${esc(level)}</b><br/><b>Your style: ${esc(style)}</b></p>
-      ${emailLine ? `<p style="color:#A39E96;">${esc(emailLine)}</p>` : ""}
-      <p>Want the full breakdown — your map, where you stack up, the parts that don't fit in an email? <a href="${url}" style="color:#7BC9C4;">See your full Snapshot &rarr;</a></p>
-      <p>Now the useful part. A score is just a mirror; what moves you is the next move. So we built you a prompt tuned to your level and style. Paste it into Claude or ChatGPT and it meets you where you are and pulls you up a rung.</p>
-      <p style="color:#6F6A63;">Copy everything between the lines:</p>
-      <pre style="white-space:pre-wrap;background:#1A1622;border:1px solid rgba(232,228,220,0.12);border-radius:10px;padding:16px;font-size:13px;line-height:1.5;color:#E8E4DC;">${esc(promptText)}</pre>
-      <p>Paste it in fresh, answer what it asks, and do the first thing it hands back. Ten minutes today beats a saved-for-later tab.</p>
-      <p><b>One real ask:</b> hit reply and tell me one thing you learned, or one thing that surprised you. I read every reply myself.</p>
-      <p>Go run the prompt, then tell me what happened.</p>
-      <p>CT<br/>Ovae</p>
+  const html = `<div style="background:#14101A;padding:28px;font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;color:#E8E4DC;">
+    <div style="max-width:560px;margin:0 auto;">
+      <div style="color:#7BC9C4;font-size:12px;letter-spacing:.18em;font-weight:700;margin-bottom:20px;">OVAE <span style="color:#544f5c;">·</span> <span style="color:#6F6A63;font-weight:600;">AI LEVERAGE SNAPSHOT</span></div>
+      <div style="line-height:1.6;">
+        <p>Hey ${esc(name)},</p>
+        <p>You finished the whole Snapshot — most people bail halfway. Here's where you landed:</p>
+        <div style="background:#1A1622;border:1px solid rgba(123,201,196,0.25);border-radius:12px;padding:18px 20px;margin:18px 0;">
+          <div style="color:#6F6A63;font-size:11px;letter-spacing:.14em;text-transform:uppercase;">Your AI level</div>
+          <div style="color:#E8E4DC;font-size:24px;font-weight:700;margin-top:5px;">${esc(level || "—")}${lvlNum}</div>
+          ${style ? `<div style="color:#7BC9C4;font-size:14px;margin-top:6px;"><b>${esc(style)}</b> — your style with AI (how you work, not a rank)</div>` : ""}
+        </div>
+        ${emailLine ? `<p style="color:#A39E96;">${esc(emailLine)}</p>` : ""}
+        <p>Want the full picture — your spot on the map, where you stack up, the parts that don't fit in an email? <a href="${url}" style="color:#7BC9C4;font-weight:600;">See your full Snapshot &rarr;</a></p>
+        <p>Now the useful part. A level is just a mirror; what moves you is the next move. So here's a prompt tuned to your level and style — paste it into Claude or ChatGPT and it meets you where you are and pulls you up a rung:</p>
+        <pre style="white-space:pre-wrap;background:#1A1622;border:1px solid rgba(232,228,220,0.12);border-radius:10px;padding:16px;font-size:13px;line-height:1.5;color:#E8E4DC;font-family:ui-monospace,SFMono-Regular,monospace;">${esc(promptText)}</pre>
+        <p>Paste it in fresh, answer what it asks, and do the first thing it hands back. Ten minutes today beats a saved-for-later tab.</p>
+        <p><b>One real ask:</b> hit reply and tell me one thing you learned, or one thing that surprised you. I read every reply myself.</p>
+        <p style="margin-top:22px;">— CT<br/><span style="color:#6F6A63;">Ovae</span></p>
+      </div>
     </div></div>`;
-  const subject = `${name}, your AI level: ${style} ${level} (+ the prompt to level up)`.trim();
+  const subject = `${name}, your AI level: ${idn || level}${promptText ? " (+ the prompt to level up)" : ""}`.trim();
   const replyTo = Deno.env.get("NOTIFY_TO") || "ct@ovae.ai";
   await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -124,7 +173,7 @@ async function emailTaker(row: Record<string, any>, promptText: string, emailLin
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
 
-  // GET ?id= -> PII-SAFE public identity for the shareable /u/ page.
+  // GET ?id= -> PII-SAFE public identity for the shareable result page.
   // Never returns name, email, answers, attribution, or the private Index.
   if (req.method === "GET") {
     const id = new URL(req.url).searchParams.get("id");
