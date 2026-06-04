@@ -444,18 +444,14 @@
         point(ICN.target, "Where your business is leaking the most"),
         point(ICN.up, "The one move worth the most, right now")
       ]),
-      el("button", { class: "btn btn-primary btn-block fork-cta", html: (fc.primary || "See my business leverage") + " &nbsp;→", onclick: function () { s.doBusiness = true; go(); } }),
-      el("button", { class: "fork-skip", text: fc.secondary || "Maybe later, just my result", onclick: function () { s.doBusiness = false; go(); } })
+      el("button", { class: "btn btn-primary btn-block fork-cta", html: (fc.primary || "See my business leverage") + " &nbsp;→", onclick: function () { s.doBusiness = true; go(); } })
     ]);
   }
   function renderPersonalReveal(s, go) {
     var a = s.actA;
     var node = revealBody(a, s.role, s.mirror);
     var shareBtn = el("button", { class: "btn btn-primary btn-block", html: "↗ &nbsp;Share my result", onclick: function () { shareResult(s, shareBtn); } });
-    node.appendChild(el("div", { class: "sharecard-wrap" }, [
-      shareBtn,
-      el("button", { class: "btn btn-block", html: "↓ &nbsp;Download my level card", onclick: function () { downloadCard(a); } })
-    ]));
+    node.appendChild(el("div", { class: "sharecard-wrap" }, [shareBtn]));
     node.appendChild(renderForkCard(s, go));
     paint(node, 2, false);
     // make the address bar a real, shareable, DB-backed result URL + remember the owner
