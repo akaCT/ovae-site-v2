@@ -369,7 +369,19 @@
     ]));
     var ff = (C.copy && typeof C.copy.flatteringFact === "function") ? C.copy.flatteringFact(a.rung) : null;
     if (ff) node.appendChild(el("div", { class: "flatter", html: T(ff) }));
-    node.appendChild(el("div", { class: "mapwrap" }, [mapSVG(a)]));
+    var sColor = STYLE_COLOR[a.style] || "#7BC9C4";
+    var ahead;
+    if (a.rung >= 5) ahead = "You're at the summit. From here it's depth — and pulling the level below you up.";
+    else if (a.rung === 4) ahead = "Everything past your dot is your runway — <b>Conductor</b>, the summit, is one step away.";
+    else ahead = "Everything past your dot is your runway — <b>" + RUNGS[a.rung + 1] + "</b> is your next step toward Conductor.";
+    node.appendChild(el("div", { class: "mapwrap" }, [
+      mapSVG(a),
+      el("div", { class: "map-cap", html: "Your spot on the 6-level climb, low to high. " + ahead }),
+      el("div", { class: "map-legend" }, [
+        el("span", { class: "ml-dot", style: "background:" + sColor }),
+        el("span", { class: "ml-txt", html: "<b style=\"color:" + sColor + "\">" + STYLE_NAME[a.style] + "</b> is your <b>style</b> — <i>how</i> you work with AI. A flavor, not a rank." })
+      ])
+    ]));
     if (mirror != null) {
       var expect = { behind: 1, average: 2, ahead: 3, frontier: 5 }[mirror];
       var guessLabel = { behind: "behind most", average: "about average", ahead: "ahead of most", frontier: "way ahead" }[mirror];
@@ -666,36 +678,66 @@
   // ============================================================
   // 2D MAP + SHARE CARD
   // ============================================================
+  // Diagonal "ascent track": rung is the single spectrum (bottom-left 0 → top-right 5,
+  // Conductor = glowing summit). Style is the YOU dot's COLOR, never a vertical rank —
+  // this is what fixes the old scatter map's "up = better?" / "three dots?" confusion.
   function mapSVG(a) {
-    var W = 520, H = 280, padL = 44, padR = 24, padT = 28, padB = 44;
-    var x = function (r) { return padL + (r / 5) * (W - padL - padR); };
-    var lanes = { centaur: padT + 30, cyborg: H / 2, self: H - padB - 24 };
+    var W = 520, H = 300, padL = 56, padR = 70, padT = 46, padB = 56;
+    var sc = STYLE_COLOR[a.style] || "#7BC9C4";
+    var xr = function (r) { return padL + (r / 5) * (W - padL - padR); };
+    var yr = function (r) { return (H - padB) - (r / 5) * (H - padT - padB); };
     var ns = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(ns, "svg");
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
-    function add(tag, attrs, txt) { var e = document.createElementNS(ns, tag); Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); }); if (txt != null) e.textContent = txt; svg.appendChild(e); return e; }
-    // axis labels
+    svg.setAttribute("class", "ascent");
+    function mk(parent, tag, attrs, txt) { var e = document.createElementNS(ns, tag); Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); }); if (txt != null) e.textContent = txt; parent.appendChild(e); return e; }
+    var add = function (tag, attrs, txt) { return mk(svg, tag, attrs, txt); };
+    function pts(a0, a1) { var s = []; for (var r = a0; r <= a1; r++) s.push(xr(r) + "," + yr(r)); return s.join(" "); }
+
+    // defs: diagonal track gradient (dim → your style color) + radial summit glow
+    var defs = add("defs", {});
+    var lg = mk(defs, "linearGradient", { id: "trkGrad", x1: "0", y1: "1", x2: "1", y2: "0" });
+    mk(lg, "stop", { offset: "0", "stop-color": "#7BC9C4", "stop-opacity": "0.5" });
+    mk(lg, "stop", { offset: "1", "stop-color": sc, "stop-opacity": "1" });
+    var rg = mk(defs, "radialGradient", { id: "smtGlow" });
+    mk(rg, "stop", { offset: "0", "stop-color": "#7BC9C4", "stop-opacity": "0.55" });
+    mk(rg, "stop", { offset: "1", "stop-color": "#7BC9C4", "stop-opacity": "0" });
+
+    // summit hotspot behind Conductor (top-right)
+    add("circle", { cx: xr(5), cy: yr(5), r: 60, fill: "url(#smtGlow)", "class": "map-summit" });
+
+    // full faint track, then the runway ahead, then the bright completed climb
+    add("polyline", { points: pts(0, 5), fill: "none", stroke: "rgba(232,228,220,0.13)", "stroke-width": "3", "stroke-linecap": "round", "stroke-linejoin": "round" });
+    if (a.rung < 5) add("polyline", { points: pts(a.rung, 5), fill: "none", stroke: "rgba(232,228,220,0.24)", "stroke-width": "3", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-dasharray": "1 9" });
+    if (a.rung > 0) {
+      add("polyline", { points: pts(0, a.rung), fill: "none", stroke: sc, "stroke-opacity": "0.16", "stroke-width": "9", "stroke-linecap": "round", "stroke-linejoin": "round" });
+      add("polyline", { points: pts(0, a.rung), fill: "none", stroke: "url(#trkGrad)", "stroke-width": "4", "stroke-linecap": "round", "stroke-linejoin": "round", "class": "trk-done" });
+    }
+
+    // direction cue in the open lower-right triangle
+    add("text", { x: xr(3.5), y: yr(0) - 2, fill: "#6F6A63", "font-size": "10", "font-family": "DM Mono, monospace", "text-anchor": "middle", "letter-spacing": "0.08em" }, "MORE LEVERAGE ↗");
+
+    // milestone / runway nodes + rung-name labels (YOU drawn separately, on top)
     RUNGS.forEach(function (nm, r) {
-      add("line", { x1: x(r), y1: padT, x2: x(r), y2: H - padB, stroke: "rgba(232,228,220,0.05)" });
-      add("text", { x: x(r), y: H - padB + 18, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace", "text-anchor": "middle" }, String(r));
+      if (r === a.rung) return;
+      var cx = xr(r), cy = yr(r), isTop = r === 5, passed = r < a.rung;
+      if (isTop) {
+        add("circle", { cx: cx, cy: cy, r: 8, fill: "none", stroke: "#7BC9C4", "stroke-width": "2", "class": "map-summit-node" });
+        add("circle", { cx: cx, cy: cy, r: 3, fill: "#7BC9C4" });
+      } else if (passed) {
+        add("circle", { cx: cx, cy: cy, r: 4.5, fill: sc, "fill-opacity": "0.6" });
+      } else {
+        add("circle", { cx: cx, cy: cy, r: 4.5, fill: "#1A1622", stroke: "rgba(232,228,220,0.28)", "stroke-width": "1.5" });
+      }
+      add("text", { x: cx, y: cy + 20, fill: isTop ? "#7BC9C4" : "#6F6A63", "font-size": "9.5", "font-family": "DM Mono, monospace", "text-anchor": "middle", "font-weight": isTop ? "600" : "400" }, nm);
     });
-    add("text", { x: padL, y: padT - 12, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace" }, "SEARCHER");
-    add("text", { x: W - padR, y: padT - 12, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace", "text-anchor": "end" }, "CONDUCTOR");
-    Object.keys(lanes).forEach(function (st) {
-      add("text", { x: 6, y: lanes[st] + 3, fill: STYLE_COLOR[st], "font-size": "8.5", "font-family": "DM Mono, monospace" }, STYLE_ABBR[st] || st.toUpperCase());
-    });
-    // faint archetype dots
-    [[1, "cyborg"], [2, "centaur"], [3, "self"], [4, "cyborg"], [5, "self"]].forEach(function (d) {
-      if (d[0] === a.rung && d[1] === a.style) return;
-      add("circle", { cx: x(d[0]), cy: lanes[d[1]], r: 4, fill: STYLE_COLOR[d[1]], opacity: "0.18" });
-    });
-    // opportunity arrow (empty region ahead)
-    if (a.rung < 5) add("text", { x: x(Math.min(5, a.rung + 1)), y: lanes[a.style] - 14, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace", "text-anchor": "middle" }, "→ next");
-    // you
-    var cx = x(a.rung), cy = lanes[a.style];
-    add("circle", { cx: cx, cy: cy, r: 13, fill: STYLE_COLOR[a.style], opacity: "0.22", "class": "you-glow" });
-    add("circle", { cx: cx, cy: cy, r: 7, fill: STYLE_COLOR[a.style], "class": "you-dot" });
-    add("text", { x: cx, y: cy - 20, fill: "#E8E4DC", "font-size": "12", "font-weight": "600", "font-family": "DM Sans, sans-serif", "text-anchor": "middle" }, "YOU");
+
+    // YOU (on top): glow ring + solid dot in style color, "YOU" above, rung name below
+    var ux = xr(a.rung), uy = yr(a.rung);
+    add("circle", { cx: ux, cy: uy, r: 15, fill: sc, opacity: "0.22", "class": "you-glow" });
+    add("circle", { cx: ux, cy: uy, r: 8, fill: sc, "class": "you-dot" });
+    add("text", { x: ux, y: uy - 19, fill: "#E8E4DC", "font-size": "12", "font-weight": "700", "font-family": "DM Sans, sans-serif", "text-anchor": "middle" }, "YOU");
+    add("text", { x: ux, y: uy + 20, fill: sc, "font-size": "9.5", "font-weight": "600", "font-family": "DM Mono, monospace", "text-anchor": "middle" }, a.rungName);
     return svg;
   }
 
@@ -760,16 +802,28 @@
     g.fillStyle = "#E8E4DC"; g.fillText(a.rungName, 80, 540);
     g.fillStyle = "#A39E96"; g.font = "34px 'DM Sans', sans-serif";
     g.fillText("Level " + a.rung + " of 5  ·  " + STYLE_NAME[a.style] + " style", 80, 610);
-    // mini ladder
-    var ly = 820, lx0 = 80, lw = w - 160;
-    g.strokeStyle = "rgba(232,228,220,0.12)"; g.lineWidth = 3; g.beginPath(); g.moveTo(lx0, ly); g.lineTo(lx0 + lw, ly); g.stroke();
-    for (var r = 0; r <= 5; r++) {
-      var px = lx0 + (r / 5) * lw;
-      g.fillStyle = r === a.rung ? STYLE_COLOR[a.style] : "rgba(232,228,220,0.25)";
-      g.beginPath(); g.arc(px, ly, r === a.rung ? 22 : 9, 0, 7); g.fill();
-      g.fillStyle = "#6F6A63"; g.font = "22px 'DM Mono', monospace"; g.textAlign = "center"; g.fillText(String(r), px, ly + 60); g.textAlign = "left";
+    // diagonal ascent ladder (matches the in-flow map): rung 0 bottom-left → 5 top-right
+    var lx0 = 120, lw = 840, lyB = 1060, climb = 300;
+    var cx = function (r) { return lx0 + (r / 5) * lw; };
+    var cy = function (r) { return lyB - (r / 5) * climb; };
+    g.lineCap = "round"; g.lineJoin = "round";
+    g.strokeStyle = "rgba(232,228,220,0.14)"; g.lineWidth = 5;
+    g.beginPath(); g.moveTo(cx(0), cy(0)); for (var r = 1; r <= 5; r++) g.lineTo(cx(r), cy(r)); g.stroke();
+    if (a.rung > 0) { g.strokeStyle = STYLE_COLOR[a.style]; g.lineWidth = 8; g.beginPath(); g.moveTo(cx(0), cy(0)); for (r = 1; r <= a.rung; r++) g.lineTo(cx(r), cy(r)); g.stroke(); }
+    g.textAlign = "center";
+    for (r = 0; r <= 5; r++) {
+      var nx = cx(r), nyy = cy(r), you = r === a.rung, top = r === 5;
+      if (you) { g.fillStyle = STYLE_COLOR[a.style]; g.beginPath(); g.arc(nx, nyy, 26, 0, 7); g.fill(); }
+      else if (r < a.rung) { g.globalAlpha = 0.65; g.fillStyle = STYLE_COLOR[a.style]; g.beginPath(); g.arc(nx, nyy, 11, 0, 7); g.fill(); g.globalAlpha = 1; }
+      else if (top) { g.strokeStyle = "#7BC9C4"; g.lineWidth = 4; g.beginPath(); g.arc(nx, nyy, 15, 0, 7); g.stroke(); g.fillStyle = "#7BC9C4"; g.beginPath(); g.arc(nx, nyy, 6, 0, 7); g.fill(); }
+      else { g.fillStyle = "rgba(232,228,220,0.3)"; g.beginPath(); g.arc(nx, nyy, 11, 0, 7); g.fill(); }
+      g.fillStyle = you ? STYLE_COLOR[a.style] : (top ? "#7BC9C4" : "#6F6A63");
+      g.font = (you || top) ? "600 24px 'DM Mono', monospace" : "22px 'DM Mono', monospace";
+      g.fillText(RUNGS[r], nx, nyy + (you ? 64 : 46));
     }
-    g.fillStyle = "#6F6A63"; g.font = "24px 'DM Mono', monospace"; g.fillText("SEARCHER", lx0, ly + 110); g.textAlign = "right"; g.fillText("CONDUCTOR", lx0 + lw, ly + 110); g.textAlign = "left";
+    g.fillStyle = "#E8E4DC"; g.font = "700 28px 'DM Sans', sans-serif"; g.fillText("YOU", cx(a.rung), cy(a.rung) - 44);
+    g.fillStyle = "#6F6A63"; g.font = "22px 'DM Mono', monospace"; g.fillText("MORE LEVERAGE ↗", cx(3.4), cy(0) + 4);
+    g.textAlign = "left";
     g.fillStyle = "#E8E4DC"; g.font = "30px 'DM Sans', sans-serif"; g.fillText("What level are you? → ovae.ai/snapshot", 80, h - 90);
     var url = cv.toDataURL("image/png");
     var link = document.createElement("a"); link.href = url; link.download = "ai-you-" + a.style + "-" + a.rungName.toLowerCase() + ".png"; link.click();
