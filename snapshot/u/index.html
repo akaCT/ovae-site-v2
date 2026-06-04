@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>My AI level — The AI Leverage Snapshot | Ovae</title>
+  <meta name="description" content="My result on the AI Leverage Snapshot. AI has 6 levels — find out which one you are." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="My AI level — what's yours?" />
+  <meta property="og:description" content="AI has 6 levels. Find out which one you are in 90 seconds." />
+  <meta property="og:image" content="https://ovae.ai/snapshot/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://ovae.ai/snapshot/og.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/snapshot.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <a class="wordmark" href="https://ovae.ai">Ovae</a>
+      <span class="topbar-meta">The AI Leverage Snapshot</span>
+    </header>
+    <main id="u"><div class="stage"><p class="muted center">Loading…</p></div></main>
+  </div>
+
+  <script src="../data/content.js"></script>
+  <script src="../js/score.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    var FN = "https://muguotipixphthfxjssu.supabase.co/functions/v1/snapshot-submit";
+    var C = window.SNAP_CONTENT || {};
+    var RUNGS = (window.SnapScore && window.SnapScore.RUNG_NAMES) || ["Unaware","Searcher","Drafter","Operator","Builder","Conductor"];
+    var STYLE_NAME = { centaur: "Centaur", cyborg: "Cyborg", self: "Self-Automator" };
+    var STYLE_COLOR = { centaur: "#7BC9C4", cyborg: "#C9A77B", self: "#C97D5C" };
+    var mount = document.getElementById("u");
+
+    function el(t, a, k) { var n = document.createElement(t); if (a) Object.keys(a).forEach(function (x) { if (x === "class") n.className = a[x]; else if (x === "html") n.innerHTML = a[x]; else if (x === "text") n.textContent = a[x]; else n.setAttribute(x, a[x]); }); (k || []).forEach(function (c) { if (c != null) n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); }); return n; }
+
+    function mapSVG(rung, style) {
+      var ns = "http://www.w3.org/2000/svg", W = 520, H = 280, padL = 44, padR = 24, padT = 28, padB = 44;
+      var x = function (r) { return padL + (r / 5) * (W - padL - padR); };
+      var lanes = { centaur: padT + 30, cyborg: H / 2, self: H - padB - 24 };
+      var svg = document.createElementNS(ns, "svg"); svg.setAttribute("viewBox", "0 0 " + W + " " + H); svg.style.width = "100%"; svg.style.height = "auto";
+      function add(tag, at, txt) { var e = document.createElementNS(ns, tag); Object.keys(at).forEach(function (k) { e.setAttribute(k, at[k]); }); if (txt != null) e.textContent = txt; svg.appendChild(e); return e; }
+      for (var r = 0; r <= 5; r++) { add("line", { x1: x(r), y1: padT, x2: x(r), y2: H - padB, stroke: "rgba(232,228,220,0.05)" }); add("text", { x: x(r), y: H - padB + 18, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace", "text-anchor": "middle" }, String(r)); }
+      add("text", { x: padL, y: padT - 12, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace" }, "SEARCHER");
+      add("text", { x: W - padR, y: padT - 12, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace", "text-anchor": "end" }, "CONDUCTOR");
+      Object.keys(lanes).forEach(function (st) { add("text", { x: 6, y: lanes[st] + 3, fill: STYLE_COLOR[st], "font-size": "8.5", "font-family": "DM Mono, monospace" }, STYLE_NAME[st].toUpperCase().slice(0, 7)); });
+      [[1,"cyborg"],[2,"centaur"],[3,"self"],[4,"cyborg"],[5,"self"]].forEach(function (d) { if (d[0] === rung && d[1] === style) return; add("circle", { cx: x(d[0]), cy: lanes[d[1]], r: 4, fill: STYLE_COLOR[d[1]], opacity: "0.18" }); });
+      if (rung < 5) add("text", { x: x(Math.min(5, rung + 1)), y: lanes[style] - 14, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace", "text-anchor": "middle" }, "→ next");
+      var cx = x(rung), cy = lanes[style] || H / 2;
+      add("circle", { cx: cx, cy: cy, r: 13, fill: STYLE_COLOR[style] || "#7BC9C4", opacity: "0.22" });
+      add("circle", { cx: cx, cy: cy, r: 7, fill: STYLE_COLOR[style] || "#7BC9C4" });
+      add("text", { x: cx, y: cy - 20, fill: "#E8E4DC", "font-size": "12", "font-weight": "600", "font-family": "DM Sans, sans-serif", "text-anchor": "middle" }, "THEM");
+      return svg;
+    }
+
+    function render(d) {
+      var rung = d.rung || 0, style = d.style || "cyborg";
+      var rc = (C.copy && C.copy.rung && C.copy.rung[rung]) || {};
+      var stc = (C.copy && C.copy.style && C.copy.style[style]) || {};
+      var node = el("div", { class: "reveal" }, [
+        el("div", { class: "identity-drop" }, [
+          el("div", { class: "tribe-label", text: "AI level " + rung + " of 5 · " + (STYLE_NAME[style] || style) }),
+          el("div", { class: "id-name", text: (STYLE_NAME[style] || style) + " " + (RUNGS[rung] || "") }),
+          el("div", { class: "id-blurb", text: (stc.blurb || rc.blurb || "") })
+        ]),
+        el("div", { class: "mapwrap" }, [mapSVG(rung, style)]),
+        el("div", { class: "cta-card" }, [
+          el("div", { class: "cc-h", text: "AI has 6 levels. Which one are you?" }),
+          el("div", { class: "cc-b", text: "Find your level in 90 seconds — plus the one habit that gets you to the next." }),
+          el("a", { class: "btn btn-primary", href: "/snapshot/", html: "Find my level &nbsp;→" })
+        ]),
+        el("div", { class: "footer", html: "The AI Leverage Snapshot · <a href='https://ovae.ai'>Ovae</a>" })
+      ]);
+      mount.innerHTML = ""; mount.appendChild(el("div", { class: "stage" }, [node]));
+    }
+
+    function fail(msg) { mount.innerHTML = ""; mount.appendChild(el("div", { class: "stage" }, [el("div", { class: "reveal center" }, [el("div", { class: "identity-drop" }, [el("div", { class: "id-name", text: "AI has 6 levels." }), el("div", { class: "id-blurb", text: msg || "This result isn't available — but you can find yours." })]), el("div", { class: "btn-row" }, [el("a", { class: "btn btn-primary btn-block", href: "/snapshot/", html: "Find my level &nbsp;→" })])])])); }
+
+    var id = new URLSearchParams(location.search).get("id");
+    if (!id) { fail(); return; }
+    fetch(FN + "?id=" + encodeURIComponent(id)).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d && d.rung != null) render(d); else fail(); })
+      .catch(function () { fail(); });
+  })();
+  </script>
+</body>
+</html>

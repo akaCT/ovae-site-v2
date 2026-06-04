@@ -41,23 +41,27 @@
   function scoreActA(a) {
     a = a || {};
     var picks = (a.picks || []).filter(Boolean);
-    var claimed = picks.length ? Math.max.apply(null, picks.map(function (p) { return clampRung(p.rung); })) : 0;
+    var confirmers = (a.confirmers || []).filter(Boolean);
+    var scenarioMax = picks.length ? Math.max.apply(null, picks.map(function (p) { return clampRung(p.rung); })) : 0;
+    // the matching confirmer is the more deliberate read — it can raise or lower the scenario claim
+    var claimed = confirmers.length ? Math.max.apply(null, confirmers.map(function (p) { return clampRung(p.rung); })) : scenarioMax;
 
     // explicit "barely use it" floor
-    if (a.barely && claimed <= 1) claimed = picks.some(function (p) { return clampRung(p.rung) >= 1; }) ? 1 : 0;
+    if (a.barely && claimed <= 1) claimed = scenarioMax >= 1 ? 1 : 0;
 
-    // Guttman ceiling: zero/low unsupervised autonomy can't sit at Builder/Orchestrator
+    // Guttman ceiling: zero/low unsupervised autonomy can't sit at Builder/Conductor
     var cap = ceilingCap(a.ceiling);
     var rung = Math.min(claimed, cap);
     rung = clampRung(rung);
 
-    // style: dominant tag across picks, tie-break toward the highest-rung pick
+    // style: dominant tag across all picks, tie-break toward the highest-rung pick
+    var allForStyle = picks.concat(confirmers);
     var tally = { centaur: 0, cyborg: 0, self: 0 };
-    picks.forEach(function (p) { if (p.style && tally.hasOwnProperty(p.style)) tally[p.style] += 1; });
+    allForStyle.forEach(function (p) { if (p.style && tally.hasOwnProperty(p.style)) tally[p.style] += 1; });
     var style = "cyborg", best = -1;
     Object.keys(tally).forEach(function (k) { if (tally[k] > best) { best = tally[k]; style = k; } });
     if (best <= 0) {
-      var top = picks.slice().sort(function (x, y) { return clampRung(y.rung) - clampRung(x.rung); })[0];
+      var top = allForStyle.slice().sort(function (x, y) { return clampRung(y.rung) - clampRung(x.rung); })[0];
       if (top && top.style) style = top.style;
     }
 

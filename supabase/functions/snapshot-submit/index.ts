@@ -86,7 +86,24 @@ async function emailCT(r: Record<string, any>, id: string) {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
-  if (req.method !== "POST") return json({ error: "POST only" }, 405);
+
+  // GET ?id= -> PII-SAFE public identity for the shareable /u/ page.
+  // Never returns name, email, answers, attribution, or the private Index.
+  if (req.method === "GET") {
+    const id = new URL(req.url).searchParams.get("id");
+    if (!id) return json({ error: "id required" }, 400);
+    try {
+      const rows = await sb("GET", `snapshot_submissions?id=eq.${encodeURIComponent(id)}&select=rung,rung_name,style,persona,band,industry,role`);
+      const r = Array.isArray(rows) && rows[0] ? rows[0] : null;
+      if (!r) return json({ error: "not found" }, 404);
+      return json({
+        rung: r.rung, rung_name: r.rung_name, style: r.style,
+        persona: r.persona, band: r.band, industry: r.industry, role: r.role,
+      });
+    } catch (e) { return json({ error: String(e) }, 500); }
+  }
+
+  if (req.method !== "POST") return json({ error: "POST or GET" }, 405);
   try {
     const b = await req.json().catch(() => ({}));
     if (b.id) {

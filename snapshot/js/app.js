@@ -157,11 +157,16 @@
     // adaptive confirmers
     (C.confirmers || []).forEach(function (cf) {
       steps.push({
-        when: function (s) { try { return cf.showIf ? !!cf.showIf(s) : true; } catch (e) { return true; } },
+        when: function (s) {
+          // confirmers run before scoring, so expose a provisional rung (max claimed pick)
+          var pr = s.picks.length ? Math.max.apply(null, s.picks.map(function (p) { return p.rung || 0; })) : 0;
+          var ss = { picks: s.picks, role: s.role, rung: pr, style: (s.picks[0] || {}).style };
+          try { return cf.showIf ? !!cf.showIf(ss) : true; } catch (e) { return true; }
+        },
         render: function (s, go) {
           paint(el("div", {}, [
             el("h2", { class: "q-stem", text: cf.stem }),
-            optionList(cf.options, function (o) { s.confirmerPicks.push({ rung: o.rung, style: o.style }); s.picks.push({ rung: o.rung, style: o.style }); go(); })
+            optionList(cf.options, function (o) { s.confirmerPicks.push({ rung: o.rung, style: o.style }); go(); })
           ]), 1, true);
         }
       });
@@ -200,7 +205,7 @@
 
     // EMAIL GATE — universal. Compute personal score, capture EVERY completer here.
     steps.push({ when: null, render: function (s, go) {
-      if (!s.actA) s.actA = Score.scoreActA({ picks: s.picks, ceiling: s.ceiling, barely: s.barely });
+      if (!s.actA) s.actA = Score.scoreActA({ picks: s.picks, confirmers: s.confirmerPicks, ceiling: s.ceiling, barely: s.barely });
       renderGate(s, go);
     }});
 
@@ -307,9 +312,11 @@
       ]));
     }
 
-    // share + fork
+    // share + download
+    var shareBtn = el("button", { class: "btn btn-primary btn-block", html: "↗ &nbsp;Share my result", onclick: function () { shareResult(s, shareBtn); } });
     node.appendChild(el("div", { class: "sharecard-wrap" }, [
-      el("button", { class: "btn btn-block", html: "↓ &nbsp;Download my AI level card", onclick: function () { downloadCard(a); } })
+      shareBtn,
+      el("button", { class: "btn btn-block", html: "↓ &nbsp;Download my level card", onclick: function () { downloadCard(a); } })
     ]));
     var ownerish = s.role === "owner" || s.role === "team";
     node.appendChild(el("div", { class: "btn-row" }, [
@@ -488,6 +495,17 @@
     add("circle", { cx: cx, cy: cy, r: 7, fill: STYLE_COLOR[a.style] });
     add("text", { x: cx, y: cy - 20, fill: "#E8E4DC", "font-size": "12", "font-weight": "600", "font-family": "DM Sans, sans-serif", "text-anchor": "middle" }, "YOU");
     return svg;
+  }
+
+  function shareResult(s, btn) {
+    Promise.resolve(s._idP).then(function () {
+      if (!s.id) { if (btn) btn.innerHTML = "Link not ready — tap again"; return; }
+      var url = location.origin + "/snapshot/u/?id=" + s.id;
+      var text = "I'm a " + STYLE_NAME[s.actA.style] + " " + s.actA.rungName + " on the AI Leverage Snapshot. AI has 6 levels — which one are you?";
+      if (navigator.share) { navigator.share({ title: "My AI level", text: text, url: url }).catch(function () {}); }
+      else if (navigator.clipboard) { navigator.clipboard.writeText(url); if (btn) btn.innerHTML = "✓ &nbsp;Link copied"; }
+      else { window.prompt("Copy your result link:", url); }
+    });
   }
 
   function downloadCard(a) {
