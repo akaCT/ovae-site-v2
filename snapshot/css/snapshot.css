@@ -41,6 +41,11 @@ body::after{
 .wordmark::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px var(--accent-dim); }
 .topbar-meta{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.14em; color:var(--ink-mute); text-transform:uppercase; }
 
+/* back / forward nav */
+.navrow{ display:flex; justify-content:space-between; align-items:center; padding:14px 0 2px; min-height:20px; }
+.navbtn{ background:none; border:none; color:var(--ink-mute); font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; padding:6px 2px; transition:color .15s var(--ease); }
+.navbtn:hover{ color:var(--accent); }
+
 /* progress — section dots, never a raw counter */
 .progress{ display:flex; gap:6px; align-items:center; padding:10px 0 2px; }
 .progress .dot{ height:3px; flex:1; border-radius:2px; background:var(--rule); overflow:hidden; }

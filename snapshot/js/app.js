@@ -20,6 +20,11 @@
     attribution: {}
   };
   var app, stepIdx = 0, steps = [];
+  // back/forward navigation via state snapshots
+  var backStack = [], fwdStack = [];
+  function clone(o) { try { return JSON.parse(JSON.stringify(o)); } catch (e) { return o; } }
+  // lead submission tracked OUTSIDE S so it survives snapshot restore (no dup inserts on back)
+  var sub = { done: false, id: null, idP: null };
 
   // ---- dom helpers ----
   function el(tag, attrs, kids) {
@@ -79,9 +84,18 @@
   }
 
   // ---- screen scaffold ----
+  function navBar() {
+    var canBack = navIdx > 0, canFwd = navIdx < timeline.length - 1;
+    if (!canBack && !canFwd) return null;
+    return el("div", { class: "navrow" }, [
+      canBack ? el("button", { class: "navbtn", html: "← Back", onclick: back }) : el("span", {}, []),
+      canFwd ? el("button", { class: "navbtn", html: "Forward →", onclick: forward }) : el("span", {}, [])
+    ]);
+  }
   function paint(node, section, withCard) {
     clear(app);
     var inner = el("div", { class: "screen" }, []);
+    var nav = navBar(); if (nav) inner.appendChild(nav);
     if (section) inner.appendChild(progress(section));
     if (withCard) inner.appendChild(renderCard());
     inner.appendChild(node);
@@ -89,12 +103,33 @@
     app.appendChild(stage);
     window.scrollTo(0, 0);
   }
-  function next() { stepIdx++; run(); }
+  // timeline of {idx, snap} positions; navIdx points at the current one.
+  var timeline = [], navIdx = -1;
+  function hashFor(idx) { var n = steps[idx] && steps[idx].name; return "#" + (n || ("step-" + (navIdx + 1))); }
+  function renderCurrent() { steps[stepIdx].render(S, next); }
+
+  // forward navigation: record a new timeline position + browser history entry
   function run() {
     while (stepIdx < steps.length && steps[stepIdx].when && !steps[stepIdx].when(S)) stepIdx++;
     if (stepIdx >= steps.length) return;
-    steps[stepIdx].render(S, next);
+    navIdx++;
+    timeline = timeline.slice(0, navIdx);
+    timeline.push({ idx: stepIdx, snap: clone(S) });
+    try { history.pushState({ seq: navIdx }, "", hashFor(stepIdx)); } catch (e) {}
+    renderCurrent();
   }
+  function next() { stepIdx++; run(); }
+
+  // restore a timeline position (state + step) without recording new history
+  function goTo(seq) {
+    if (seq < 0 || seq >= timeline.length) return;
+    navIdx = seq;
+    var e = timeline[seq];
+    S = clone(e.snap); stepIdx = e.idx;
+    renderCurrent();
+  }
+  function back() { if (navIdx > 0) history.back(); }
+  function forward() { if (navIdx < timeline.length - 1) history.forward(); }
 
   // ---- option pickers ----
   function optionList(opts, onPick, getLabel) {
@@ -325,6 +360,7 @@
     ]));
 
     paint(node, 2, false);
+    try { history.replaceState({ seq: navIdx }, "", "#my-result"); } catch (e) {}
   }
 
   function renderGate(s, go) {
@@ -340,7 +376,7 @@
         el("button", { class: "btn btn-primary btn-block", html: "Show me my level &nbsp;→", onclick: function () {
           if (!nameI.value.trim() || !/.+@.+\..+/.test(emailI.value)) { err.textContent = "A first name and a valid email, please."; return; }
           s.name = nameI.value.trim(); s.email = emailI.value.trim();
-          submitLead(s);
+          captureLead(s);
           go();
         }}),
         err,
@@ -435,6 +471,7 @@
 
     node.appendChild(el("div", { class: "footer", html: "Ovae — Latin, plural of <i>ovum</i>: eggs, origins. &nbsp;·&nbsp; <a href='/snapshot/'>Restart ↺</a>" }));
     paint(node, 3, false);
+    try { history.replaceState({ seq: navIdx }, "", "#my-business"); } catch (e) {}
   }
 
   function ctaFor(s) {
@@ -498,13 +535,25 @@
   }
 
   function shareResult(s, btn) {
-    Promise.resolve(s._idP).then(function () {
-      if (!s.id) { if (btn) btn.innerHTML = "Link not ready — tap again"; return; }
-      var url = location.origin + "/snapshot/u/?id=" + s.id;
+    if (btn) btn.innerHTML = "Preparing your link…";
+    Promise.resolve(sub.idP).then(function () {
+      var origin = location.origin;
+      // insert failed / no id — share the generic invite rather than a broken link
+      if (!sub.id) {
+        var g = origin + "/snapshot/";
+        if (navigator.clipboard) navigator.clipboard.writeText(g);
+        if (btn) btn.innerHTML = "✓ &nbsp;Invite link copied";
+        return;
+      }
+      var url = origin + "/snapshot/u/?id=" + sub.id;
       var text = "I'm a " + STYLE_NAME[s.actA.style] + " " + s.actA.rungName + " on the AI Leverage Snapshot. AI has 6 levels — which one are you?";
-      if (navigator.share) { navigator.share({ title: "My AI level", text: text, url: url }).catch(function () {}); }
-      else if (navigator.clipboard) { navigator.clipboard.writeText(url); if (btn) btn.innerHTML = "✓ &nbsp;Link copied"; }
-      else { window.prompt("Copy your result link:", url); }
+      if (navigator.share) {
+        navigator.share({ title: "My AI level", text: text, url: url })
+          .then(function () { if (btn) btn.innerHTML = "↗ &nbsp;Share my result"; })
+          .catch(function () { if (navigator.clipboard) navigator.clipboard.writeText(url); if (btn) btn.innerHTML = "✓ &nbsp;Link copied"; });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(function () { if (btn) btn.innerHTML = "✓ &nbsp;Link copied — paste to share"; });
+      } else { window.prompt("Copy your result link:", url); }
     });
   }
 
@@ -594,21 +643,23 @@
         .then(function (r) { return r.json(); }).catch(function () { return null; });
     } catch (e) { return Promise.resolve(null); }
   }
-  // insert the lead the instant email is given; remember the id-promise
+  // insert the lead the instant email is given; remember the id-promise.
+  // `sub` is module-level so it survives back/forward snapshot restores — no dup inserts.
   function submitLead(s) {
-    if (s.submitted || !s.email) return;
-    s.submitted = true;
-    s._idP = post(buildPayload(s)).then(function (j) { if (j && j.id) s.id = j.id; return s.id; });
+    if (sub.done || !s.email) return;
+    sub.done = true;
+    sub.idP = post(buildPayload(s)).then(function (j) { if (j && j.id) sub.id = j.id; return sub.id; });
   }
-  // enrich the SAME row as they go deeper — always wait for the insert's id first
-  // so a fast user can never spawn a duplicate or lose the patch.
+  // enrich the SAME row as they go deeper — always wait for the insert's id first.
   function updateLead(s) {
     if (!s.email) return;
-    if (!s.submitted) { submitLead(s); return; }
-    Promise.resolve(s._idP).then(function () {
-      var p = buildPayload(s); if (s.id) p.id = s.id; post(p);
+    if (!sub.done) { submitLead(s); return; }
+    Promise.resolve(sub.idP).then(function () {
+      var p = buildPayload(s); if (sub.id) p.id = sub.id; post(p);
     });
   }
+  // gate calls this: insert first time, patch on any later pass (e.g. after going Back)
+  function captureLead(s) { if (!sub.done) submitLead(s); else updateLead(s); }
   function deriveFlag(s) {
     var hot = s.appetite === "build_now" || s.appetite === "want_help";
     var bizLow = s.actB && s.actB.pct < 50;
@@ -639,7 +690,11 @@
     S.attribution = parseAttribution();
     if (!C.scenarios) { app.innerHTML = "<div class='stage'><p class='muted center'>Loading…</p></div>"; return; }
     try { if (Score && Score.selftest) Score.selftest(); } catch (e) {}
-    buildSteps(); stepIdx = 0; run();
+    window.addEventListener("popstate", function (e) {
+      var seq = (e.state && typeof e.state.seq === "number") ? e.state.seq : 0;
+      goTo(seq);
+    });
+    buildSteps(); stepIdx = 0; timeline = []; navIdx = -1; run();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();
