@@ -431,10 +431,33 @@
       el("button", { class: "btn btn-ghost btn-block", text: fc.secondary || "I'm good with my result", onclick: function () { s.doBusiness = false; go(); } })
     ]));
     paint(node, 2, false);
-    // make the address bar a real, shareable, DB-backed result URL
+    // make the address bar a real, shareable, DB-backed result URL + remember the owner
     Promise.resolve(sub.idP).then(function () {
-      if (sub.id) { try { history.replaceState({ seq: navIdx }, "", "?id=" + sub.id); } catch (e) {} }
+      if (!sub.id) return;
+      try { history.replaceState({ seq: navIdx }, "", "?id=" + sub.id); } catch (e) {}
+      try {
+        localStorage.setItem("snap_owner", JSON.stringify({
+          id: sub.id, rung: a.rung, rungName: a.rungName, style: a.style, index: a.index,
+          role: s.role, industry: s.industry, name: s.name, email: s.email, mirror: s.mirror
+        }));
+      } catch (e) {}
     });
+  }
+
+  // owner re-opens their own /?id= link: restore their result and drop them on the
+  // reveal WITH the business path (not the visitor "find your level" view).
+  function restoreOwnerSession(o) {
+    S.actA = { rung: o.rung, rungName: o.rungName || (Score.RUNG_NAMES[o.rung] || ""), style: o.style || "cyborg", index: o.index || 0 };
+    S.role = o.role || "owner"; S.industry = o.industry || "generic";
+    S.name = o.name || ""; S.email = o.email || ""; S.mirror = (o.mirror != null ? o.mirror : null);
+    sub.done = true; sub.id = o.id; sub.idP = Promise.resolve(o.id);
+    window.addEventListener("popstate", function (e) {
+      var seq = (e.state && typeof e.state.seq === "number") ? e.state.seq : 0; goTo(seq);
+    });
+    buildSteps();
+    stepIdx = revealIdx; navIdx = 0; timeline = [{ idx: revealIdx, snap: clone(S) }];
+    try { history.replaceState({ seq: 0 }, "", "?id=" + o.id); } catch (e) {}
+    renderCurrent();
   }
 
   // /snapshot/?id=<id> — fetch the public identity and render a read-only result
@@ -833,9 +856,13 @@
     app = document.getElementById("app");
     if (!app) return;
     S.attribution = parseAttribution();
-    // shared result link: /snapshot/?id=<uuid> renders a read-only DB-backed result
+    // /snapshot/?id=<uuid>: owner sees their full result + business path; visitors see read-only
     var sharedId = new URLSearchParams(location.search).get("id");
-    if (sharedId) { renderSharedResult(sharedId); return; }
+    if (sharedId) {
+      var owner = null; try { owner = JSON.parse(localStorage.getItem("snap_owner") || "null"); } catch (e) {}
+      if (owner && owner.id === sharedId) { restoreOwnerSession(owner); return; }
+      renderSharedResult(sharedId); return;
+    }
     if (!C.scenarios) { app.innerHTML = "<div class='stage'><p class='muted center'>Loading…</p></div>"; return; }
     try { if (Score && Score.selftest) Score.selftest(); } catch (e) {}
     window.addEventListener("popstate", function (e) {
