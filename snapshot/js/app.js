@@ -566,7 +566,7 @@
       return el("div", { class: "cta-card" }, [
         el("div", { class: "cc-h", text: "This is exactly what we install." }),
         el("div", { class: "cc-b", text: "A 30-minute call with CT & Isaiah maps your constraint to the first build. We take on a handful of flagship engagements." }),
-        el("a", { class: "btn btn-primary", href: "https://ovae.ai/#contact", html: "Book a 30-min call &nbsp;→" })
+        el("a", { class: "btn btn-primary", href: "mailto:ct@ovae.ai?subject=Book%20a%2030-min%20AI%20Leverage%20call", html: "Book a 30-min call &nbsp;→" })
       ]);
     }
     if (s.appetite === "convince") {
