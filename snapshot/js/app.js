@@ -177,6 +177,12 @@
             el("div", {}, [el("span", { class: "llevel-name", text: it.name }), el("span", { class: "llevel-line", text: it.line })])
           ]);
         })));
+      } else if (s.type === "profile") {
+        var pimg = el("img", { class: "lprofile-img", src: "/snapshot/sample-result.png", alt: "Your AI Leverage Snapshot result", loading: "lazy" });
+        var plist = el("div", { class: "lprofile-list" }, (s.items || []).map(function (it) {
+          return el("div", { class: "lprofile-item" }, [el("span", { class: "lpi-check", text: "✓" }), el("span", { text: it })]);
+        }));
+        sec.appendChild(el("div", { class: "lprofile" }, [pimg, plist]));
       } else if (s.type === "preview") {
         sec.appendChild(el("img", { class: "lpreview", src: "/snapshot/sample-result.png", alt: "Sample AI Leverage Snapshot result", loading: "lazy" }));
         sec.appendChild(el("ul", { class: "llist" }, (s.items || []).map(function (it) { return el("li", { text: it.text }); })));
@@ -199,16 +205,19 @@
     steps.push({ when: null, render: function (s, go) {
       var hook = (C.hook && C.hook.headline) || "AI has 6 levels. Which one are you?";
       var sub = (C.hook && C.hook.sub) || "90 seconds, no signup. Find your level — and the one habit that gets you to the next.";
-      var page = el("div", { class: "hero-poster" }, [
-        el("div", { class: "hp-eyebrow", text: "The AI Leverage Snapshot" }),
-        el("h1", { class: "hp-title" }, [
-          el("span", { class: "hp-lead", text: "AI has" }),
-          el("span", { class: "hp-big" }, [
-            el("span", { class: "hp-num", text: "6" }),
-            el("span", { class: "hp-levels", text: "levels." })
-          ]),
-          el("span", { class: "hp-q", text: "Which one are you?" })
-        ]),
+      var ladderNames = ["Newcomer", "Searcher", "Drafter", "Operator", "Builder", "Conductor"];
+      var ladder = el("div", { class: "hero-ladder" }, [
+        el("div", { class: "hl-rail" }, ladderNames.map(function (nm, i) {
+          return el("div", { class: "hl-node", style: "--i:" + i }, [
+            el("span", { class: "hl-dot", text: String(i) }),
+            el("span", { class: "hl-lbl", text: nm })
+          ]);
+        }))
+      ]);
+      var page = el("div", { class: "hero" }, [
+        el("div", { class: "hero-eyebrow", text: "The AI Leverage Snapshot" }),
+        el("h1", { class: "hero-h1", html: "AI has <span class='hl6'>6</span> levels.<br>Which one are you?" }),
+        ladder,
         el("p", { class: "sub", text: sub }),
         el("div", { class: "btn-row" }, [el("button", { class: "btn btn-primary btn-block", onclick: go, html: "Find my level &nbsp;→" })]),
         el("div", { class: "reassure" }, [

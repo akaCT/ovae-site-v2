@@ -20,31 +20,16 @@ window.SNAP_CONTENT = {
 
   landing: [
   {
-    "id": "value",
-    "type": "value-strip",
-    "heading": "What you walk away with",
-    "body": "",
+    "id": "profile",
+    "type": "profile",
+    "heading": "You walk away with a full profile",
+    "body": "Not a score buried in a report. A clear read on where you stand, and exactly what to do next.",
     "items": [
-      {
-        "title": "Your level + style",
-        "text": "Named in plain English."
-      },
-      {
-        "title": "Your spot on the map",
-        "text": "Level by style, at a glance."
-      },
-      {
-        "title": "A prompt to level up",
-        "text": "Tailored to you. Use it in 5 minutes."
-      }
+      "Your AI level, 0 to 5, and your style, named in plain English",
+      "Your exact spot on the 6-level by 3-style map",
+      "A prompt built for your level, ready to use in 5 minutes",
+      "Where your business stands, and the one move worth the most"
     ]
-  },
-  {
-    "id": "preview",
-    "type": "preview",
-    "heading": "What you get",
-    "body": "One clean card. Built to screenshot, or act on today.",
-    "items": []
   },
   {
     "id": "cta",
