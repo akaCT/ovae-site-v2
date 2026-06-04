@@ -7,7 +7,7 @@
   "use strict";
 
   // ---- config constants (calibration knobs) ----
-  var RUNG_NAMES = ["Unaware", "Searcher", "Drafter", "Operator", "Builder", "Conductor"];
+  var RUNG_NAMES = ["Newcomer", "Searcher", "Drafter", "Operator", "Builder", "Conductor"];
   var YOU_HIGH_CUT = 3;        // Operator+ counts as "high you" for the quadrant
   var BIZ_HIGH_CUT = 50;       // business pct >= 50 (Leveraged+) counts as "high business"
   var INDEX_BY_RUNG = [6, 22, 40, 60, 80, 93]; // private 0-100 anchor per rung
@@ -124,10 +124,10 @@
     var youHigh = actA && actA.rung >= YOU_HIGH_CUT;
     var bizHigh = actB && actB.pct >= BIZ_HIGH_CUT;
     var key, label;
-    if (youHigh && !bizHigh) { key = "bottlenecked_builder"; label = "Bottlenecked Builder"; }
-    else if (!youHigh && bizHigh) { key = "next_at_wheel"; label = "Next at the Wheel"; }
-    else if (!youHigh && !bizHigh) { key = "ground_floor"; label = "Ground Floor"; }
-    else { key = "ai_native"; label = "AI-Native Operator"; }
+    if (youHigh && !bizHigh) { key = "bottlenecked_builder"; label = "Bottlenecked"; }
+    else if (!youHigh && bizHigh) { key = "next_at_wheel"; label = "Coasting"; }
+    else if (!youHigh && !bizHigh) { key = "ground_floor"; label = "Untapped"; }
+    else { key = "ai_native"; label = "Compounding"; }
     return { key: key, label: label, youHigh: !!youHigh, bizHigh: !!bizHigh };
   }
 

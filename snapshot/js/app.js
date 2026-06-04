@@ -10,7 +10,7 @@
   var STYLE_NAME = { centaur: "Delegator", cyborg: "Collaborator", self: "Automator" };
   var STYLE_ABBR = { centaur: "DELEG", cyborg: "COLLAB", self: "AUTO" };
   var STYLE_COLOR = { centaur: "#7BC9C4", cyborg: "#C9A77B", self: "#C97D5C" };
-  var RUNGS = ["Unaware", "Searcher", "Drafter", "Operator", "Builder", "Conductor"];
+  var RUNGS = ["Newcomer", "Searcher", "Drafter", "Operator", "Builder", "Conductor"];
 
   // ---- state ----
   var S = {

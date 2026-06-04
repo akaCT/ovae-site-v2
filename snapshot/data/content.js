@@ -707,7 +707,7 @@ window.SNAP_CONTENT = {
     // ---- rung 0..5: {name, blurb} ----
     rung: {
       0: {
-        name: "Unaware",
+        name: "Newcomer",
         blurb: "You haven't really put AI to work yet. That's a standing start, not a hole. The people three levels up didn't learn anything you can't pick up in an afternoon. You're one habit away from your first 'wait, that just saved me an hour.'"
       },
       1: {
@@ -752,22 +752,22 @@ window.SNAP_CONTENT = {
     persona: {
       // high YOU / low BIZ
       bottlenecked_builder: {
-        name: "The Bottlenecked Builder",
+        name: "Bottlenecked",
         blurb: "Personally, you're flying. You've got AI habits most people are years from. But the business around you hasn't caught up, so all that leverage dead-ends at you. You're the fastest part of a slow machine. The fix isn't getting better at AI. It's getting the rest of the operation to run at your speed."
       },
       // low YOU / high BIZ
       next_at_wheel: {
-        name: "Next at the Wheel",
+        name: "Coasting",
         blurb: "The business is already pulling real leverage out of AI, but it's running on systems, not on you. You're standing next to a fast car you haven't fully learned to drive. That's a good problem. The infrastructure already exists, so every habit you pick up pays off right away instead of starting from zero."
       },
       // low / low - expected modal cell; framed as leapfrog
       ground_floor: {
-        name: "Ground Floor",
+        name: "Untapped",
         blurb: "You and the business are both early, and that's a good place to be standing. Everyone above you had to unlearn old habits to get here. You don't. You get to build it right from the start while competitors are mid-renovation. Most companies that leapfrogged the last tech shift looked a lot like this the year before they did it."
       },
       // high / high
       ai_native: {
-        name: "AI-Native",
+        name: "Compounding",
         blurb: "You move with AI by instinct and the business is built around it. You're in the small group that's setting the pace of this shift, not chasing it. The risk up here isn't falling behind. It's getting comfortable. The frontier moves fast, and your real competition is your own last quarter."
       }
     },
@@ -943,7 +943,7 @@ window.SNAP_CONTENT = {
   // ==========================================================================
   prompts: {
     generic: {
-      0: { title: 'Your first real AI move', moves: 'Unaware to Searcher', text:
+      0: { title: 'Your first real AI move', moves: 'Newcomer to Searcher', text:
 "You are my practical assistant. I don't use AI much yet and I want one quick win today.\n\nHere is something real I have to deal with this week:\n[PASTE the email, message, or task you've been putting off]\n\nDo three things:\n1. Tell me, in plain language, the fastest way to handle this.\n2. Write a version I can actually use or send.\n3. Suggest one more thing this week I could hand to you instead of doing the hard way.\n\nKeep it short and concrete. No theory." },
       1: { title: 'Stop writing from blank', moves: 'Searcher to Drafter', text:
 "Be my drafting partner. Before you answer, here is my context:\n- What I do: [one line]\n- Who I'm talking to: [audience]\n- The tone I want: [e.g. warm, direct, professional]\n\nThe task:\n[PASTE or describe the thing you need to write]\n\nWrite a complete first draft I can edit, not an outline. Then list 3 questions whose answers would make the next draft sharper. At the end, give me a reusable version of this prompt I can save and use again for similar tasks." },
@@ -957,7 +957,7 @@ window.SNAP_CONTENT = {
 "I run several AI-driven workflows already. Help me make them durable and worth it, not just impressive.\n\nWhat I have running: [list your automations/agents]\nWhat each was supposed to save or earn: [rough numbers]\n\nDo this:\n1. Show me how to measure whether each one actually pays: time saved or money made vs. upkeep.\n2. Flag where I'm over-automated and at risk of de-skilling or a silent failure.\n3. Tell me exactly where to keep a human in the loop on purpose.\n4. Give me a simple weekly review I can run to catch drift before it costs me." }
     },
     owner: {
-      0: { title: 'Your first real AI move', moves: 'Unaware to Searcher', text:
+      0: { title: 'Your first real AI move', moves: 'Newcomer to Searcher', text:
 "You are my practical business assistant. I run {{business}} and I barely use AI yet. I want one quick win today.\n\nHere's something real I'm dealing with this week:\n[PASTE the {{customer}} email, the pricing question, or the task you've been avoiding]\n\nDo three things:\n1. Tell me in plain language the fastest way to handle this.\n2. Write a version I can actually send or use.\n3. Name one more thing this week I could hand to you instead of doing it the slow way.\n\nShort and concrete. No theory." },
       1: { title: 'Stop writing from blank', moves: 'Searcher to Drafter', text:
 "Be my drafting partner for my business. Context first:\n- My business: {{business}}\n- Who I serve: {{customer}}\n- My tone with them: [warm / direct / premium / no-nonsense]\n\nThe task:\n[PASTE the proposal, the {{customer}} reply, or the message you need to write]\n\nWrite a complete first draft I can edit, not an outline. Then give me a saved, reusable version of this prompt so next time I just drop in the new details. Flag anything you assumed that I should correct." },
@@ -971,7 +971,7 @@ window.SNAP_CONTENT = {
 "I run several AI workflows in my business. Help me make them durable and profitable, not just clever.\n\nMy business: {{business}}\nWhat's running: [list automations/agents]\nWhat each should save or earn: [rough numbers]\n\nDo this:\n1. Show me how to measure which ones actually pay vs. cost me in upkeep.\n2. Flag where I'm over-automated, risk of silent failure or losing the {{customer}} touch that wins business.\n3. Tell me exactly where to keep a human in the loop on purpose.\n4. Give me a weekly review to catch drift before a {{customer}} feels it." }
     },
     team: {
-      0: { title: 'Your first real AI move at work', moves: 'Unaware to Searcher', text:
+      0: { title: 'Your first real AI move at work', moves: 'Newcomer to Searcher', text:
 "You are my practical work assistant. I barely use AI yet and want one quick win today.\n\nHere's something real on my plate this week:\n[PASTE the message, doc, or task you've been putting off]\n\nDo three things:\n1. Tell me the fastest way to handle it, in plain language.\n2. Write a version I can actually use or send.\n3. Name one more thing this week I could hand to you instead of doing it the slow way.\n\nShort and concrete." },
       1: { title: 'Stop writing from blank', moves: 'Searcher to Drafter', text:
 "Be my drafting partner at work. Context first:\n- My role / team: [one line]\n- Who this is for: [audience]\n- Tone: [how your team actually writes]\n\nThe task:\n[PASTE the update, reply, or doc you need to write]\n\nWrite a complete first draft I can edit, not an outline. Then give me a reusable version of this prompt so next time I just drop in the new details. Flag any assumptions I should correct." },
@@ -985,7 +985,7 @@ window.SNAP_CONTENT = {
 "I run several AI workflows for my team. Help me make them durable, measurable, and not dependent on just me.\n\nWhat's running: [list them]\nWhat each should save the team: [rough numbers]\n\nDo this:\n1. Show me how to measure whether each actually saves time vs. upkeep.\n2. Flag where we're over-automated or at risk of a silent failure.\n3. Tell me where to keep a human in the loop on purpose.\n4. Give me a way to teach the team to run and read the system, plus a weekly review to catch drift." }
     },
     ic: {
-      0: { title: 'Your first real AI move', moves: 'Unaware to Searcher', text:
+      0: { title: 'Your first real AI move', moves: 'Newcomer to Searcher', text:
 "You are my practical work assistant. I barely use AI yet and want one quick win on my actual work today.\n\nHere's something real I have to do this week:\n[PASTE the task, the doc, or the problem you've been stalling on]\n\nDo three things:\n1. Tell me the fastest sane way to handle it.\n2. Produce a first version I can actually use.\n3. Name one more thing this week I could hand to you instead of grinding through it.\n\nShort and concrete. No fluff." },
       1: { title: 'Stop starting from zero', moves: 'Searcher to Drafter', text:
 "Be my drafting partner on my real work. Context first:\n- What I do: [one line]\n- Who/what this is for: [audience or system]\n- The standard it has to hit: [be specific]\n\nThe task:\n[PASTE or describe what you need: the doc, the code, the analysis]\n\nProduce a complete first version I can edit and improve, not an outline. Then give me a reusable version of this prompt for similar tasks, and list 3 questions that would make the next pass sharper." },
@@ -999,7 +999,7 @@ window.SNAP_CONTENT = {
 "I run several AI-driven workflows on my work. Help me make them reliable without dulling the skills that make me valuable.\n\nWhat's running: [list them]\nWhat each should produce: [describe]\n\nDo this:\n1. Show me how to verify each still produces good work and catch when it drifts.\n2. Flag where heavy automation risks de-skilling me, and what to keep doing by hand on purpose.\n3. Tell me where a human judgment call must stay in the loop.\n4. Make sure I can explain how the whole system works, so I actually own it." }
     },
     solo: {
-      0: { title: 'Your first real AI move', moves: 'Unaware to Searcher', text:
+      0: { title: 'Your first real AI move', moves: 'Newcomer to Searcher', text:
 "You are my practical assistant. I run {{business}} solo and barely use AI yet. I want one quick win today.\n\nHere's something real on my plate this week:\n[PASTE the {{customer}} message, the task, or the thing you've been avoiding]\n\nDo three things:\n1. Tell me the fastest way to handle it, plainly.\n2. Write a version I can actually use or send.\n3. Name one more thing this week I could hand to you instead of doing it the slow way.\n\nShort and concrete." },
       1: { title: 'Stop writing from blank', moves: 'Searcher to Drafter', text:
 "Be my drafting partner. I run {{business}} solo. Context first:\n- What I sell: {{business}}\n- Who I sell to: {{customer}}\n- My voice: [how you actually talk to {{customer}}]\n\nThe task:\n[PASTE the pitch, post, or {{customer}} reply you need to write]\n\nWrite a complete first draft in my voice, not an outline. Then give me a reusable version of this prompt so next time I just drop in the details. Flag anything you assumed." },
