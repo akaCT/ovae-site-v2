@@ -324,3 +324,33 @@ h1.hook{ font-size:clamp(30px,7vw,46px); line-height:1.08; letter-spacing:-.02em
 .lprofile-list{ display:flex; flex-direction:column; gap:15px; }
 .lprofile-item{ display:flex; gap:13px; align-items:flex-start; font-size:15px; color:var(--ink); line-height:1.45; }
 .lpi-check{ flex:none; width:23px; height:23px; border-radius:7px; background:var(--accent-soft); border:1px solid var(--accent-dim); color:var(--accent); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; margin-top:1px; }
+
+/* ============================================================
+   ACT 2 FORK — the "unlock your business" card
+   ============================================================ */
+.fork-card{ position:relative; overflow:hidden; margin:30px 0 6px; padding:26px 24px; border-radius:var(--r);
+  background:linear-gradient(165deg, rgba(123,201,196,.11), var(--bg-soft) 72%);
+  border:1px solid var(--accent-dim); box-shadow:0 26px 64px -36px rgba(123,201,196,.55); }
+.fork-card::before{ content:""; position:absolute; top:-55%; right:-28%; width:70%; height:170%; pointer-events:none;
+  background:radial-gradient(circle, var(--accent-soft), transparent 66%); opacity:.7; }
+.fork-step{ position:relative; display:flex; align-items:center; gap:10px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-mute); margin-bottom:15px; }
+.fork-step .fs-done{ color:var(--accent); }
+.fork-step .fs-arrow{ opacity:.55; }
+.fork-step .fs-next{ color:var(--ink); font-weight:500; }
+.fork-title{ position:relative; font-size:clamp(23px,5vw,31px); font-weight:600; letter-spacing:-.02em; line-height:1.12; margin:0 0 9px; }
+.fork-lead{ position:relative; font-size:15px; color:var(--ink-dim); line-height:1.5; margin:0 0 22px; max-width:32em; }
+.fork-points{ position:relative; display:flex; flex-direction:column; gap:13px; margin:0 0 24px; }
+.fork-point{ display:flex; align-items:center; gap:13px; font-size:15px; font-weight:500; color:var(--ink); }
+.fp-ic{ flex:none; width:36px; height:36px; border-radius:10px; background:var(--accent-soft); border:1px solid var(--accent-dim); display:flex; align-items:center; justify-content:center; }
+.fork-cta{ position:relative; font-size:17px; padding:17px 26px; }
+.fork-skip{ display:block; width:100%; text-align:center; margin-top:14px; padding:8px; background:none; border:none; font-size:13.5px; color:var(--ink-mute); transition:color .15s var(--ease); }
+.fork-skip:hover{ color:var(--ink-dim); }
+
+@media (prefers-reduced-motion: no-preference){
+  .fork-card::before{ animation: forkPulse 3.8s ease-in-out infinite; }
+  @keyframes forkPulse{ 0%,100%{ opacity:.5; } 50%{ opacity:1; } }
+  .fork-point{ animation: upFade .5s cubic-bezier(.16,1,.3,1) both; }
+  .fork-point:nth-child(1){ animation-delay:.04s; } .fork-point:nth-child(2){ animation-delay:.12s; } .fork-point:nth-child(3){ animation-delay:.2s; }
+  .fork-cta{ animation: ctaNudge 3.2s ease-in-out 1.4s infinite; }
+  @keyframes ctaNudge{ 0%,90%,100%{ transform:translateY(0); } 95%{ transform:translateY(-2px); } }
+}

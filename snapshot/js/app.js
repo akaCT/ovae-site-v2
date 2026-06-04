@@ -415,6 +415,39 @@
     return node;
   }
 
+  function shortLead(sub) {
+    sub = T(sub || "");
+    var first = sub.split(". ")[0] || sub;
+    if (first && !/[.!?]$/.test(first)) first += ".";
+    return first;
+  }
+  function renderForkCard(s, go) {
+    var fc = (C.forkCopy && C.forkCopy.fork && (C.forkCopy.fork[s.role] || C.forkCopy.fork.generic)) || {};
+    var ICN = {
+      gauge: "<svg viewBox='0 0 24 24' fill='none' stroke='#7BC9C4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' width='17' height='17'><path d='M4 15a8 8 0 0116 0'/><path d='M12 15l3.5-4.5'/></svg>",
+      target: "<svg viewBox='0 0 24 24' fill='none' stroke='#7BC9C4' stroke-width='2' width='17' height='17'><circle cx='12' cy='12' r='8'/><circle cx='12' cy='12' r='3.2'/></svg>",
+      up: "<svg viewBox='0 0 24 24' fill='none' stroke='#7BC9C4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' width='17' height='17'><path d='M12 20V6'/><path d='M5 12l7-7 7 7'/></svg>"
+    };
+    function point(icon, label) {
+      return el("div", { class: "fork-point" }, [el("span", { class: "fp-ic", html: icon }), el("span", { text: label })]);
+    }
+    return el("div", { class: "fork-card" }, [
+      el("div", { class: "fork-step" }, [
+        el("span", { class: "fs-done", html: "&#10003;&nbsp; You" }),
+        el("span", { class: "fs-arrow", text: "→" }),
+        el("span", { class: "fs-next", text: "Your business" })
+      ]),
+      el("h2", { class: "fork-title", text: fc.stem || "Now, the part that pays." }),
+      el("p", { class: "fork-lead", text: shortLead(fc.sub) }),
+      el("div", { class: "fork-points" }, [
+        point(ICN.gauge, "Your AI Leverage Index, 0 to 100"),
+        point(ICN.target, "Where your business is leaking the most"),
+        point(ICN.up, "The one move worth the most, right now")
+      ]),
+      el("button", { class: "btn btn-primary btn-block fork-cta", html: (fc.primary || "See my business leverage") + " &nbsp;→", onclick: function () { s.doBusiness = true; go(); } }),
+      el("button", { class: "fork-skip", text: fc.secondary || "Maybe later, just my result", onclick: function () { s.doBusiness = false; go(); } })
+    ]);
+  }
   function renderPersonalReveal(s, go) {
     var a = s.actA;
     var node = revealBody(a, s.role, s.mirror);
@@ -423,13 +456,7 @@
       shareBtn,
       el("button", { class: "btn btn-block", html: "↓ &nbsp;Download my level card", onclick: function () { downloadCard(a); } })
     ]));
-    var fc = (C.forkCopy && C.forkCopy.fork && (C.forkCopy.fork[s.role] || C.forkCopy.fork.generic)) || {};
-    node.appendChild(el("div", { class: "cta-card" }, [
-      fc.stem ? el("div", { class: "cc-h", text: fc.stem }) : null,
-      fc.sub ? el("div", { class: "cc-b", text: T(fc.sub) }) : null,
-      el("button", { class: "btn btn-primary btn-block", html: (fc.primary || "See my business leverage") + " &nbsp;→", onclick: function () { s.doBusiness = true; go(); } }),
-      el("button", { class: "btn btn-ghost btn-block", text: fc.secondary || "I'm good with my result", onclick: function () { s.doBusiness = false; go(); } })
-    ]));
+    node.appendChild(renderForkCard(s, go));
     paint(node, 2, false);
     // make the address bar a real, shareable, DB-backed result URL + remember the owner
     Promise.resolve(sub.idP).then(function () {
