@@ -21,6 +21,8 @@
     attribution: {}
   };
   var app, stepIdx = 0, steps = [];
+  // phase boundaries for the progress bar (set in buildSteps)
+  var revealIdx = 0, act2StartIdx = 0, bizRevealIdx = 0;
   // back/forward navigation via state snapshots
   var backStack = [], fwdStack = [];
   function clone(o) { try { return JSON.parse(JSON.stringify(o)); } catch (e) { return o; } }
@@ -75,13 +77,21 @@
   }
 
   // ---- progress ----
-  function progress(section) { // 1=You, 2=Identity, 3=Business
-    var dots = [1, 2, 3].map(function (i) {
-      var cls = "dot" + (i < section ? " done" : i === section ? " cur" : "");
-      return el("div", { class: cls }, i === section ? [el("span")] : []);
-    });
-    var label = section === 1 ? "You" : section === 2 ? "Your result" : "Your business";
-    return el("div", { class: "progress" }, dots.concat([el("div", { class: "progress-label", text: label })]));
+  function barEl(label, pct) {
+    pct = Math.max(6, Math.min(97, Math.round(pct)));
+    return el("div", { class: "progress" }, [
+      el("div", { class: "progress-meta" }, [el("span", { text: label }), el("span", { class: "mono", text: pct + "%" })]),
+      el("div", { class: "bar-track" }, [el("div", { class: "bar-fill", style: "width:" + pct + "%" })])
+    ]);
+  }
+  // proportional fill: Act 1 (You) fills scenario->gate (~90% at the gate),
+  // Act 2 (Your business) is a fresh bar; result screens show no bar.
+  function progressBar() {
+    if (stepIdx > 0 && stepIdx < revealIdx) return barEl("Your AI level", 100 * stepIdx / revealIdx);
+    if (stepIdx >= act2StartIdx && stepIdx < bizRevealIdx) {
+      return barEl("Your business", 100 * (stepIdx - revealIdx) / Math.max(1, bizRevealIdx - revealIdx));
+    }
+    return null;
   }
 
   // ---- screen scaffold ----
@@ -93,11 +103,12 @@
       canFwd ? el("button", { class: "navbtn", html: "Forward →", onclick: forward }) : el("span", {}, [])
     ]);
   }
-  function paint(node, section, withCard) {
+  function paint(node, section, withCard, progOverride) {
     clear(app);
     var inner = el("div", { class: "screen" }, []);
     var nav = navBar(); if (nav) inner.appendChild(nav);
-    if (section) inner.appendChild(progress(section));
+    var pb = progOverride ? barEl(progOverride.label, progOverride.pct) : progressBar();
+    if (pb) inner.appendChild(pb);
     if (withCard) inner.appendChild(renderCard());
     inner.appendChild(node);
     var stage = el("div", { class: "stage" }, [inner]);
@@ -148,6 +159,39 @@
   // ============================================================
   // BUILD THE FLOW
   // ============================================================
+  // landing sales sections rendered below the hero on the cold-open
+  function renderLanding(go) {
+    var wrap = el("div", { class: "landing" }, []);
+    (C.landing || []).forEach(function (s) {
+      var sec = el("section", { class: "lsec lsec-" + (s.type || "") }, []);
+      if (s.heading) sec.appendChild(el("h2", { class: "lsec-h", text: s.heading }));
+      if (s.body) sec.appendChild(el("p", { class: "lsec-b", text: s.body }));
+      if (s.type === "value-strip") {
+        sec.appendChild(el("div", { class: "lgrid" }, (s.items || []).map(function (it) {
+          return el("div", { class: "lcard" }, [el("div", { class: "lcard-t", text: it.title }), el("div", { class: "lcard-x", text: it.text })]);
+        })));
+      } else if (s.type === "levels-list") {
+        sec.appendChild(el("div", { class: "llevels" }, (s.items || []).map(function (it) {
+          return el("div", { class: "llevel" }, [
+            el("span", { class: "llevel-n", text: it.level }),
+            el("div", {}, [el("span", { class: "llevel-name", text: it.name }), el("span", { class: "llevel-line", text: it.line })])
+          ]);
+        })));
+      } else if (s.type === "preview") {
+        sec.appendChild(el("img", { class: "lpreview", src: "/snapshot/sample-result.png", alt: "Sample AI Leverage Snapshot result", loading: "lazy" }));
+        sec.appendChild(el("ul", { class: "llist" }, (s.items || []).map(function (it) { return el("li", { text: it.text }); })));
+      } else if (s.type === "faq") {
+        sec.appendChild(el("div", { class: "lfaq" }, (s.items || []).map(function (it) {
+          return el("details", { class: "lfaq-i" }, [el("summary", { text: it.q }), el("p", { text: it.a })]);
+        })));
+      } else if (s.type === "cta") {
+        sec.appendChild(el("button", { class: "btn btn-primary btn-block", onclick: go, html: "Find my level &nbsp;→" }));
+      }
+      wrap.appendChild(sec);
+    });
+    return wrap;
+  }
+
   function buildSteps() {
     steps = [];
 
@@ -155,7 +199,7 @@
     steps.push({ when: null, render: function (s, go) {
       var hook = (C.hook && C.hook.headline) || "AI has 6 levels. Which one are you?";
       var sub = (C.hook && C.hook.sub) || "90 seconds, no signup. Find your level — and the one habit that gets you to the next.";
-      paint(el("div", {}, [
+      var page = el("div", {}, [
         el("div", { class: "kicker", text: "The AI Leverage Snapshot" }),
         el("h1", { class: "hook", text: hook }),
         el("p", { class: "sub", text: sub }),
@@ -164,7 +208,9 @@
           el("span", { text: "90 seconds" }), el("span", { text: "Instant result" }), el("span", { text: "Free" })
         ]),
         el("div", { class: "credit", text: "Grounded in research from Wharton, Kellogg & BCG" })
-      ]), 0, false);
+      ]);
+      page.appendChild(renderLanding(go));
+      paint(page, 0, false);
     }});
 
     // 1..n — scenarios (core measurement)
@@ -242,13 +288,20 @@
     // EMAIL GATE — universal. Compute personal score, capture EVERY completer here.
     steps.push({ when: null, render: function (s, go) {
       if (!s.actA) s.actA = Score.scoreActA({ picks: s.picks, confirmers: s.confirmerPicks, ceiling: s.ceiling, barely: s.barely });
+      // compute the level-up prompt + a one-liner now, so the taker email can include them
+      var pr = pickPrompt(s.actA.rung, s.role);
+      s.promptText = T((pr && (typeof pr === "string" ? pr : pr.text)) || "");
+      var stc = (C.copy && C.copy.style && C.copy.style[s.actA.style]) || {};
+      s.emailLine = T(stc.blurb || "");
       renderGate(s, go);
     }});
 
     // PERSONAL REVEAL (ungated payoff, post-email)
+    revealIdx = steps.length;
     steps.push({ when: null, render: function (s, go) { renderPersonalReveal(s, go); }});
 
     // BUSINESS PROFILE (industry + revenue + headcount) — Act 2 only
+    act2StartIdx = steps.length;
     steps.push({ when: function (s) { return s.doBusiness; }, render: function (s, go) { renderProfile(s, go); } });
 
     // BUSINESS QUESTIONS (role-forked, one per screen)
@@ -263,6 +316,7 @@
     }});
 
     // BUSINESS REVEAL
+    bizRevealIdx = steps.length;
     steps.push({ when: function (s) { return s.doBusiness; }, render: function (s, go) {
       s.actB = Score.scoreActB(s.role, s.bizAnswers);
       s.persona = Score.persona(s.actA, s.actB);
@@ -277,31 +331,22 @@
   // ============================================================
   // REVEAL SCREENS
   // ============================================================
-  function renderPersonalReveal(s, go) {
-    var a = s.actA;
-    var idName = STYLE_NAME[a.style] + " " + a.rungName;
+  // shared reveal body used by both the live reveal and the /?id= shared view
+  function revealBody(a, role, mirror) {
     var rc = (C.copy && C.copy.rung && C.copy.rung[a.rung]) || {};
     var stc = (C.copy && C.copy.style && C.copy.style[a.style]) || {};
     var node = el("div", { class: "reveal" }, []);
-
-    // identity drop
     node.appendChild(el("div", { class: "identity-drop" }, [
-      el("div", { class: "tribe-label", text: "Your AI level: " + a.rung + " of 5 · " + STYLE_NAME[a.style] }),
-      el("div", { class: "id-name", text: idName }),
+      el("div", { class: "tribe-label", text: "AI level " + a.rung + " of 5 · " + STYLE_NAME[a.style] }),
+      el("div", { class: "id-name", text: STYLE_NAME[a.style] + " " + a.rungName }),
       el("div", { class: "id-blurb", text: T(stc.blurb || rc.blurb || "") })
     ]));
-
-    // flattering fact
     var ff = (C.copy && typeof C.copy.flatteringFact === "function") ? C.copy.flatteringFact(a.rung) : null;
     if (ff) node.appendChild(el("div", { class: "flatter", html: T(ff) }));
-
-    // 2D map
     node.appendChild(el("div", { class: "mapwrap" }, [mapSVG(a)]));
-
-    // mirror result (relative-confidence guess vs measured level)
-    if (s.mirror != null) {
-      var expect = { behind: 1, average: 2, ahead: 3, frontier: 5 }[s.mirror];
-      var guessLabel = { behind: "behind most", average: "about average", ahead: "ahead of most", frontier: "way ahead" }[s.mirror];
+    if (mirror != null) {
+      var expect = { behind: 1, average: 2, ahead: 3, frontier: 5 }[mirror];
+      var guessLabel = { behind: "behind most", average: "about average", ahead: "ahead of most", frontier: "way ahead" }[mirror];
       if (expect != null) {
         var line = a.rung > expect ? "You sell yourself short. You're further along than you guessed."
           : a.rung < expect ? "You're optimistic about it, and that instinct helps. There's more room ahead than it feels."
@@ -309,9 +354,7 @@
         node.appendChild(el("p", { class: "center muted", html: "<b>You guessed you're " + guessLabel + ".</b> " + line }));
       }
     }
-
-    // peer mirror
-    var pm = pickPeerMirror(s.role, a.rung);
+    var pm = pickPeerMirror(role, a.rung);
     var habits = pm && (pm.habits || (Array.isArray(pm) ? pm : null));
     if (habits && habits.length) {
       var ahead = (pm && pm.aheadName) ? pm.aheadName : "the level above";
@@ -321,8 +364,6 @@
         return el("div", { class: "habit not" }, [el("span", { class: "hb", text: "→" }), el("span", { html: T(h) })]);
       }))));
     }
-
-    // unaware delight
     if (a.rung === 0 && C.copy && C.copy.unawareDelight) {
       node.appendChild(el("div", { class: "peer" }, [
         el("div", { class: "peer-h", text: "You said you barely use AI. You already rely on it here:" })
@@ -330,9 +371,7 @@
         return el("div", { class: "habit has" }, [el("span", { class: "hb", text: "✓" }), el("span", { html: h })]);
       }))));
     }
-
-    // level-up prompt
-    var prompt = pickPrompt(a.rung, s.role);
+    var prompt = pickPrompt(a.rung, role);
     var promptText = prompt && (typeof prompt === "string" ? prompt : prompt.text);
     promptText = T(promptText);
     if (promptText) {
@@ -347,21 +386,55 @@
         pt
       ]));
     }
+    return node;
+  }
 
-    // share + download
+  function renderPersonalReveal(s, go) {
+    var a = s.actA;
+    var node = revealBody(a, s.role, s.mirror);
     var shareBtn = el("button", { class: "btn btn-primary btn-block", html: "↗ &nbsp;Share my result", onclick: function () { shareResult(s, shareBtn); } });
     node.appendChild(el("div", { class: "sharecard-wrap" }, [
       shareBtn,
       el("button", { class: "btn btn-block", html: "↓ &nbsp;Download my level card", onclick: function () { downloadCard(a); } })
     ]));
-    var ownerish = s.role === "owner" || s.role === "team";
-    node.appendChild(el("div", { class: "btn-row" }, [
-      el("button", { class: "btn btn-primary btn-block", html: (ownerish ? "See how ready my business is &nbsp;→" : "See what this means for my team &nbsp;→"), onclick: function () { s.doBusiness = true; go(); } }),
-      el("button", { class: "btn btn-ghost btn-block", text: "I'm good with my result", onclick: function () { s.doBusiness = false; go(); } })
+    var fc = (C.forkCopy && C.forkCopy.fork && (C.forkCopy.fork[s.role] || C.forkCopy.fork.generic)) || {};
+    node.appendChild(el("div", { class: "cta-card" }, [
+      fc.stem ? el("div", { class: "cc-h", text: fc.stem }) : null,
+      fc.sub ? el("div", { class: "cc-b", text: T(fc.sub) }) : null,
+      el("button", { class: "btn btn-primary btn-block", html: (fc.primary || "See my business leverage") + " &nbsp;→", onclick: function () { s.doBusiness = true; go(); } }),
+      el("button", { class: "btn btn-ghost btn-block", text: fc.secondary || "I'm good with my result", onclick: function () { s.doBusiness = false; go(); } })
     ]));
-
     paint(node, 2, false);
-    try { history.replaceState({ seq: navIdx }, "", "#my-result"); } catch (e) {}
+    // make the address bar a real, shareable, DB-backed result URL
+    Promise.resolve(sub.idP).then(function () {
+      if (sub.id) { try { history.replaceState({ seq: navIdx }, "", "?id=" + sub.id); } catch (e) {} }
+    });
+  }
+
+  // /snapshot/?id=<id> — fetch the public identity and render a read-only result
+  function renderSharedResult(id) {
+    clear(app);
+    app.appendChild(el("div", { class: "stage" }, [el("p", { class: "muted center", text: "Loading…" })]));
+    fetch(SUBMIT_URL + "?id=" + encodeURIComponent(id)).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d || d.rung == null) { renderSharedFail(); return; }
+      S.industry = d.industry || "generic";
+      var a = { rung: d.rung, rungName: RUNGS[d.rung] || "", style: d.style || "cyborg", index: 0 };
+      var node = revealBody(a, d.role || "owner", null);
+      node.appendChild(el("div", { class: "cta-card" }, [
+        el("div", { class: "cc-h", text: "AI has 6 levels. Which one are you?" }),
+        el("div", { class: "cc-b", text: "Find your level in 90 seconds — plus the one habit that gets you to the next." }),
+        el("a", { class: "btn btn-primary", href: "/snapshot/", html: "Find my level &nbsp;→" })
+      ]));
+      node.appendChild(el("div", { class: "footer", html: "The AI Leverage Snapshot · <a href='https://ovae.ai'>Ovae</a>" }));
+      clear(app); app.appendChild(el("div", { class: "stage" }, [node]));
+    }).catch(renderSharedFail);
+  }
+  function renderSharedFail() {
+    clear(app);
+    app.appendChild(el("div", { class: "stage" }, [el("div", { class: "reveal center" }, [
+      el("div", { class: "identity-drop" }, [el("div", { class: "id-name", text: "AI has 6 levels." }), el("div", { class: "id-blurb", text: "Find out which one you are." })]),
+      el("div", { class: "btn-row" }, [el("a", { class: "btn btn-primary btn-block", href: "/snapshot/", html: "Find my level &nbsp;→" })])
+    ])]));
   }
 
   function renderGate(s, go) {
@@ -370,11 +443,11 @@
     var err = el("div", { class: "fine", style: "color:var(--rust)", text: "" });
     var node = el("div", { class: "gate" }, [
       el("div", { class: "gate-card" }, [
-        el("h2", { class: "q-stem", text: "Your result is ready." }),
-        el("p", { class: "q-help", text: "Where should we send your AI level, your shareable card, and your level-up move? You'll see it on the next screen too." }),
+        el("h2", { class: "q-stem", text: (C.forkCopy && C.forkCopy.gate && C.forkCopy.gate.stem) || "Your result is ready." }),
+        el("p", { class: "q-help", text: (C.forkCopy && C.forkCopy.gate && C.forkCopy.gate.sub) || "Where should we send your AI level, your shareable card, and your level-up move?" }),
         nameI, emailI,
         el("div", { class: "spacer" }),
-        el("button", { class: "btn btn-primary btn-block", html: "Show me my level &nbsp;→", onclick: function () {
+        el("button", { class: "btn btn-primary btn-block", html: ((C.forkCopy && C.forkCopy.gate && C.forkCopy.gate.button) || "Show me my level") + " &nbsp;→", onclick: function () {
           if (!nameI.value.trim() || !/.+@.+\..+/.test(emailI.value)) { err.textContent = "A first name and a valid email, please."; return; }
           s.name = nameI.value.trim(); s.email = emailI.value.trim();
           captureLead(s);
@@ -431,7 +504,7 @@
       paint(el("div", {}, [
         el("h2", { class: "q-stem", text: stem }),
         optionList(q.options, function (o) { s.bizAnswers.push({ dim: q.dim, v: o.v, id: q.id }); i++; ask(); })
-      ]), 3, false);
+      ]), 3, false, { label: "Your business", pct: 15 + 70 * (i / qs.length) });
     }
     ask();
   }
@@ -546,7 +619,7 @@
         if (btn) btn.innerHTML = "✓ &nbsp;Invite link copied";
         return;
       }
-      var url = origin + "/snapshot/u/?id=" + sub.id;
+      var url = origin + "/snapshot/?id=" + sub.id;
       var text = "I'm a " + STYLE_NAME[s.actA.style] + " " + s.actA.rungName + " on the AI Leverage Snapshot. AI has 6 levels — which one are you?";
       if (navigator.share) {
         navigator.share({ title: "My AI level", text: text, url: url })
@@ -635,6 +708,7 @@
       appetite: s.appetite, revenue: s.revenue || null, headcount: s.headcount || null,
       answers: { picks: s.picks, ceiling: s.ceiling, mirror: s.mirror, biz: s.bizAnswers },
       flag: deriveFlag(s), attribution: s.attribution || {}, via: (s.attribution && s.attribution.via) || null,
+      prompt_text: s.promptText || null, email_line: s.emailLine || null,
       user_agent: navigator.userAgent, referrer: document.referrer || null
     };
   }
@@ -689,6 +763,9 @@
     app = document.getElementById("app");
     if (!app) return;
     S.attribution = parseAttribution();
+    // shared result link: /snapshot/?id=<uuid> renders a read-only DB-backed result
+    var sharedId = new URLSearchParams(location.search).get("id");
+    if (sharedId) { renderSharedResult(sharedId); return; }
     if (!C.scenarios) { app.innerHTML = "<div class='stage'><p class='muted center'>Loading…</p></div>"; return; }
     try { if (Score && Score.selftest) Score.selftest(); } catch (e) {}
     window.addEventListener("popstate", function (e) {

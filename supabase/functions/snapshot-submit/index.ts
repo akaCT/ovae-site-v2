@@ -84,6 +84,43 @@ async function emailCT(r: Record<string, any>, id: string) {
   }).catch((e) => console.error("resend:", e));
 }
 
+// email the TAKER their result + level-up prompt + a reply invite.
+// NOTE: only delivers once ovae.ai is verified at resend.com/domains; until then
+// Resend rejects sends to non-account addresses (caught, never blocks the submit).
+async function emailTaker(row: Record<string, any>, promptText: string, emailLine: string) {
+  const apiKey = Deno.env.get("RESEND_API_KEY"); if (!apiKey || !row.email) return;
+  const from = Deno.env.get("TAKER_FROM") || Deno.env.get("NOTIFY_FROM") || "CT at Ovae <onboarding@resend.dev>";
+  const site = Deno.env.get("SITE_URL") || "https://ovae.ai";
+  const name = row.name || "there";
+  const level = row.rung_name || "";
+  const style = row.style ? (STYLE[row.style] || row.style) : "";
+  const url = `${site}/snapshot/?id=${row.id}`;
+  const esc = (t: unknown) => String(t ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const html = `<div style="background:#14101A;padding:28px;font-family:system-ui,sans-serif;color:#E8E4DC;">
+    <div style="max-width:560px;margin:0 auto;line-height:1.6;">
+      <p>Hey ${esc(name)},</p>
+      <p>You finished the whole AI Leverage Snapshot, which most people don't. Here's where you landed:</p>
+      <p style="font-size:18px;margin:18px 0;"><b>Level: ${esc(level)}</b><br/><b>Your style: ${esc(style)}</b></p>
+      ${emailLine ? `<p style="color:#A39E96;">${esc(emailLine)}</p>` : ""}
+      <p>Want the full breakdown — your map, where you stack up, the parts that don't fit in an email? <a href="${url}" style="color:#7BC9C4;">See your full Snapshot &rarr;</a></p>
+      <p>Now the useful part. A score is just a mirror; what moves you is the next move. So we built you a prompt tuned to your level and style. Paste it into Claude or ChatGPT and it meets you where you are and pulls you up a rung.</p>
+      <p style="color:#6F6A63;">Copy everything between the lines:</p>
+      <pre style="white-space:pre-wrap;background:#1A1622;border:1px solid rgba(232,228,220,0.12);border-radius:10px;padding:16px;font-size:13px;line-height:1.5;color:#E8E4DC;">${esc(promptText)}</pre>
+      <p>Paste it in fresh, answer what it asks, and do the first thing it hands back. Ten minutes today beats a saved-for-later tab.</p>
+      <p><b>One real ask:</b> hit reply and tell me one thing you learned, or one thing that surprised you. I read every reply myself.</p>
+      <p>Go run the prompt, then tell me what happened.</p>
+      <p>CT<br/>Ovae</p>
+    </div></div>`;
+  const subject = `${name}, your AI level: ${style} ${level} (+ the prompt to level up)`.trim();
+  const replyTo = Deno.env.get("NOTIFY_TO") || "ct@ovae.ai";
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${apiKey}`, "content-type": "application/json" },
+    body: JSON.stringify({ from, to: [row.email], reply_to: replyTo, subject, html }),
+  }).then(async (r) => { if (!r.ok) console.error("taker email rejected (verify ovae.ai at resend):", await r.text()); })
+    .catch((e) => console.error("taker email:", e));
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
 
@@ -120,6 +157,7 @@ Deno.serve(async (req) => {
     const inserted = await sb("POST", "snapshot_submissions", toRow(b));
     const row = inserted[0];
     await emailCT(row, row.id);
+    await emailTaker(row, b.prompt_text || "", b.email_line || "");
     return json({ ok: true, id: row.id });
   } catch (e) {
     console.error("snapshot-submit:", e);
