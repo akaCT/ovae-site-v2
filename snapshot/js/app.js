@@ -754,14 +754,15 @@
       mk(spark, "animateMotion", { dur: "2.8s", begin: "1.4s", repeatCount: "indefinite", path: dDone });
     }
 
-    // ---- "MORE LEVERAGE" directional cue (open lower-right, points up to summit) ----
-    var aX1 = xr(3.15), aY1 = (H - padB) + 6, aX2 = xr(4.4), aY2 = (H - padB) - 34;
+    // ---- "MORE LEVERAGE" directional cue (open lower-right): arrow up, label below it ----
+    var baseY = H - padB;
+    var aX1 = xr(3.25), aY1 = baseY - 18, aX2 = xr(4.5), aY2 = baseY - 52;
     var ang = Math.atan2(aY2 - aY1, aX2 - aX1), hl = 13;
     var cue = add("g", { "class": "lev-cue" });
     mk(cue, "line", { x1: aX1, y1: aY1, x2: aX2, y2: aY2, stroke: sc, "stroke-opacity": "0.85", "stroke-width": "2.2", "stroke-linecap": "round" });
     mk(cue, "line", { x1: aX2, y1: aY2, x2: aX2 - hl * Math.cos(ang - 0.42), y2: aY2 - hl * Math.sin(ang - 0.42), stroke: sc, "stroke-opacity": "0.85", "stroke-width": "2.2", "stroke-linecap": "round" });
     mk(cue, "line", { x1: aX2, y1: aY2, x2: aX2 - hl * Math.cos(ang + 0.42), y2: aY2 - hl * Math.sin(ang + 0.42), stroke: sc, "stroke-opacity": "0.85", "stroke-width": "2.2", "stroke-linecap": "round" });
-    lbl(cue, (aX1 + aX2) / 2 - 6, aY1 - 4, "MORE LEVERAGE", { fill: sc, op: "0.92", size: "12", font: "'DM Mono', monospace", weight: "500", ls: "0.13em", anchor: "end" });
+    lbl(cue, (aX1 + aX2) / 2, baseY + 7, "MORE LEVERAGE", { fill: sc, op: "0.92", size: "12", font: "'DM Mono', monospace", weight: "500", ls: "0.13em" });
 
     // ---- milestone / runway nodes + labels — each rung a group that lights up in sequence ----
     RUNGS.forEach(function (nm, r) {
@@ -857,27 +858,82 @@
     g.fillStyle = "#E8E4DC"; g.fillText(a.rungName, 80, 540);
     g.fillStyle = "#A39E96"; g.font = "34px 'DM Sans', sans-serif";
     g.fillText("Level " + a.rung + " of 5  ·  " + STYLE_NAME[a.style] + " style", 80, 610);
-    // diagonal ascent ladder (matches the in-flow map): rung 0 bottom-left → 5 top-right
-    var lx0 = 120, lw = 840, lyB = 1060, climb = 300;
-    var cx = function (r) { return lx0 + (r / 5) * lw; };
-    var cy = function (r) { return lyB - (r / 5) * climb; };
+    // ascent map (mirrors the in-flow SVG): convex "leverage" climb, glow track,
+    // contours from the summit, pulsing YOU orb + pill, white haloed labels
+    var sc = STYLE_COLOR[a.style];
+    var mapX0 = 132, mapW = 818, mapYB = 1090, mapH = 322;
+    var cx = function (r) { return mapX0 + (r / 5) * mapW; };
+    var elev = function (r) { return Math.pow(r / 5, 1.3); };
+    var cy = function (r) { return mapYB - elev(r) * mapH; };
     g.lineCap = "round"; g.lineJoin = "round";
-    g.strokeStyle = "rgba(232,228,220,0.14)"; g.lineWidth = 5;
-    g.beginPath(); g.moveTo(cx(0), cy(0)); for (var r = 1; r <= 5; r++) g.lineTo(cx(r), cy(r)); g.stroke();
-    if (a.rung > 0) { g.strokeStyle = STYLE_COLOR[a.style]; g.lineWidth = 8; g.beginPath(); g.moveTo(cx(0), cy(0)); for (r = 1; r <= a.rung; r++) g.lineTo(cx(r), cy(r)); g.stroke(); }
-    g.textAlign = "center";
-    for (r = 0; r <= 5; r++) {
-      var nx = cx(r), nyy = cy(r), you = r === a.rung, top = r === 5;
-      if (you) { g.fillStyle = STYLE_COLOR[a.style]; g.beginPath(); g.arc(nx, nyy, 26, 0, 7); g.fill(); }
-      else if (r < a.rung) { g.globalAlpha = 0.65; g.fillStyle = STYLE_COLOR[a.style]; g.beginPath(); g.arc(nx, nyy, 11, 0, 7); g.fill(); g.globalAlpha = 1; }
-      else if (top) { g.strokeStyle = "#7BC9C4"; g.lineWidth = 4; g.beginPath(); g.arc(nx, nyy, 15, 0, 7); g.stroke(); g.fillStyle = "#7BC9C4"; g.beginPath(); g.arc(nx, nyy, 6, 0, 7); g.fill(); }
-      else { g.fillStyle = "rgba(232,228,220,0.3)"; g.beginPath(); g.arc(nx, nyy, 11, 0, 7); g.fill(); }
-      g.fillStyle = you ? STYLE_COLOR[a.style] : (top ? "#7BC9C4" : "#6F6A63");
-      g.font = (you || top) ? "600 24px 'DM Mono', monospace" : "22px 'DM Mono', monospace";
-      g.fillText(RUNGS[r], nx, nyy + (you ? 64 : 46));
+    function climb(lo, hi) {
+      var P = [], i; for (i = lo; i <= hi; i++) P.push([cx(i), cy(i)]);
+      g.moveTo(P[0][0], P[0][1]);
+      for (i = 0; i < P.length - 1; i++) {
+        var p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || P[i + 1];
+        g.bezierCurveTo(p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6, p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6, p2[0], p2[1]);
+      }
     }
-    g.fillStyle = "#E8E4DC"; g.font = "700 28px 'DM Sans', sans-serif"; g.fillText("YOU", cx(a.rung), cy(a.rung) - 44);
-    g.fillStyle = "#6F6A63"; g.font = "22px 'DM Mono', monospace"; g.fillText("MORE LEVERAGE ↗", cx(3.4), cy(0) + 4);
+    function rr(x, y, ww, hh, rad) { g.beginPath(); g.moveTo(x + rad, y); g.arcTo(x + ww, y, x + ww, y + hh, rad); g.arcTo(x + ww, y + hh, x, y + hh, rad); g.arcTo(x, y + hh, x, y, rad); g.arcTo(x, y, x + ww, y, rad); g.closePath(); }
+    function halo(tx, x, y, fill, font, hw, ls) { g.font = font; g.letterSpacing = (ls || 0) + "px"; if (hw !== 0) { g.lineJoin = "round"; g.lineWidth = hw || 7; g.strokeStyle = "#14101A"; g.strokeText(tx, x, y); } g.fillStyle = fill; g.fillText(tx, x, y); g.letterSpacing = "0px"; }
+
+    // contours from the summit, clipped to the map band
+    g.save(); g.beginPath(); g.rect(70, 600, 940, 560); g.clip();
+    g.strokeStyle = "rgba(123,201,196,0.06)"; g.lineWidth = 2;
+    [240, 400, 560, 720].forEach(function (rad, i) { g.setLineDash(i % 2 ? [] : [6, 16]); g.beginPath(); g.arc(cx(5), cy(5), rad, 0, 7); g.stroke(); });
+    g.setLineDash([]); g.restore();
+    // summit glow
+    var sgr = g.createRadialGradient(cx(5), cy(5), 0, cx(5), cy(5), 116);
+    sgr.addColorStop(0, "rgba(123,201,196,0.42)"); sgr.addColorStop(1, "rgba(123,201,196,0)");
+    g.fillStyle = sgr; g.beginPath(); g.arc(cx(5), cy(5), 116, 0, 7); g.fill();
+    // faint full path + dashed runway ahead
+    g.strokeStyle = "rgba(232,228,220,0.13)"; g.lineWidth = 5; g.beginPath(); climb(0, 5); g.stroke();
+    if (a.rung < 5) { g.strokeStyle = "rgba(232,228,220,0.32)"; g.lineWidth = 5; g.setLineDash([2, 16]); g.beginPath(); climb(a.rung, 5); g.stroke(); g.setLineDash([]); }
+    // completed climb: bloom underglow + bright gradient core
+    if (a.rung > 0) {
+      g.save(); g.shadowColor = sc; g.shadowBlur = 28; g.strokeStyle = sc; g.lineWidth = 9; g.beginPath(); climb(0, a.rung); g.stroke(); g.restore();
+      var tg = g.createLinearGradient(cx(0), cy(0), cx(a.rung), cy(a.rung));
+      tg.addColorStop(0, sc + "66"); tg.addColorStop(1, sc);
+      g.strokeStyle = tg; g.lineWidth = 7; g.beginPath(); climb(0, a.rung); g.stroke();
+    }
+    // milestone / runway nodes + labels (YOU drawn last)
+    g.textAlign = "center";
+    for (var r = 0; r <= 5; r++) {
+      if (r === a.rung) continue;
+      var nx = cx(r), ny = cy(r), top = r === 5, passed = r < a.rung;
+      if (top) {
+        g.strokeStyle = "#7BC9C4"; g.lineWidth = 4; g.beginPath(); g.arc(nx, ny, 16, 0, 7); g.stroke();
+        g.fillStyle = "#7BC9C4"; g.beginPath(); g.arc(nx, ny, 6, 0, 7); g.fill();
+        halo("▲", nx, ny - 30, "#7BC9C4", "20px 'DM Sans', sans-serif", 0);
+        halo("Conductor", nx, ny + 50, "#A6E6E1", "600 28px 'DM Sans', sans-serif", 7);
+        halo("THE SUMMIT", nx, ny + 80, "#5F8C89", "15px 'DM Mono', monospace", 5, 4);
+      } else {
+        if (passed) { g.fillStyle = sc; g.beginPath(); g.arc(nx, ny, 9, 0, 7); g.fill(); }
+        else { g.fillStyle = "#14101A"; g.strokeStyle = "rgba(232,228,220,0.34)"; g.lineWidth = 3; g.beginPath(); g.arc(nx, ny, 9, 0, 7); g.fill(); g.stroke(); }
+        halo(RUNGS[r], nx, ny + 46, passed ? "#E8E4DC" : "rgba(232,228,220,0.6)", (passed ? "500 " : "") + "26px 'DM Sans', sans-serif", 7);
+      }
+    }
+    // MORE LEVERAGE cue (open lower-right): arrow up, label centered below it
+    var ax1 = cx(3.2), ay1 = mapYB - 18, ax2 = cx(4.5), ay2 = mapYB - 60, ang = Math.atan2(ay2 - ay1, ax2 - ax1), hl = 26;
+    g.globalAlpha = 0.85; g.strokeStyle = sc; g.lineWidth = 4.5; g.beginPath();
+    g.moveTo(ax1, ay1); g.lineTo(ax2, ay2);
+    g.moveTo(ax2, ay2); g.lineTo(ax2 - hl * Math.cos(ang - 0.42), ay2 - hl * Math.sin(ang - 0.42));
+    g.moveTo(ax2, ay2); g.lineTo(ax2 - hl * Math.cos(ang + 0.42), ay2 - hl * Math.sin(ang + 0.42));
+    g.stroke(); g.globalAlpha = 1;
+    halo("MORE LEVERAGE", (ax1 + ax2) / 2, mapYB + 26, sc, "600 23px 'DM Mono', monospace", 6, 3);
+    // YOU: glow + ring + orb + pill + rung name
+    var ux = cx(a.rung), uy = cy(a.rung);
+    var yg = g.createRadialGradient(ux, uy, 0, ux, uy, 56);
+    yg.addColorStop(0, sc + "99"); yg.addColorStop(1, sc + "00");
+    g.fillStyle = yg; g.beginPath(); g.arc(ux, uy, 56, 0, 7); g.fill();
+    g.globalAlpha = 0.55; g.strokeStyle = sc; g.lineWidth = 3; g.beginPath(); g.arc(ux, uy, 28, 0, 7); g.stroke(); g.globalAlpha = 1;
+    g.fillStyle = sc; g.beginPath(); g.arc(ux, uy, 18, 0, 7); g.fill();
+    g.fillStyle = "#14101A"; g.beginPath(); g.arc(ux, uy, 7, 0, 7); g.fill();
+    var pillW = 100, pillH = 46, py = uy - 96;
+    g.globalAlpha = 0.5; g.strokeStyle = sc; g.lineWidth = 3; g.beginPath(); g.moveTo(ux, py + pillH / 2); g.lineTo(ux, uy - 30); g.stroke(); g.globalAlpha = 1;
+    g.fillStyle = sc; rr(ux - pillW / 2, py - pillH / 2, pillW, pillH, pillH / 2); g.fill();
+    halo("YOU", ux, py + 9, "#14101A", "700 26px 'DM Sans', sans-serif", 0, 2);
+    halo(a.rungName, ux, uy + 60, sc, "700 32px 'DM Sans', sans-serif", 7);
     g.textAlign = "left";
     g.fillStyle = "#E8E4DC"; g.font = "30px 'DM Sans', sans-serif"; g.fillText("What level are you? → ovae.ai/snapshot", 80, h - 90);
     var url = cv.toDataURL("image/png");
