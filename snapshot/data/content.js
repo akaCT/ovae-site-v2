@@ -20,128 +20,95 @@ window.SNAP_CONTENT = {
 
   landing: [
   {
-    "id": "value-strip",
-    "type": "value-strip",
-    "heading": "What you get in 90 seconds",
-    "body": "Answer a handful of honest questions. Walk away knowing exactly where you stand with AI and what to do next.",
-    "items": [
-      {
-        "title": "Your level and your style",
-        "text": "One of six levels, plus whether you delegate, collaborate, or automate. Two words that finally explain how you actually work with AI."
-      },
-      {
-        "title": "A personalized 2D map",
-        "text": "See yourself plotted on the level-by-style grid. You stop guessing whether you're ahead or behind and see it at a glance."
-      },
-      {
-        "title": "A prompt that levels you up",
-        "text": "One tailored prompt, written for your level and your work. Copy it, paste it, and put it to use in the next five minutes."
-      },
-      {
-        "title": "Where your work stands",
-        "text": "A plain read on how far AI has actually reached into your day, and the next move that moves the needle, not a generic checklist."
-      }
-    ]
-  },
-  {
-    "id": "the-six-levels",
+    "id": "levels",
     "type": "levels-list",
     "heading": "AI has 6 levels. Find yours.",
-    "body": "Read down the list and you'll spot yourself fast. Most people are closer to the next level than they assume.",
+    "body": "Read down the list. Most people are one rung from the next.",
     "items": [
       {
         "level": 0,
         "name": "Newcomer",
-        "line": "You've heard the hype but barely touch it on purpose. AI is a thing other people use."
+        "line": "You barely touch it on purpose."
       },
       {
         "level": 1,
         "name": "Searcher",
-        "line": "You ask it like Google. Short questions, quick answers, then back to doing the work yourself."
+        "line": "You ask it like Google."
       },
       {
         "level": 2,
         "name": "Drafter",
-        "line": "You paste in real work and ask for a rewrite. It's a sharper editor, not yet a teammate."
+        "line": "You paste real work in for a rewrite."
       },
       {
         "level": 3,
         "name": "Operator",
-        "line": "It's part of your day, across many tasks, on purpose. You know which tool to reach for and when."
+        "line": "It's in your day, across many tasks."
       },
       {
         "level": 4,
         "name": "Builder",
-        "line": "You've set up AI that produces finished work on its own. Automations run while you do something else."
+        "line": "You've set up AI that runs on its own."
       },
       {
         "level": 5,
         "name": "Conductor",
-        "line": "You direct a system of AI agents through multi-step work. You set the goal; the system handles the steps."
+        "line": "You direct a system of AI agents."
       }
     ]
   },
   {
-    "id": "result-preview",
-    "type": "preview",
-    "heading": "What your result looks like",
-    "body": "No dense report to wade through. You get a single clean card: your level, your style, your spot on the map, and the one prompt to use next. Built to screenshot and share, or to act on in the next five minutes.",
+    "id": "value",
+    "type": "value-strip",
+    "heading": "What you walk away with",
+    "body": "",
     "items": [
       {
-        "text": "Your level and style, named in plain English"
+        "title": "Your level + style",
+        "text": "Named in plain English."
       },
       {
-        "text": "Your dot on the 6-level by 3-style map"
+        "title": "Your spot on the map",
+        "text": "Level by style, at a glance."
       },
       {
-        "text": "One tailored prompt, ready to copy"
-      },
-      {
-        "text": "Your next move, specific to the work you actually do"
+        "title": "A prompt to level up",
+        "text": "Tailored to you. Use it in 5 minutes."
       }
     ]
+  },
+  {
+    "id": "preview",
+    "type": "preview",
+    "heading": "What you get",
+    "body": "One clean card. Built to screenshot, or act on today.",
+    "items": []
   },
   {
     "id": "faq",
     "type": "faq",
-    "heading": "Before you start",
-    "body": "The honest answers to what people ask first.",
+    "heading": "Quick questions",
+    "body": "",
     "items": [
       {
         "q": "How long does it take?",
-        "a": "About 90 seconds. A handful of questions, no long forms, no homework. You'll have your result before your coffee cools."
+        "a": "About 90 seconds. A handful of questions, no long forms."
       },
       {
         "q": "Is it free?",
-        "a": "Yes. The snapshot, the map, and your tailored prompt are all free. No card, no trial, no catch."
+        "a": "Yes. Your result, your map, and your prompt are all free."
       },
       {
         "q": "Do I need to be technical?",
-        "a": "Not at all. If you've ever typed a message into ChatGPT, you're ready. If you haven't, you're exactly who Level 0 is for. The questions are about how you work day to day, so there's nothing to study."
-      },
-      {
-        "q": "What happens to my email?",
-        "a": "We send your result and the occasional sharp note on getting more out of AI. We don't sell it, rent it, or bury you in mail. Unsubscribe in one click whenever you want."
+        "a": "Not at all. If you've typed into ChatGPT, you're ready."
       }
     ]
-  },
-  {
-    "id": "credibility",
-    "type": "credibility",
-    "heading": "Built on how AI adoption actually works",
-    "body": "The levels and styles come from a simple, repeatable pattern in how people and teams really adopt AI: the ones who pull ahead aren't the most technical, they're the ones who climb deliberately, one level at a time. This snapshot shows you where you are on that climb and the exact next rung to grab."
   },
   {
     "id": "cta",
     "type": "cta",
-    "heading": "Find your level. It takes 90 seconds.",
-    "body": "You'll know your number, see your map, and leave with one prompt you can use today. Free and fast.",
-    "items": [
-      {
-        "label": "Find my level",
-        "action": "start"
-      }
-    ]
+    "heading": "Find your level.",
+    "body": "90 seconds. Free."
   }
 ],
 

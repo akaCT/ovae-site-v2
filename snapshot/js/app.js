@@ -205,7 +205,9 @@
         el("p", { class: "sub", text: sub }),
         el("div", { class: "btn-row" }, [el("button", { class: "btn btn-primary btn-block", onclick: go, html: "Find my level &nbsp;→" })]),
         el("div", { class: "reassure" }, [
-          el("span", { text: "90 seconds" }), el("span", { text: "Instant result" }), el("span", { text: "Free" })
+          el("span", {}, [el("span", { class: "ri", text: "◷" }), "90 seconds"]),
+          el("span", {}, [el("span", { class: "ri", text: "✦" }), "Instant result"]),
+          el("span", {}, [el("span", { class: "ri", text: "✓" }), "Free"])
         ]),
         el("div", { class: "credit", text: "Grounded in research from Wharton, Kellogg & BCG" })
       ]);
