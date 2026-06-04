@@ -379,7 +379,7 @@
       el("div", { class: "map-cap", html: "Your spot on the 6-level climb, low to high. " + ahead }),
       el("div", { class: "map-legend" }, [
         el("span", { class: "ml-dot", style: "background:" + sColor }),
-        el("span", { class: "ml-txt", html: "<b style=\"color:" + sColor + "\">" + STYLE_NAME[a.style] + "</b> is your <b>style</b> — <i>how</i> you work with AI. A flavor, not a rank." })
+        el("span", { class: "ml-txt", html: "<b style=\"color:" + sColor + "\">" + STYLE_NAME[a.style] + "</b> is your <b>style</b> — <i>how</i> you work with AI." })
       ])
     ]));
     if (mirror != null) {
@@ -672,7 +672,7 @@
       return el("div", { class: "cta-card" }, [
         el("div", { class: "cc-h", text: "This is exactly what we install." }),
         el("div", { class: "cc-b", text: "A 30-minute call with CT & Isaiah maps your constraint to the first build. We take on a handful of flagship engagements." }),
-        el("a", { class: "btn btn-primary", href: "mailto:ct@ovae.ai?subject=Book%20a%2030-min%20AI%20Leverage%20call", html: "Book a 30-min call &nbsp;→" })
+        el("a", { class: "btn btn-primary", href: "https://calendly.com/isaiah-orectic/30min", target: "_blank", rel: "noopener", html: "Book a 30-min call &nbsp;→" })
       ]);
     }
     if (s.appetite === "convince") {
@@ -696,63 +696,103 @@
   // Conductor = glowing summit). Style is the YOU dot's COLOR, never a vertical rank —
   // this is what fixes the old scatter map's "up = better?" / "three dots?" confusion.
   function mapSVG(a) {
-    var W = 520, H = 300, padL = 56, padR = 74, padT = 64, padB = 52;
+    var W = 560, H = 358, padL = 58, padR = 94, padT = 60, padB = 84;
     var sc = STYLE_COLOR[a.style] || "#7BC9C4";
-    var xr = function (r) { return padL + (r / 5) * (W - padL - padR); };
-    var yr = function (r) { return (H - padB) - (r / 5) * (H - padT - padB); };
     var ns = "http://www.w3.org/2000/svg";
+    var iW = W - padL - padR, iH = H - padT - padB, rung = a.rung;
+    var xr = function (r) { return padL + (r / 5) * iW; };
+    var elev = function (r) { return Math.pow(r / 5, 1.3); };           // convex "leverage" climb
+    var yr = function (r) { return (H - padB) - elev(r) * iH; };
     var svg = document.createElementNS(ns, "svg");
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
     svg.setAttribute("class", "ascent");
     function mk(parent, tag, attrs, txt) { var e = document.createElementNS(ns, tag); Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); }); if (txt != null) e.textContent = txt; parent.appendChild(e); return e; }
     var add = function (tag, attrs, txt) { return mk(svg, tag, attrs, txt); };
-    function pts(a0, a1) { var s = []; for (var r = a0; r <= a1; r++) s.push(xr(r) + "," + yr(r)); return s.join(" "); }
-
-    // defs: diagonal track gradient (dim → your style color) + radial summit glow
-    var defs = add("defs", {});
-    var lg = mk(defs, "linearGradient", { id: "trkGrad", x1: "0", y1: "1", x2: "1", y2: "0" });
-    mk(lg, "stop", { offset: "0", "stop-color": "#7BC9C4", "stop-opacity": "0.5" });
-    mk(lg, "stop", { offset: "1", "stop-color": sc, "stop-opacity": "1" });
-    var rg = mk(defs, "radialGradient", { id: "smtGlow" });
-    mk(rg, "stop", { offset: "0", "stop-color": "#7BC9C4", "stop-opacity": "0.55" });
-    mk(rg, "stop", { offset: "1", "stop-color": "#7BC9C4", "stop-opacity": "0" });
-
-    // summit hotspot behind Conductor (top-right) — radius < top/right margin so the
-    // glow fades to 0 fully inside the viewBox (no clipping at the card corner)
-    add("circle", { cx: xr(5), cy: yr(5), r: 48, fill: "url(#smtGlow)", "class": "map-summit" });
-
-    // full faint track, then the runway ahead, then the bright completed climb
-    add("polyline", { points: pts(0, 5), fill: "none", stroke: "rgba(232,228,220,0.13)", "stroke-width": "3", "stroke-linecap": "round", "stroke-linejoin": "round" });
-    if (a.rung < 5) add("polyline", { points: pts(a.rung, 5), fill: "none", stroke: "rgba(232,228,220,0.24)", "stroke-width": "3", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-dasharray": "1 9" });
-    if (a.rung > 0) {
-      add("polyline", { points: pts(0, a.rung), fill: "none", stroke: sc, "stroke-opacity": "0.16", "stroke-width": "9", "stroke-linecap": "round", "stroke-linejoin": "round" });
-      add("polyline", { points: pts(0, a.rung), fill: "none", stroke: "url(#trkGrad)", "stroke-width": "4", "stroke-linecap": "round", "stroke-linejoin": "round", "class": "trk-done" });
+    // text with a dark halo (paint-order:stroke) so labels stay crisp over the glow
+    function lbl(parent, x, y, tx, o) { o = o || {}; return mk(parent, "text", { x: x, y: y, fill: o.fill || "#E8E4DC", "fill-opacity": o.op || "1", "font-size": o.size || "13", "font-family": o.font || "'DM Sans', sans-serif", "font-weight": o.weight || "500", "letter-spacing": o.ls || "0", "text-anchor": o.anchor || "middle", "paint-order": "stroke", stroke: "#14101A", "stroke-width": o.halo == null ? "3.6" : o.halo, "stroke-linejoin": "round" }, tx); }
+    // smooth catmull-rom path through rungs lo..hi
+    function pathD(lo, hi) {
+      var P = []; for (var r = lo; r <= hi; r++) P.push([xr(r), yr(r)]);
+      if (P.length === 1) return "M" + P[0][0] + "," + P[0][1];
+      var d = "M" + P[0][0] + "," + P[0][1];
+      for (var i = 0; i < P.length - 1; i++) {
+        var p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || P[i + 1];
+        d += "C" + (p1[0] + (p2[0] - p0[0]) / 6) + "," + (p1[1] + (p2[1] - p0[1]) / 6) + " " +
+             (p2[0] - (p3[0] - p1[0]) / 6) + "," + (p2[1] - (p3[1] - p1[1]) / 6) + " " + p2[0] + "," + p2[1];
+      }
+      return d;
     }
 
-    // direction cue in the open lower-right triangle
-    add("text", { x: xr(3.5), y: yr(0) - 2, fill: "#6F6A63", "font-size": "10", "font-family": "DM Mono, monospace", "text-anchor": "middle", "letter-spacing": "0.08em" }, "MORE LEVERAGE ↗");
+    // ---- defs: track gradient, summit + you radial glows, soft bloom filter ----
+    var defs = add("defs", {});
+    var lg = mk(defs, "linearGradient", { id: "trkGrad", gradientUnits: "userSpaceOnUse", x1: xr(0), y1: yr(0), x2: xr(rung), y2: yr(rung) });
+    mk(lg, "stop", { offset: "0", "stop-color": sc, "stop-opacity": "0.4" });
+    mk(lg, "stop", { offset: "1", "stop-color": sc, "stop-opacity": "1" });
+    var sg = mk(defs, "radialGradient", { id: "smtGlow" });
+    mk(sg, "stop", { offset: "0", "stop-color": "#7BC9C4", "stop-opacity": "0.5" });
+    mk(sg, "stop", { offset: "1", "stop-color": "#7BC9C4", "stop-opacity": "0" });
+    var yg = mk(defs, "radialGradient", { id: "youGlow" });
+    mk(yg, "stop", { offset: "0", "stop-color": sc, "stop-opacity": "0.6" });
+    mk(yg, "stop", { offset: "1", "stop-color": sc, "stop-opacity": "0" });
+    var fb = mk(defs, "filter", { id: "bloom", x: "-50%", y: "-50%", width: "200%", height: "200%" });
+    mk(fb, "feGaussianBlur", { stdDeviation: "4.5" });
 
-    // milestone / runway nodes + rung-name labels (YOU drawn separately, on top)
+    // ---- atmosphere: topographic contours from the summit + glow ----
+    [132, 212, 300, 392].forEach(function (rad, i) {
+      add("circle", { cx: xr(5), cy: yr(5), r: rad, fill: "none", stroke: "rgba(123,201,196,0.05)", "stroke-width": "1", "stroke-dasharray": i % 2 ? "none" : "3 9" });
+    });
+    add("circle", { cx: xr(5), cy: yr(5), r: 52, fill: "url(#smtGlow)", "class": "map-summit" });
+
+    // ---- tracks: faint full path, dashed runway, glowing completed climb ----
+    add("path", { d: pathD(0, 5), fill: "none", stroke: "rgba(232,228,220,0.12)", "stroke-width": "2.5", "stroke-linecap": "round" });
+    if (rung < 5) add("path", { d: pathD(rung, 5), fill: "none", stroke: "rgba(232,228,220,0.32)", "stroke-width": "2.5", "stroke-linecap": "round", "stroke-dasharray": "1 8" });
+    if (rung > 0) {
+      var dDone = pathD(0, rung);
+      add("path", { d: dDone, fill: "none", stroke: sc, "stroke-opacity": "0.5", "stroke-width": "11", "stroke-linecap": "round", filter: "url(#bloom)" });
+      add("path", { d: dDone, fill: "none", stroke: "url(#trkGrad)", "stroke-width": "4", "stroke-linecap": "round", pathLength: "100", "class": "trk-done" });
+      var spark = add("circle", { r: "3.2", fill: "#FFFFFF", filter: "url(#bloom)", "class": "trk-spark" });
+      mk(spark, "animateMotion", { dur: "2.8s", begin: "1.4s", repeatCount: "indefinite", path: dDone });
+    }
+
+    // ---- "MORE LEVERAGE" directional cue (open lower-right, points up to summit) ----
+    var aX1 = xr(3.15), aY1 = (H - padB) + 6, aX2 = xr(4.4), aY2 = (H - padB) - 34;
+    var ang = Math.atan2(aY2 - aY1, aX2 - aX1), hl = 13;
+    var cue = add("g", { "class": "lev-cue" });
+    mk(cue, "line", { x1: aX1, y1: aY1, x2: aX2, y2: aY2, stroke: sc, "stroke-opacity": "0.85", "stroke-width": "2.2", "stroke-linecap": "round" });
+    mk(cue, "line", { x1: aX2, y1: aY2, x2: aX2 - hl * Math.cos(ang - 0.42), y2: aY2 - hl * Math.sin(ang - 0.42), stroke: sc, "stroke-opacity": "0.85", "stroke-width": "2.2", "stroke-linecap": "round" });
+    mk(cue, "line", { x1: aX2, y1: aY2, x2: aX2 - hl * Math.cos(ang + 0.42), y2: aY2 - hl * Math.sin(ang + 0.42), stroke: sc, "stroke-opacity": "0.85", "stroke-width": "2.2", "stroke-linecap": "round" });
+    lbl(cue, (aX1 + aX2) / 2 - 6, aY1 - 4, "MORE LEVERAGE", { fill: sc, op: "0.92", size: "12", font: "'DM Mono', monospace", weight: "500", ls: "0.13em", anchor: "end" });
+
+    // ---- milestone / runway nodes + labels — each rung a group that lights up in sequence ----
     RUNGS.forEach(function (nm, r) {
-      if (r === a.rung) return;
-      var cx = xr(r), cy = yr(r), isTop = r === 5, passed = r < a.rung;
-      if (isTop) {
-        add("circle", { cx: cx, cy: cy, r: 8, fill: "none", stroke: "#7BC9C4", "stroke-width": "2", "class": "map-summit-node" });
-        add("circle", { cx: cx, cy: cy, r: 3, fill: "#7BC9C4" });
-      } else if (passed) {
-        add("circle", { cx: cx, cy: cy, r: 4.5, fill: sc, "fill-opacity": "0.6" });
-      } else {
-        add("circle", { cx: cx, cy: cy, r: 4.5, fill: "#1A1622", stroke: "rgba(232,228,220,0.28)", "stroke-width": "1.5" });
+      var nx = xr(r), ny = yr(r), isSummit = r === 5, isYou = r === rung, passed = r < rung;
+      if (isYou) return; // YOU drawn last, on top
+      var g = add("g", { "class": "rung-grp", style: "animation-delay:" + (0.55 + r * 0.12).toFixed(2) + "s" });
+      if (isSummit) {
+        mk(g, "circle", { cx: nx, cy: ny, r: 9, fill: "none", stroke: "#7BC9C4", "stroke-width": "2", "class": "map-summit-node" });
+        mk(g, "circle", { cx: nx, cy: ny, r: 3.2, fill: "#7BC9C4" });
+        lbl(g, nx, ny - 17, "▲", { fill: "#7BC9C4", size: "11", halo: "0" });
+        lbl(g, nx, ny + 28, "Conductor", { fill: "#A6E6E1", size: "13.5", weight: "600" });
+        lbl(g, nx, ny + 43, "THE SUMMIT", { fill: "#5F8C89", size: "8.5", font: "'DM Mono', monospace", ls: "0.2em", halo: "2.5" });
+        return;
       }
-      add("text", { x: cx, y: cy + 20, fill: isTop ? "#7BC9C4" : "#6F6A63", "font-size": "9.5", "font-family": "DM Mono, monospace", "text-anchor": "middle", "font-weight": isTop ? "600" : "400" }, nm);
+      if (passed) mk(g, "circle", { cx: nx, cy: ny, r: 5, fill: sc, "fill-opacity": "0.9" });
+      else mk(g, "circle", { cx: nx, cy: ny, r: 5, fill: "#14101A", stroke: "rgba(232,228,220,0.34)", "stroke-width": "1.6" });
+      lbl(g, nx, ny + 27, nm, { op: passed ? "0.92" : "0.58", weight: passed ? "500" : "400" });
     });
 
-    // YOU (on top): glow ring + solid dot in style color, "YOU" above, rung name below
-    var ux = xr(a.rung), uy = yr(a.rung);
-    add("circle", { cx: ux, cy: uy, r: 15, fill: sc, opacity: "0.22", "class": "you-glow" });
-    add("circle", { cx: ux, cy: uy, r: 8, fill: sc, "class": "you-dot" });
-    add("text", { x: ux, y: uy - 19, fill: "#E8E4DC", "font-size": "12", "font-weight": "700", "font-family": "DM Sans, sans-serif", "text-anchor": "middle" }, "YOU");
-    add("text", { x: ux, y: uy + 20, fill: sc, "font-size": "9.5", "font-weight": "600", "font-family": "DM Mono, monospace", "text-anchor": "middle" }, a.rungName);
+    // ---- YOU: pill above + connector + multi-ring pulsing orb + rung name below ----
+    var ux = xr(rung), uy = yr(rung);
+    var ygrp = add("g", { "class": "you-grp" });
+    mk(ygrp, "circle", { cx: ux, cy: uy, r: 27, fill: "url(#youGlow)", "class": "you-glow2" });
+    mk(ygrp, "circle", { cx: ux, cy: uy, r: 14, fill: "none", stroke: sc, "stroke-width": "1.5", "stroke-opacity": "0.55", "class": "you-ring" });
+    mk(ygrp, "circle", { cx: ux, cy: uy, r: 9, fill: sc, "class": "you-dot" });
+    mk(ygrp, "circle", { cx: ux, cy: uy, r: 3.3, fill: "#14101A", "fill-opacity": "0.9" });
+    var pillW = 48, pillH = 22, py = uy - 46;
+    mk(ygrp, "line", { x1: ux, y1: py + pillH / 2, x2: ux, y2: uy - 15, stroke: sc, "stroke-width": "1.4", "stroke-opacity": "0.5" });
+    mk(ygrp, "rect", { x: ux - pillW / 2, y: py - pillH / 2, width: pillW, height: pillH, rx: pillH / 2, fill: sc, "class": "you-pill" });
+    lbl(ygrp, ux, py + 4, "YOU", { fill: "#14101A", size: "11.5", weight: "700", ls: "0.14em", halo: "0" });
+    lbl(ygrp, ux, uy + 29, a.rungName, { fill: sc, size: "15", weight: "700" });
     return svg;
   }
 
