@@ -145,11 +145,11 @@
 
   // ---- option pickers ----
   function optionList(opts, onPick, getLabel) {
-    return el("div", { class: "opts" }, opts.map(function (o) {
+    return el("div", { class: "opts" }, opts.map(function (o, idx) {
       var label = getLabel ? getLabel(o) : (o.label || o);
       var inner = [el("span", { html: label })];
       if (o && o.sub) inner.push(el("span", { class: "opt-sub", html: o.sub }));
-      return el("button", { class: "opt", onclick: function () { onPick(o); } }, [
+      return el("button", { class: "opt", style: "--i:" + idx, onclick: function () { onPick(o); } }, [
         el("span", { class: "tick" }),
         el("span", {}, inner)
       ]);
@@ -199,9 +199,16 @@
     steps.push({ when: null, render: function (s, go) {
       var hook = (C.hook && C.hook.headline) || "AI has 6 levels. Which one are you?";
       var sub = (C.hook && C.hook.sub) || "90 seconds, no signup. Find your level — and the one habit that gets you to the next.";
-      var page = el("div", {}, [
-        el("div", { class: "kicker", text: "The AI Leverage Snapshot" }),
-        el("h1", { class: "hook", text: hook }),
+      var page = el("div", { class: "hero-poster" }, [
+        el("div", { class: "hp-eyebrow", text: "The AI Leverage Snapshot" }),
+        el("h1", { class: "hp-title" }, [
+          el("span", { class: "hp-lead", text: "AI has" }),
+          el("span", { class: "hp-big" }, [
+            el("span", { class: "hp-num", text: "6" }),
+            el("span", { class: "hp-levels", text: "levels." })
+          ]),
+          el("span", { class: "hp-q", text: "Which one are you?" })
+        ]),
         el("p", { class: "sub", text: sub }),
         el("div", { class: "btn-row" }, [el("button", { class: "btn btn-primary btn-block", onclick: go, html: "Find my level &nbsp;→" })]),
         el("div", { class: "reassure" }, [
@@ -521,8 +528,9 @@
     var node = el("div", { class: "reveal" }, []);
 
     node.appendChild(el("div", { class: "center" }, [el("span", { class: "persona-badge", text: p.label })]));
+    var ixNum = el("div", { class: "ix-num", text: "0" });
     node.appendChild(el("div", { class: "index-hero" }, [
-      el("div", { class: "ix-num", text: String(s.actA.index) }),
+      ixNum,
       el("div", { class: "ix-cap", text: "Your AI Leverage Index" })
     ]));
     if (pc.blurb) node.appendChild(el("p", { class: "center id-blurb", html: T(pc.blurb) }));
@@ -556,7 +564,24 @@
 
     node.appendChild(el("div", { class: "footer", html: "Ovae — Latin, plural of <i>ovum</i>: eggs, origins. &nbsp;·&nbsp; <a href='/snapshot/'>Restart ↺</a>" }));
     paint(node, 3, false);
+    countUp(ixNum, s.actA.index, 1100, 260);
     try { history.replaceState({ seq: navIdx }, "", "#my-business"); } catch (e) {}
+  }
+
+  // requestAnimationFrame count-up (respects reduced motion)
+  function countUp(node, to, dur, delay) {
+    if (!node) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) { node.textContent = String(to); return; }
+    setTimeout(function () {
+      var start = null;
+      function frame(t) {
+        if (start === null) start = t;
+        var p = Math.min(1, (t - start) / dur);
+        node.textContent = String(Math.round(to * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) requestAnimationFrame(frame); else node.textContent = String(to);
+      }
+      requestAnimationFrame(frame);
+    }, delay || 0);
   }
 
   function ctaFor(s) {
@@ -613,8 +638,8 @@
     if (a.rung < 5) add("text", { x: x(Math.min(5, a.rung + 1)), y: lanes[a.style] - 14, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace", "text-anchor": "middle" }, "→ next");
     // you
     var cx = x(a.rung), cy = lanes[a.style];
-    add("circle", { cx: cx, cy: cy, r: 13, fill: STYLE_COLOR[a.style], opacity: "0.22" });
-    add("circle", { cx: cx, cy: cy, r: 7, fill: STYLE_COLOR[a.style] });
+    add("circle", { cx: cx, cy: cy, r: 13, fill: STYLE_COLOR[a.style], opacity: "0.22", "class": "you-glow" });
+    add("circle", { cx: cx, cy: cy, r: 7, fill: STYLE_COLOR[a.style], "class": "you-dot" });
     add("text", { x: cx, y: cy - 20, fill: "#E8E4DC", "font-size": "12", "font-weight": "600", "font-family": "DM Sans, sans-serif", "text-anchor": "middle" }, "YOU");
     return svg;
   }
