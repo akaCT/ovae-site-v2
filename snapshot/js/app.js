@@ -306,15 +306,23 @@
     act2StartIdx = steps.length;
     steps.push({ when: function (s) { return s.doBusiness; }, render: function (s, go) { renderProfile(s, go); } });
 
-    // BUSINESS QUESTIONS (role-forked, one per screen)
-    steps.push({ when: function (s) { return s.doBusiness; }, render: function (s, go) { renderBusiness(s, go); } });
+    // BUSINESS QUESTIONS — one real flow step per question, so Back goes one at a time
+    var MAX_BIZ = 12;
+    for (var bi = 0; bi < MAX_BIZ; bi++) {
+      (function (i) {
+        steps.push({
+          when: function (s) { return s.doBusiness && i < bizQs(s).length; },
+          render: function (s, go) { renderBizQuestion(s, go, i); }
+        });
+      })(bi);
+    }
 
     // APPETITE
     steps.push({ when: function (s) { return s.doBusiness && C.appetite; }, render: function (s, go) {
       paint(el("div", {}, [
         el("h2", { class: "q-stem", text: C.appetite.stem }),
         optionList(C.appetite.options, function (o) { s.appetite = o.value; updateLead(s); go(); })
-      ]), 3, false);
+      ]), 3, false, { label: "Your business", pct: 94 });
     }});
 
     // BUSINESS REVEAL
@@ -477,7 +485,7 @@
       el("div", { class: "spacer" }), companyI,
       el("div", { class: "spacer" }),
       el("button", { class: "btn btn-primary btn-block", html: "Continue &nbsp;→", onclick: function () { s.company = companyI.value.trim(); updateLead(s); go(); } })
-    ]), 3, false);
+    ]), 3, false, { label: "Your business", pct: 6 });
   }
 
   function renderCloseout(s) {
@@ -496,19 +504,15 @@
     ]), 3, false);
   }
 
-  function renderBusiness(s, go) {
-    var qs = (C.business && (C.business[s.role] || C.business.owner)) || [];
-    var i = 0;
-    function ask() {
-      if (i >= qs.length) { go(); return; }
-      var q = qs[i];
-      var stem = T(q.stem);
-      paint(el("div", {}, [
-        el("h2", { class: "q-stem", text: stem }),
-        optionList(q.options, function (o) { s.bizAnswers.push({ dim: q.dim, v: o.v, id: q.id }); i++; ask(); })
-      ]), 3, false, { label: "Your business", pct: 15 + 70 * (i / qs.length) });
-    }
-    ask();
+  function bizQs(s) { return (C.business && (C.business[s.role] || C.business.owner)) || []; }
+  // one business question = one flow step (Back/Forward work per question)
+  function renderBizQuestion(s, go, i) {
+    var qs = bizQs(s); var q = qs[i];
+    if (!q) { go(); return; }
+    paint(el("div", {}, [
+      el("h2", { class: "q-stem", text: T(q.stem) }),
+      optionList(q.options, function (o) { s.bizAnswers[i] = { dim: q.dim, v: o.v, id: q.id }; go(); })
+    ]), 3, false, { label: "Your business", pct: 12 + 76 * ((i + 1) / qs.length) });
   }
 
   function renderBusinessReveal(s) {
@@ -541,6 +545,11 @@
       return el("div", { class: "fix" }, [el("div", {}, [el("div", { class: "fx-h", text: Score.DIM_NAME[d] }), el("div", { class: "fx-b", html: opp })])]);
     }));
     node.appendChild(fixes);
+
+    // download results card
+    node.appendChild(el("div", { class: "sharecard-wrap" }, [
+      el("button", { class: "btn btn-block", html: "↓ &nbsp;Download my results card", onclick: function () { downloadBizCard(s); } })
+    ]));
 
     // CTA — role + appetite conditioned
     node.appendChild(ctaFor(s));
@@ -631,6 +640,31 @@
         navigator.clipboard.writeText(url).then(function () { if (btn) btn.innerHTML = "✓ &nbsp;Link copied — paste to share"; });
       } else { window.prompt("Copy your result link:", url); }
     });
+  }
+
+  function downloadBizCard(s) {
+    var b = s.actB, p = s.persona, a = s.actA;
+    var w = 1080, h = 1350, cv = document.createElement("canvas"); cv.width = w; cv.height = h;
+    var g = cv.getContext("2d");
+    g.fillStyle = "#14101A"; g.fillRect(0, 0, w, h);
+    var grd = g.createRadialGradient(w, 0, 0, w, 0, 900); grd.addColorStop(0, "rgba(123,201,196,0.12)"); grd.addColorStop(1, "rgba(20,16,26,0)");
+    g.fillStyle = grd; g.fillRect(0, 0, w, h);
+    g.fillStyle = "#7BC9C4"; g.font = "600 30px 'DM Mono', monospace"; g.fillText("THE AI LEVERAGE SNAPSHOT", 80, 130);
+    g.fillStyle = "#6F6A63"; g.font = "26px 'DM Mono', monospace"; g.fillText("YOUR BUSINESS · " + monthYear().toUpperCase(), 80, 175);
+    g.fillStyle = "#E8E4DC"; g.font = "600 80px 'DM Sans', sans-serif"; g.fillText(p.label, 80, 310);
+    g.fillStyle = "#7BC9C4"; g.font = "600 190px 'DM Sans', sans-serif"; g.fillText(String(a.index), 80, 540);
+    g.fillStyle = "#A39E96"; g.font = "34px 'DM Sans', sans-serif"; g.fillText("AI Leverage Index  ·  " + b.band, 80, 610);
+    var dims = Object.keys(b.dims); var by = 720;
+    dims.forEach(function (d, i) {
+      var y = by + i * 80; var isC = d === b.constraint;
+      g.fillStyle = "#E8E4DC"; g.font = "28px 'DM Sans', sans-serif"; g.textAlign = "left"; g.fillText(Score.DIM_NAME[d], 80, y);
+      g.fillStyle = "#6F6A63"; g.font = "24px 'DM Mono', monospace"; g.textAlign = "right"; g.fillText(b.dims[d].pct + "%", w - 80, y); g.textAlign = "left";
+      var bx = 80, bw = w - 160, bh = 14, byy = y + 16;
+      g.fillStyle = "#1F1A28"; g.fillRect(bx, byy, bw, bh);
+      g.fillStyle = isC ? "#C97D5C" : "#7BC9C4"; g.fillRect(bx, byy, bw * (b.dims[d].pct / 100), bh);
+    });
+    g.fillStyle = "#E8E4DC"; g.font = "30px 'DM Sans', sans-serif"; g.fillText("Where's your business? → ovae.ai/snapshot", 80, h - 80);
+    var link = document.createElement("a"); link.href = cv.toDataURL("image/png"); link.download = "ai-leverage-" + (p.key || "result") + ".png"; link.click();
   }
 
   function downloadCard(a) {

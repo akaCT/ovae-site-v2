@@ -20,44 +20,6 @@ window.SNAP_CONTENT = {
 
   landing: [
   {
-    "id": "levels",
-    "type": "levels-list",
-    "heading": "AI has 6 levels. Find yours.",
-    "body": "Read down the list. Most people are one rung from the next.",
-    "items": [
-      {
-        "level": 0,
-        "name": "Newcomer",
-        "line": "You barely touch it on purpose."
-      },
-      {
-        "level": 1,
-        "name": "Searcher",
-        "line": "You ask it like Google."
-      },
-      {
-        "level": 2,
-        "name": "Drafter",
-        "line": "You paste real work in for a rewrite."
-      },
-      {
-        "level": 3,
-        "name": "Operator",
-        "line": "It's in your day, across many tasks."
-      },
-      {
-        "level": 4,
-        "name": "Builder",
-        "line": "You've set up AI that runs on its own."
-      },
-      {
-        "level": 5,
-        "name": "Conductor",
-        "line": "You direct a system of AI agents."
-      }
-    ]
-  },
-  {
     "id": "value",
     "type": "value-strip",
     "heading": "What you walk away with",
@@ -83,26 +45,6 @@ window.SNAP_CONTENT = {
     "heading": "What you get",
     "body": "One clean card. Built to screenshot, or act on today.",
     "items": []
-  },
-  {
-    "id": "faq",
-    "type": "faq",
-    "heading": "Quick questions",
-    "body": "",
-    "items": [
-      {
-        "q": "How long does it take?",
-        "a": "About 90 seconds. A handful of questions, no long forms."
-      },
-      {
-        "q": "Is it free?",
-        "a": "Yes. Your result, your map, and your prompt are all free."
-      },
-      {
-        "q": "Do I need to be technical?",
-        "a": "Not at all. If you've typed into ChatGPT, you're ready."
-      }
-    ]
   },
   {
     "id": "cta",
