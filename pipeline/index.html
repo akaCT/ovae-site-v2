@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>Ovae · Readiness Leads</title>
+<title>Ovae · Pipeline</title>
 <style>
   html,body{margin:0;height:100%;background:#14101A;color:#A39E96;
     font-family:"DM Mono",ui-monospace,monospace;
@@ -14,7 +14,7 @@
 </style>
 </head>
 <body>
-  <div id="state"><div class="pulse">Ovae · loading leads…</div></div>
+  <div id="state"><div class="pulse">Ovae · loading pipeline…</div></div>
   <script>
   (function () {
     var EDGE = "https://muguotipixphthfxjssu.supabase.co/functions/v1/pipeline";
@@ -22,7 +22,7 @@
       .then(function (r) { return r.text(); })
       .then(function (html) { document.open(); document.write(html); document.close(); })
       .catch(function () {
-        document.getElementById("state").innerHTML = '<div class="pulse">Could not load leads.</div>';
+        document.getElementById("state").innerHTML = '<div class="pulse">Could not load pipeline.</div>';
       });
   })();
   </script>

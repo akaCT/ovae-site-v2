@@ -2,7 +2,7 @@
 // Body: either a full submission payload (inserts a new row) OR { notify_id }
 // to (re)send the notification for an existing row (used for testing).
 // Deploy with --no-verify-jwt; called cross-origin from ovae.ai.
-import { fetchRow, flagMeta, type Row } from "../_shared/readiness.ts";
+import { fetchRow, flagMeta, C1_MID, C2_MID, type Row } from "../_shared/readiness.ts";
 import { renderEmailHTML } from "../_shared/render.ts";
 
 const CORS = {
@@ -31,6 +31,28 @@ async function insertRow(payload: Record<string, unknown>): Promise<Row> {
   });
   if (!res.ok) throw new Error(`insert failed: ${res.status} ${await res.text()}`);
   return (await res.json())[0] as Row;
+}
+
+async function upsertPipeline(row: Row): Promise<void> {
+  const base = Deno.env.get("SUPABASE_URL")!;
+  const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const c1 = row.value_band_1, c2 = row.value_band_2;
+  let lo: number | null = null, hi: number | null = null;
+  if (c1 && c1 !== "unsure" && c2 && c2 !== "unsure") {
+    const t = (C1_MID[c1] || 0) + (C2_MID[c2] || 0);
+    lo = Math.round(t * 0.25); hi = Math.round(t * 0.40);
+  }
+  const entry = {
+    name: row.name, company: row.company, email: row.email, stage: "new", source: "readiness",
+    readiness_id: row.id, readiness_score: row.readiness_score, flag: row.flag,
+    constraint_dim: row.constraint_dim, value_low: lo, value_high: hi,
+  };
+  const res = await fetch(`${base}/rest/v1/pipeline?on_conflict=readiness_id`, {
+    method: "POST",
+    headers: { apikey: key, Authorization: `Bearer ${key}`, "content-type": "application/json", Prefer: "resolution=ignore-duplicates,return=minimal" },
+    body: JSON.stringify(entry),
+  });
+  if (!res.ok) throw new Error(`pipeline upsert failed: ${res.status} ${await res.text()}`);
 }
 
 async function sendEmail(row: Row, reportUrl: string): Promise<string> {
@@ -63,6 +85,7 @@ Deno.serve(async (req) => {
     } else {
       if (!body.name || !body.email) return json({ error: "name and email required" }, 400);
       row = await insertRow(body);
+      try { await upsertPipeline(row); } catch (e) { console.error("pipeline upsert failed:", e); }
     }
 
     const SITE = Deno.env.get("SITE_URL") || "https://ovae.ai";
