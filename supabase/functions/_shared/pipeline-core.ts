@@ -1,5 +1,5 @@
-import { ACCENT, RUST, WARN, GREEN, esc, fmtUsd } from "./readiness.ts";
-export { ACCENT, RUST, WARN, GREEN, esc, fmtUsd };
+import { ACCENT, RUST, WARN, GREEN, esc, fmtUsd, flagMeta } from "./readiness.ts";
+export { ACCENT, RUST, WARN, GREEN, esc, fmtUsd, flagMeta };
 
 export interface PRow {
   id: string; created_at: string; updated_at: string; name: string; company: string | null; email: string | null;
@@ -8,7 +8,7 @@ export interface PRow {
   value_low: number | null; value_high: number | null;
   deal_value_low: number | null; deal_value_high: number | null;
   opportunity_low: number | null; opportunity_high: number | null;
-  contact_title: string | null; phone: string | null;
+  contact_title: string | null; phone: string | null; referred_by: string | null;
   next_step: string | null; next_step_due: string | null; owner: string | null; last_activity: string | null;
   proposal_url: string | null; notes: string | null; details: Record<string, string> | null;
 }
@@ -37,6 +37,18 @@ export const SRC: Record<string, { label: string; color: string }> = {
 export function srcMeta(s: string) { return SRC[s] || { label: (s || "").toUpperCase(), color: "#A39E96" }; }
 
 export const SCORE_COLOR = (s: number) => (s >= 76 ? GREEN : s >= 51 ? ACCENT : s >= 26 ? WARN : RUST);
+
+// Hot = a lead worth jumping on: completed the snapshot business act, or a flagship-fit readiness lead.
+export function isHot(r: PRow): boolean {
+  return r.lead_type === "snapshot-business" || r.flag === "flagship";
+}
+// Unified lead badge across sources (snapshot acts, readiness flag, orectic, manual).
+export function leadBadge(r: PRow): { label: string; color: string; dot: string } {
+  if (r.lead_type === "snapshot-business") return { label: "AI-LEVEL + BIZ", color: GREEN, dot: "🔥" };
+  if (r.lead_type === "snapshot") return { label: "AI-LEVEL", color: "#9AA0A6", dot: "○" };
+  if (r.flag) { const fm = flagMeta(r.flag); return { label: fm.label, color: fm.color, dot: fm.dot }; }
+  const sm = srcMeta(r.source); return { label: sm.label, color: sm.color, dot: "" };
+}
 
 export function dealLowHigh(r: PRow): [number | null, number | null] { return [r.deal_value_low, r.deal_value_high]; }
 export function dealMid(r: PRow): number {

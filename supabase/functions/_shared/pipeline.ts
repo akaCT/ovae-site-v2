@@ -1,30 +1,28 @@
 import {
   ACCENT, RUST, WARN, GREEN, esc, fmtUsd,
   STAGES, STAGE_PROB, STAGE_COLOR, STAGE_LABEL, srcMeta, SCORE_COLOR,
-  dealStr, oppStr, dealMid, isStale, fmtDate, relDate, type PRow,
+  dealStr, oppStr, dealMid, isStale, isHot, leadBadge, fmtDate, relDate, type PRow,
 } from "./pipeline-core.ts";
-import { flagMeta } from "./readiness.ts";
 
 const BOARD_STAGES = STAGES.filter((s) => s.k !== "new"); // 'new' lives in the Inbox
 
 function badge(r: PRow): string {
-  const fm = r.flag ? flagMeta(r.flag) : null;
-  const sm = srcMeta(r.source);
-  return fm
-    ? `<span class="bdg" style="--c:${fm.color}">${fm.dot} ${esc(fm.label)}</span>`
-    : `<span class="bdg" style="--c:${sm.color}">${esc(sm.label)}</span>`;
+  const m = leadBadge(r);
+  return `<span class="bdg" style="--c:${m.color}">${m.dot ? esc(m.dot) + " " : ""}${esc(m.label)}</span>`;
+}
+function viaChip(r: PRow): string {
+  return r.referred_by ? `<span class="via">↗ via ${esc(r.referred_by)}</span>` : "";
 }
 function dataAttrs(r: PRow): string {
-  const q = (r.name + " " + (r.company || "")).toLowerCase();
-  return `data-id="${esc(r.id)}" data-q="${esc(q)}" data-src="${esc(r.source)}" data-stage="${esc(r.stage)}"`;
+  const q = (r.name + " " + (r.company || "") + " " + (r.referred_by || "")).toLowerCase();
+  return `data-id="${esc(r.id)}" data-q="${esc(q)}" data-src="${esc(r.source)}" data-stage="${esc(r.stage)}" data-hot="${isHot(r) ? 1 : 0}"`;
 }
 
 function inboxRow(r: PRow, token: string): string {
-  const sm = srcMeta(r.source);
-  return `<div class="inrow" ${dataAttrs(r)}>
+  return `<div class="inrow${isHot(r) ? " inrow--hot" : ""}" ${dataAttrs(r)}>
     <a class="cover" href="/pipeline/c/?id=${esc(r.id)}&k=${esc(token)}" aria-label="Open ${esc(r.name)}"></a>
     ${badge(r)}
-    <span class="in-name"><b>${esc(r.name)}</b><span class="in-sub">${esc(r.company || "—")}</span></span>
+    <span class="in-name"><b>${esc(r.name)}</b><span class="in-sub">${esc(r.company || "—")}${viaChip(r)}</span></span>
     ${r.readiness_score != null ? `<span class="in-score" style="color:${SCORE_COLOR(r.readiness_score)}">${r.readiness_score}</span>` : `<span class="in-score muted">—</span>`}
     <span class="in-opp"><span class="muted">opp</span> ${oppStr(r)}</span>
     <span class="in-when">${esc(relDate(r.created_at))}</span>
@@ -37,11 +35,11 @@ function inboxRow(r: PRow, token: string): string {
 
 function card(r: PRow, token: string): string {
   const stageOpts = STAGES.map((s) => `<option value="${s.k}"${s.k === r.stage ? " selected" : ""}>${s.label}</option>`).join("");
-  return `<div class="card${r.flag === "flagship" ? " card--hot" : ""}${isStale(r) ? " card--stale" : ""}" ${dataAttrs(r)}>
+  return `<div class="card${isHot(r) ? " card--hot" : ""}${isStale(r) ? " card--stale" : ""}" ${dataAttrs(r)}>
     <a class="cover" href="/pipeline/c/?id=${esc(r.id)}&k=${esc(token)}" aria-label="Open ${esc(r.name)}"></a>
     <div class="c-top">${badge(r)}${isStale(r) ? '<span class="stale" title="No activity in 7+ days">● stale</span>' : ""}</div>
     <div class="c-name">${esc(r.name)}</div>
-    <div class="c-co">${esc(r.company || "—")}</div>
+    <div class="c-co">${esc(r.company || "—")}${viaChip(r)}</div>
     <div class="c-val">${dealStr(r)}<span class="c-val-l"> deal</span></div>
     ${r.next_step ? `<div class="c-next">▸ ${esc(r.next_step)}</div>` : ""}
     <div class="c-links">
@@ -112,6 +110,11 @@ h1{font-size:26px;font-weight:500;letter-spacing:-.02em;margin:30px 0 4px}
 .mini:hover{color:var(--ink)}
 .mini-go{background:var(--accent);color:#0F0C14;border-color:transparent;font-weight:600}
 .bdg{font:600 9.5px "DM Mono",monospace;letter-spacing:.05em;color:var(--c);border:1px solid var(--c);border-radius:999px;padding:3px 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;justify-self:start}
+.inrow--hot{background:rgba(99,224,132,.07);box-shadow:inset 3px 0 0 var(--green)}
+.via{display:inline-block;margin-left:8px;font:500 11px "DM Mono",monospace;color:var(--accent);background:rgba(123,201,196,.12);border-radius:99px;padding:1px 8px;white-space:nowrap}
+.inbox-sub{margin-left:auto;font:500 10px "DM Mono",monospace;color:var(--mute);letter-spacing:.04em}
+.inbox-more{margin:6px 12px 10px;background:var(--soft);border:1px solid var(--rule2);color:var(--dim);border-radius:9px;padding:9px 14px;font:500 12.5px "DM Sans",sans-serif;cursor:pointer;width:calc(100% - 24px)}
+.inbox-more:hover{color:var(--ink);border-color:var(--accent)}
 /* board */
 .board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(238px,1fr);gap:12px;overflow-x:auto;padding-bottom:14px;align-items:start}
 .col{background:rgba(26,22,34,.5);border:1px solid var(--rule);border-radius:14px;min-height:110px}
@@ -174,8 +177,9 @@ h1{font-size:26px;font-weight:500;letter-spacing:-.02em;margin:30px 0 4px}
 </div>
 
 ${leads.length ? `<div class="inbox" id="inbox">
-  <div class="inbox-h">Leads to triage <span class="n">${leads.length}</span></div>
-  ${leads.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).map((r) => inboxRow(r, token)).join("")}
+  <div class="inbox-h">Leads to triage <span class="n">${leads.length}</span><span class="inbox-sub">hot leads first</span></div>
+  <div id="inbox-rows">${leads.sort((a, b) => { const h = (isHot(b) ? 1 : 0) - (isHot(a) ? 1 : 0); if (h) return h; return new Date(b.created_at).getTime() - new Date(a.created_at).getTime(); }).map((r) => inboxRow(r, token)).join("")}</div>
+  <button class="inbox-more" id="inbox-more" type="button" style="display:none"></button>
 </div>` : ""}
 
 <div class="board" id="board">${columns}</div>
@@ -224,24 +228,29 @@ ${leads.length ? `<div class="inbox" id="inbox">
     });
   });
   // filter + search
-  var filter="all",term="";
+  var filter="all",term="",inboxLimit=8;
   function apply(){
-    var counts={},shown=0;
+    var counts={},shown=0,inboxSeen=0,inboxHidden=0;
     [].forEach.call(document.querySelectorAll(".card,.inrow"),function(c){
       var okF=filter==="all"||c.dataset.src===filter;
       var okQ=!term||c.dataset.q.indexOf(term)>-1;
-      var vis=okF&&okQ;c.style.display=vis?"":"none";
+      var pass=okF&&okQ, vis=pass;
+      if(c.classList.contains("inrow")&&pass){ if(inboxSeen>=inboxLimit){vis=false;inboxHidden++;} inboxSeen++; }
+      c.style.display=vis?"":"none";
       if(vis){shown++;if(c.classList.contains("card"))counts[c.dataset.stage]=(counts[c.dataset.stage]||0)+1;}
     });
     [].forEach.call(document.querySelectorAll(".col-n"),function(n){n.textContent=counts[n.dataset.count]||0;});
     el("vcount").textContent=shown;
-    var ib=el("inbox"); if(ib){var anyLead=[].some.call(ib.querySelectorAll(".inrow"),function(r){return r.style.display!=="none";});ib.style.display=anyLead?"":"none";}
+    var more=el("inbox-more");
+    if(more){ if(inboxHidden>0){more.style.display="";more.textContent="Show "+inboxHidden+" more lead"+(inboxHidden>1?"s":"")+" ↓";} else more.style.display="none"; }
+    var ib=el("inbox"); if(ib){ib.style.display=inboxSeen>0?"":"none";}
   }
   [].forEach.call(document.querySelectorAll(".chip"),function(c){c.addEventListener("click",function(){
     [].forEach.call(document.querySelectorAll(".chip"),function(x){x.classList.remove("active");});c.classList.add("active");
-    filter=c.getAttribute("data-f");apply();
+    filter=c.getAttribute("data-f");inboxLimit=8;apply();
   });});
-  var q=el("q");q.addEventListener("input",function(){term=q.value.trim().toLowerCase();apply();});
+  var more=el("inbox-more"); if(more){more.addEventListener("click",function(){inboxLimit+=8;apply();});}
+  var q=el("q");q.addEventListener("input",function(){term=q.value.trim().toLowerCase();inboxLimit=8;apply();});
   document.addEventListener("keydown",function(e){
     if(e.key==="Escape")ov.classList.remove("show");
     var tag=document.activeElement?document.activeElement.tagName:"";

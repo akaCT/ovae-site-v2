@@ -84,7 +84,7 @@ Deno.serve(async (req) => {
         deal_value_low: num(b.deal_value_low), deal_value_high: num(b.deal_value_high),
         opportunity_low: num(b.opportunity_low), opportunity_high: num(b.opportunity_high),
         next_step: b.next_step || null, next_step_due: b.next_step_due || null,
-        proposal_url: b.proposal_url || null, last_activity: new Date().toISOString(),
+        proposal_url: b.proposal_url || null, referred_by: b.referred_by || null, last_activity: new Date().toISOString(),
       };
       if (b.lead_type) fields.lead_type = b.lead_type;
       if (b.notes !== undefined) fields.notes = b.notes || null;

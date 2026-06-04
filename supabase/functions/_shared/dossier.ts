@@ -82,7 +82,11 @@ h1{font-size:30px;font-weight:600;letter-spacing:-.02em;margin:0}
 .btn-edit{background:var(--accent);color:#0F0C14}
 .btn-ghost{background:transparent;border:1px solid var(--rule2);color:var(--dim);font:500 12px "DM Sans";border-radius:8px;padding:7px 12px;text-decoration:none}
 .btn-ghost:hover{color:var(--ink);border-color:var(--accent)}
-.kpis{display:flex;flex-wrap:wrap;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:14px;overflow:hidden;margin:20px 0}
+.refbar{display:flex;align-items:center;gap:9px;margin:16px 0 4px;padding:11px 16px;background:linear-gradient(120deg,rgba(123,201,196,.14),rgba(123,201,196,.03));border:1px solid rgba(123,201,196,.45);border-radius:12px;font-size:15px}
+.refbar-i{color:var(--accent);font-weight:700}
+.refbar-l{font:600 10.5px "DM Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.refbar b{color:#fff;font-weight:600}
+.kpis{display:flex;flex-wrap:wrap;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:14px;overflow:hidden;margin:16px 0}
 .kpi{flex:1;min-width:130px;background:var(--elev);padding:15px 18px}
 .kpi .l{font:500 10px "DM Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:5px}
 .kpi .v{font-size:19px;font-weight:600}
@@ -162,6 +166,8 @@ h1{font-size:30px;font-weight:600;letter-spacing:-.02em;margin:0}
   <button class="btn btn-edit" id="edit">Edit</button>
 </div>
 
+${row.referred_by ? `<div class="refbar"><span class="refbar-i">↗</span><span class="refbar-l">Referred by</span><b>${esc(row.referred_by)}</b></div>` : ""}
+
 <div class="kpis">
   <div class="kpi"><div class="l">Deal value (to us)</div><div class="v" style="color:${GREEN}">${dealStr(row)}</div></div>
   <div class="kpi"><div class="l">Client opportunity</div><div class="v">${oppStr(row)}</div></div>
@@ -229,6 +235,7 @@ ${diag}
   <div class="frow"><div class="fg"><label>Opportunity low</label><input id="e-ol" type="number" value="${row.opportunity_low ?? ""}"></div><div class="fg"><label>Opportunity high</label><input id="e-oh" type="number" value="${row.opportunity_high ?? ""}"></div></div>
   <div class="frow"><div class="fg"><label>Next step</label><input id="e-next" value="${esc(row.next_step || "")}"></div><div class="fg"><label>Due</label><input id="e-due" type="date" value="${esc(row.next_step_due || "")}"></div></div>
   <div class="fg"><label>Proposal / doc URL</label><input id="e-url" value="${esc(row.proposal_url || "")}"></div>
+  <div class="fg"><label>Referred by</label><input id="e-ref" value="${esc(row.referred_by || "")}" placeholder="Who referred this lead?"></div>
   <div class="m-err" id="e-err"></div>
   <div class="m-act"><button class="btn m-save" id="e-save">Save</button><button class="btn m-cancel" id="e-cancel">Cancel</button><button class="btn m-del" id="e-del">Delete client</button></div>
 </div></div>
@@ -294,7 +301,8 @@ ${diag}
     post({action:"save",id:ID,name:name,company:el("e-company").value.trim()||null,contact_title:el("e-title").value.trim()||null,
       email:el("e-email").value.trim()||null,phone:el("e-phone").value.trim()||null,stage:el("e-stage").value,owner:el("e-owner").value.trim()||null,
       deal_value_low:n("e-dvl"),deal_value_high:n("e-dvh"),opportunity_low:n("e-ol"),opportunity_high:n("e-oh"),
-      next_step:el("e-next").value.trim()||null,next_step_due:el("e-due").value||null,proposal_url:el("e-url").value.trim()||null
+      next_step:el("e-next").value.trim()||null,next_step_due:el("e-due").value||null,proposal_url:el("e-url").value.trim()||null,
+      referred_by:el("e-ref").value.trim()||null
     }).then(function(res){el("e-save").textContent="Save";if(res.ok)location.reload();else el("e-err").textContent="Save failed: "+(res.j.error||"");});
   });
   el("e-del").addEventListener("click",function(){
