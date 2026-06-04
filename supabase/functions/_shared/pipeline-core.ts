@@ -64,9 +64,16 @@ export function fmtDate(iso: string | null): string {
   try { return new Date(iso).toLocaleString("en-US", { month: "short", day: "numeric", timeZone: "America/Chicago" }); } catch { return iso; }
 }
 export function relDate(iso: string | null): string {
-  const d = daysSince(iso);
   if (!iso) return "";
-  if (d < 1) return "today"; if (d < 2) return "1d ago";
+  let ms: number;
+  try { ms = Date.now() - new Date(iso).getTime(); } catch { return ""; }
+  if (ms < 0) ms = 0;
+  const min = ms / 60000;
+  if (min < 1) return "just now";
+  if (min < 60) return Math.floor(min) + "m ago";
+  const h = min / 60;
+  if (h < 24) return Math.floor(h) + "h ago";
+  const d = h / 24;
   if (d < 30) return Math.floor(d) + "d ago";
   if (d < 365) return Math.floor(d / 30) + "mo ago";
   return Math.floor(d / 365) + "y ago";
