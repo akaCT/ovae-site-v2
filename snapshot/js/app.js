@@ -7,7 +7,8 @@
   var C = window.SNAP_CONTENT || {};
   var Score = window.SnapScore;
   var SUBMIT_URL = "https://muguotipixphthfxjssu.supabase.co/functions/v1/snapshot-submit";
-  var STYLE_NAME = { centaur: "Centaur", cyborg: "Cyborg", self: "Self-Automator" };
+  var STYLE_NAME = { centaur: "Delegator", cyborg: "Collaborator", self: "Automator" };
+  var STYLE_ABBR = { centaur: "DELEG", cyborg: "COLLAB", self: "AUTO" };
   var STYLE_COLOR = { centaur: "#7BC9C4", cyborg: "#C9A77B", self: "#C97D5C" };
   var RUNGS = ["Unaware", "Searcher", "Drafter", "Operator", "Builder", "Conductor"];
 
@@ -517,7 +518,7 @@
     add("text", { x: padL, y: padT - 12, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace" }, "SEARCHER");
     add("text", { x: W - padR, y: padT - 12, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace", "text-anchor": "end" }, "CONDUCTOR");
     Object.keys(lanes).forEach(function (st) {
-      add("text", { x: 6, y: lanes[st] + 3, fill: STYLE_COLOR[st], "font-size": "8.5", "font-family": "DM Mono, monospace" }, STYLE_NAME[st].toUpperCase().slice(0, 7));
+      add("text", { x: 6, y: lanes[st] + 3, fill: STYLE_COLOR[st], "font-size": "8.5", "font-family": "DM Mono, monospace" }, STYLE_ABBR[st] || st.toUpperCase());
     });
     // faint archetype dots
     [[1, "cyborg"], [2, "centaur"], [3, "self"], [4, "cyborg"], [5, "self"]].forEach(function (d) {

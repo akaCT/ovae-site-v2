@@ -30,7 +30,7 @@ All scoring is **client-side**; server is only for lead capture/email.
 ## The ladder (LOCKED naming)
 6 behavioral rungs, tool-agnostic: **0 Unaware · 1 Searcher · 2 Drafter · 3 Operator · 4 Builder · 5 Orchestrator.**
 "Orchestrator" = a human who directs a system of AI agents that do multi-step work. (The human conducts; an orchestrator agent is a thing in the system you direct — do NOT rename the rung "Conductor".)
-Orthogonal STYLE axis (Mollick/HBS): **Centaur** (hand off whole tasks, you/AI split work) · **Cyborg** (blend turn-by-turn) · **Self-Automator** (build it to run without you). Style is the SHARE HERO, lateral not ranked. Carry the cited nuance: full self-automation can de-skill.
+Orthogonal STYLE axis (display names; grounded in Mollick/HBS Centaur/Cyborg): **Delegator** (=Centaur: hand off whole tasks, you/AI split work) · **Collaborator** (=Cyborg: blend turn-by-turn) · **Automator** (build it to run without you). Internal keys stay `centaur`/`cyborg`/`self`. Style is the SHARE HERO, lateral not ranked. Carry the cited nuance: full automation can de-skill.
 Headline number: **AI Leverage Index 0–100** (PRIVATE — gated report + in-flow animation only; never on the public share card, where a low number reads as shame).
 
 ## Data shapes (content.js → window.SNAP_CONTENT)
@@ -80,7 +80,7 @@ ACT 2 (opt-in): business questions (role-forked, lexicon-rendered) → appetite 
 Progress = the living card assembling + quiet "Section X of 3" (never raw question count). One question per screen, tap-forward, mobile-first.
 
 ## Share card (2D map)
-SVG, downloadable + OG image. X axis = rung (Searcher→Orchestrator), color/Y = style. Glowing dot = you; faint dots = other archetypes; **empty region ahead reads as opportunity**. Big lateral identity ("Cyborg Operator"), family/tribe line, NO Index number. Must be legible at ~200px thumbnail (verify before final).
+SVG, downloadable + OG image. X axis = rung (Searcher→Orchestrator), color/Y = style. Glowing dot = you; faint dots = other archetypes; **empty region ahead reads as opportunity**. Big lateral identity ("Collaborator Operator"), family/tribe line, NO Index number. Must be legible at ~200px thumbnail (verify before final).
 
 ## Server (snapshot-submit edge fn + snapshot_submissions table)
 Clone readiness-submit pattern. New table `snapshot_submissions` columns: id, created_at, name, email, company, role(scope), industry, rung, style, ai_index, persona, band, business_pct, constraint, appetite, revenue, headcount, dollar bands, answers(jsonb), flag, user_agent, referrer. Insert via service_role; email CT (Resend, send-only to ct@ovae.ai) with subject by appetite/flag. Report wrapper at `/snapshot/r/?id=`. Reuse SUPABASE_URL/SERVICE_ROLE/RESEND/ADMIN_TOKEN secrets.

@@ -735,15 +735,15 @@ window.SNAP_CONTENT = {
     // ---- style: lateral, not ranked. {name, blurb} ----
     style: {
       centaur: {
-        name: "Centaur",
+        name: "Delegator",
         blurb: "You split the work cleanly. You take the parts that need a human, AI takes the parts that don't. Whole tasks go over the wall and come back done. It's the most controllable way to work with AI, and it holds up at scale because you stay the judge of what's good."
       },
       cyborg: {
-        name: "Cyborg",
+        name: "Collaborator",
         blurb: "You blend with AI turn by turn. A sentence from you, a sentence from it, back and forth until it's right. The line between your work and its work disappears. You're not delegating, you're thinking alongside it in real time, and your taste shows up in every loop."
       },
       self: {
-        name: "Self-Automator",
+        name: "Automator",
         blurb: "You'd rather build the thing that does the work than do the work yourself. Set it up once, let it run. There's a real catch the research keeps finding: when the system runs perfectly without you, your own skill at that task quietly erodes. The move is to automate the grind and keep your hands on the judgment calls."
       }
     },

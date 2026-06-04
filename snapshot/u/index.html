@@ -33,7 +33,8 @@
     var FN = "https://muguotipixphthfxjssu.supabase.co/functions/v1/snapshot-submit";
     var C = window.SNAP_CONTENT || {};
     var RUNGS = (window.SnapScore && window.SnapScore.RUNG_NAMES) || ["Unaware","Searcher","Drafter","Operator","Builder","Conductor"];
-    var STYLE_NAME = { centaur: "Centaur", cyborg: "Cyborg", self: "Self-Automator" };
+    var STYLE_NAME = { centaur: "Delegator", cyborg: "Collaborator", self: "Automator" };
+    var STYLE_ABBR = { centaur: "DELEG", cyborg: "COLLAB", self: "AUTO" };
     var STYLE_COLOR = { centaur: "#7BC9C4", cyborg: "#C9A77B", self: "#C97D5C" };
     var mount = document.getElementById("u");
 
@@ -48,7 +49,7 @@
       for (var r = 0; r <= 5; r++) { add("line", { x1: x(r), y1: padT, x2: x(r), y2: H - padB, stroke: "rgba(232,228,220,0.05)" }); add("text", { x: x(r), y: H - padB + 18, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace", "text-anchor": "middle" }, String(r)); }
       add("text", { x: padL, y: padT - 12, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace" }, "SEARCHER");
       add("text", { x: W - padR, y: padT - 12, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace", "text-anchor": "end" }, "CONDUCTOR");
-      Object.keys(lanes).forEach(function (st) { add("text", { x: 6, y: lanes[st] + 3, fill: STYLE_COLOR[st], "font-size": "8.5", "font-family": "DM Mono, monospace" }, STYLE_NAME[st].toUpperCase().slice(0, 7)); });
+      Object.keys(lanes).forEach(function (st) { add("text", { x: 6, y: lanes[st] + 3, fill: STYLE_COLOR[st], "font-size": "8.5", "font-family": "DM Mono, monospace" }, STYLE_ABBR[st] || st.toUpperCase()); });
       [[1,"cyborg"],[2,"centaur"],[3,"self"],[4,"cyborg"],[5,"self"]].forEach(function (d) { if (d[0] === rung && d[1] === style) return; add("circle", { cx: x(d[0]), cy: lanes[d[1]], r: 4, fill: STYLE_COLOR[d[1]], opacity: "0.18" }); });
       if (rung < 5) add("text", { x: x(Math.min(5, rung + 1)), y: lanes[style] - 14, fill: "#6F6A63", "font-size": "9", "font-family": "DM Mono, monospace", "text-anchor": "middle" }, "→ next");
       var cx = x(rung), cy = lanes[style] || H / 2;
