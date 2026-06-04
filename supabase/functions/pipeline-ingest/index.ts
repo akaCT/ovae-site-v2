@@ -44,8 +44,10 @@ const EXTRACT_SCHEMA = {
   required: ["summary", "activity_title", "activity_kind", "facts", "next_step"],
 };
 
+let LAST_DIAG: any = {};
 async function extract(row: any, text: string): Promise<any | null> {
-  const apiKey = Deno.env.get("ANTHROPIC_API_KEY");
+  const apiKey = (Deno.env.get("ANTHROPIC_API_KEY") || "").trim();
+  LAST_DIAG = { keyPresent: !!apiKey, keyLen: apiKey.length };
   if (!apiKey) return null;
   const existingLabels = Object.keys(row.details || {});
   const sys = `You extract CRM dossier data from raw input about a sales prospect/client (call transcripts, meeting notes, emails).
@@ -70,12 +72,13 @@ ${text.slice(0, 60000)}
         messages: [{ role: "user", content: user }],
       }),
     });
-    if (!res.ok) { console.error("anthropic error", res.status, await res.text()); return null; }
+    if (!res.ok) { const t = await res.text(); LAST_DIAG.status = res.status; LAST_DIAG.errBody = t.slice(0, 400); console.error("anthropic error", res.status, t); return null; }
     const data = await res.json();
     const textBlock = (data.content || []).find((b: any) => b.type === "text");
-    if (!textBlock) return null;
+    if (!textBlock) { LAST_DIAG.noTextBlock = true; LAST_DIAG.stop = data.stop_reason; return null; }
     return JSON.parse(textBlock.text);
   } catch (e) {
+    LAST_DIAG.exception = String(e);
     console.error("extract failed:", e);
     return null;
   }
@@ -123,7 +126,7 @@ Deno.serve(async (req) => {
 
     // No extraction available — raw artifact saved, still bump activity.
     await db(`pipeline?id=eq.${encodeURIComponent(id)}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ last_activity: new Date().toISOString() }) });
-    return json({ ok: true, extracted: false, note: "Saved as an artifact. Set ANTHROPIC_API_KEY to enable automatic fact extraction." });
+    return json({ ok: true, extracted: false, note: "Saved as an artifact. Set ANTHROPIC_API_KEY to enable automatic fact extraction.", ...(b.debug ? { diag: LAST_DIAG } : {}) });
   } catch (e) {
     console.error("pipeline-ingest error:", e);
     return json({ error: String(e) }, 500);
