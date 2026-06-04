@@ -604,19 +604,26 @@
     node.appendChild(el("div", { class: "center" }, [el("span", { class: "persona-badge", text: p.label })]));
     var ixNum = el("div", { class: "ix-num", text: "0" });
     node.appendChild(el("div", { class: "index-hero" }, [
-      ixNum,
+      el("div", { class: "ix-row" }, [ixNum, el("span", { class: "ix-max", text: "/ 100" })]),
       el("div", { class: "ix-cap", text: "Your AI Leverage Index" })
     ]));
     if (pc.blurb) node.appendChild(el("p", { class: "center id-blurb", html: T(pc.blurb) }));
 
-    // dimension bars
+    // dimension bars — each fills toward 100 (AI-Native); the shortest is the constraint.
+    // Mirrors the personal map: bright fill = where you are, faint remainder = your runway.
     node.appendChild(el("h2", { text: "Where your business stands · " + b.band }));
+    node.appendChild(el("p", { class: "bars-scale", text: "Each bar fills toward 100 — AI-Native. The shortest is what to fix first." }));
     var bars = el("div", { class: "bars" }, Object.keys(b.dims).map(function (d) {
-      var isC = d === b.constraint;
-      return el("div", { class: "bar-row" + (isC ? " constraint" : "") }, [
-        el("div", { class: "bl" }, [el("span", { html: isC ? "<b>" + Score.DIM_NAME[d] + "</b>" : Score.DIM_NAME[d] }), el("span", { class: "mono", text: b.dims[d].pct + "%" })]),
-        el("div", { class: "bar-track" }, [el("div", { class: "bar-fill", style: "width:" + b.dims[d].pct + "%" })])
-      ]);
+      var isC = d === b.constraint, pct = b.dims[d].pct;
+      var kids = [
+        el("div", { class: "bl" }, [
+          el("span", { class: "bl-name", html: isC ? "<b>" + Score.DIM_NAME[d] + "</b>" : Score.DIM_NAME[d] }),
+          el("span", { class: "bl-pct", text: pct + "%" })
+        ]),
+        el("div", { class: "bar-track" }, [el("div", { class: "bar-fill", style: "width:" + pct + "%" })])
+      ];
+      if (isC) kids.push(el("div", { class: "bar-note", text: "↑ your biggest constraint — fix this first" }));
+      return el("div", { class: "bar-row" + (isC ? " constraint" : "") }, kids);
     }));
     node.appendChild(bars);
 
@@ -689,7 +696,7 @@
   // Conductor = glowing summit). Style is the YOU dot's COLOR, never a vertical rank —
   // this is what fixes the old scatter map's "up = better?" / "three dots?" confusion.
   function mapSVG(a) {
-    var W = 520, H = 300, padL = 56, padR = 70, padT = 46, padB = 56;
+    var W = 520, H = 300, padL = 56, padR = 74, padT = 64, padB = 52;
     var sc = STYLE_COLOR[a.style] || "#7BC9C4";
     var xr = function (r) { return padL + (r / 5) * (W - padL - padR); };
     var yr = function (r) { return (H - padB) - (r / 5) * (H - padT - padB); };
@@ -710,8 +717,9 @@
     mk(rg, "stop", { offset: "0", "stop-color": "#7BC9C4", "stop-opacity": "0.55" });
     mk(rg, "stop", { offset: "1", "stop-color": "#7BC9C4", "stop-opacity": "0" });
 
-    // summit hotspot behind Conductor (top-right)
-    add("circle", { cx: xr(5), cy: yr(5), r: 60, fill: "url(#smtGlow)", "class": "map-summit" });
+    // summit hotspot behind Conductor (top-right) — radius < top/right margin so the
+    // glow fades to 0 fully inside the viewBox (no clipping at the card corner)
+    add("circle", { cx: xr(5), cy: yr(5), r: 48, fill: "url(#smtGlow)", "class": "map-summit" });
 
     // full faint track, then the runway ahead, then the bright completed climb
     add("polyline", { points: pts(0, 5), fill: "none", stroke: "rgba(232,228,220,0.13)", "stroke-width": "3", "stroke-linecap": "round", "stroke-linejoin": "round" });
