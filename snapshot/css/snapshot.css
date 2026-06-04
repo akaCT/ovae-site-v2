@@ -346,15 +346,21 @@ h1.hook{ font-size:clamp(30px,7vw,46px); line-height:1.08; letter-spacing:-.02em
   border:1px solid var(--accent-dim); box-shadow:0 26px 64px -36px rgba(123,201,196,.55); }
 .fork-card::before{ content:""; position:absolute; top:-55%; right:-28%; width:70%; height:170%; pointer-events:none;
   background:radial-gradient(circle, var(--accent-soft), transparent 66%); opacity:.7; }
-.fork-step{ position:relative; display:flex; align-items:center; gap:10px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-mute); margin-bottom:15px; }
-.fork-step .fs-done{ color:var(--accent); }
-.fork-step .fs-arrow{ opacity:.55; }
-.fork-step .fs-next{ color:var(--ink); font-weight:500; }
-.fork-title{ position:relative; font-size:clamp(23px,5vw,31px); font-weight:600; letter-spacing:-.02em; line-height:1.12; margin:0 0 9px; }
+/* hero pivot — the can't-miss "you → your business" moment */
+.fork-hero{ position:relative; display:flex; align-items:center; gap:13px; margin:2px 0 17px; }
+.fork-hero .fh-you{ display:inline-flex; align-items:center; gap:9px; font-family:'DM Sans',sans-serif; font-size:clamp(18px,4.6vw,23px); font-weight:700; letter-spacing:-.01em; color:var(--ink-dim); white-space:nowrap; }
+.fork-hero .fh-check{ flex:none; display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:var(--accent-soft); border:1px solid var(--accent-dim); color:var(--accent); font-size:13px; font-weight:800; }
+.fork-hero .fh-track{ position:relative; flex:1; min-width:26px; height:2px; border-radius:2px; background:linear-gradient(90deg, var(--accent-dim), var(--accent)); }
+.fork-hero .fh-arrow{ position:absolute; right:-3px; top:50%; transform:translateY(-52%); color:var(--accent); font-size:17px; line-height:0; }
+.fork-hero .fh-next{ font-family:'DM Sans',sans-serif; font-size:clamp(18px,4.6vw,23px); font-weight:700; letter-spacing:-.01em; color:var(--accent); text-shadow:0 0 20px var(--accent-soft); white-space:nowrap; }
+.fork-card .fork-title{ position:relative; font-family:'DM Sans',sans-serif; font-size:clamp(25px,5.4vw,34px); font-weight:600; letter-spacing:-.02em; text-transform:none; line-height:1.1; color:var(--ink); margin:0 0 10px; }
 .fork-lead{ position:relative; font-size:15px; color:var(--ink-dim); line-height:1.5; margin:0 0 22px; max-width:32em; }
-.fork-points{ position:relative; display:flex; flex-direction:column; gap:13px; margin:0 0 24px; }
-.fork-point{ display:flex; align-items:center; gap:13px; font-size:15px; font-weight:500; color:var(--ink); }
-.fp-ic{ flex:none; width:36px; height:36px; border-radius:10px; background:var(--accent-soft); border:1px solid var(--accent-dim); display:flex; align-items:center; justify-content:center; }
+.fork-points{ position:relative; display:flex; flex-direction:column; gap:15px; margin:0 0 24px; }
+.fork-point{ display:flex; align-items:flex-start; gap:13px; }
+.fork-point .fp-txt{ display:flex; flex-direction:column; gap:2px; }
+.fork-point .fp-out{ font-size:15.5px; font-weight:600; color:var(--ink); line-height:1.3; }
+.fork-point .fp-sub{ font-size:13px; font-weight:400; color:var(--ink-dim); line-height:1.4; }
+.fp-ic{ flex:none; width:36px; height:36px; border-radius:10px; background:var(--accent-soft); border:1px solid var(--accent-dim); display:flex; align-items:center; justify-content:center; margin-top:1px; }
 .fork-cta{ position:relative; font-size:17px; padding:17px 26px; }
 .fork-skip{ display:block; width:100%; text-align:center; margin-top:14px; padding:8px; background:none; border:none; font-size:13.5px; color:var(--ink-mute); transition:color .15s var(--ease); }
 .fork-skip:hover{ color:var(--ink-dim); }
@@ -366,4 +372,6 @@ h1.hook{ font-size:clamp(30px,7vw,46px); line-height:1.08; letter-spacing:-.02em
   .fork-point:nth-child(1){ animation-delay:.04s; } .fork-point:nth-child(2){ animation-delay:.12s; } .fork-point:nth-child(3){ animation-delay:.2s; }
   .fork-cta{ animation: ctaNudge 3.2s ease-in-out 1.4s infinite; }
   @keyframes ctaNudge{ 0%,90%,100%{ transform:translateY(0); } 95%{ transform:translateY(-2px); } }
+  .fork-hero .fh-next{ animation: fhGlow 3.2s ease-in-out 1s infinite; }
+  @keyframes fhGlow{ 0%,100%{ text-shadow:0 0 16px var(--accent-soft); } 50%{ text-shadow:0 0 30px var(--accent); } }
 }

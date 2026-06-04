@@ -436,26 +436,29 @@
   function renderForkCard(s, go) {
     var fc = (C.forkCopy && C.forkCopy.fork && (C.forkCopy.fork[s.role] || C.forkCopy.fork.generic)) || {};
     var ICN = {
-      gauge: "<svg viewBox='0 0 24 24' fill='none' stroke='#7BC9C4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' width='17' height='17'><path d='M4 15a8 8 0 0116 0'/><path d='M12 15l3.5-4.5'/></svg>",
-      target: "<svg viewBox='0 0 24 24' fill='none' stroke='#7BC9C4' stroke-width='2' width='17' height='17'><circle cx='12' cy='12' r='8'/><circle cx='12' cy='12' r='3.2'/></svg>",
-      up: "<svg viewBox='0 0 24 24' fill='none' stroke='#7BC9C4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' width='17' height='17'><path d='M12 20V6'/><path d='M5 12l7-7 7 7'/></svg>"
+      clock: "<svg viewBox='0 0 24 24' fill='none' stroke='#7BC9C4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' width='18' height='18'><circle cx='12' cy='12' r='9'/><path d='M12 7.5V12l3 2'/></svg>",
+      target: "<svg viewBox='0 0 24 24' fill='none' stroke='#7BC9C4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' width='18' height='18'><circle cx='12' cy='12' r='8'/><circle cx='12' cy='12' r='3.2'/><path d='M12 1v3M12 20v3M23 12h-3M4 12H1'/></svg>",
+      up: "<svg viewBox='0 0 24 24' fill='none' stroke='#7BC9C4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' width='18' height='18'><path d='M12 20V6'/><path d='M5 12l7-7 7 7'/></svg>"
     };
-    function point(icon, label) {
-      return el("div", { class: "fork-point" }, [el("span", { class: "fp-ic", html: icon }), el("span", { text: label })]);
-    }
+    var pts = fc.points || [];
     return el("div", { class: "fork-card" }, [
-      el("div", { class: "fork-step" }, [
-        el("span", { class: "fs-done", html: "&#10003;&nbsp; You" }),
-        el("span", { class: "fs-arrow", text: "→" }),
-        el("span", { class: "fs-next", text: "Your business" })
+      // hero pivot — the can't-miss "you → your business" moment
+      el("div", { class: "fork-hero" }, [
+        el("span", { class: "fh-you" }, [el("span", { class: "fh-check", html: "&#10003;" }), el("span", { text: "You" })]),
+        el("span", { class: "fh-track" }, [el("span", { class: "fh-arrow", html: "&rarr;" })]),
+        el("span", { class: "fh-next", text: fc.next || "Your business" })
       ]),
-      el("h2", { class: "fork-title", text: fc.stem || "Now, the part that pays." }),
-      el("p", { class: "fork-lead", text: shortLead(fc.sub) }),
-      el("div", { class: "fork-points" }, [
-        point(ICN.gauge, "Your AI Leverage Index, 0 to 100"),
-        point(ICN.target, "Where your business is leaking the most"),
-        point(ICN.up, "The one move worth the most, right now")
-      ]),
+      el("h2", { class: "fork-title", text: fc.stem || "That was you. Now your business." }),
+      fc.lead ? el("p", { class: "fork-lead", text: T(fc.lead) }) : null,
+      el("div", { class: "fork-points" }, pts.map(function (p) {
+        return el("div", { class: "fork-point" }, [
+          el("span", { class: "fp-ic", html: ICN[p.ic] || ICN.up }),
+          el("span", { class: "fp-txt" }, [
+            el("span", { class: "fp-out", html: T(p.out || "") }),
+            p.sub ? el("span", { class: "fp-sub", html: T(p.sub) }) : null
+          ])
+        ]);
+      })),
       el("button", { class: "btn btn-primary btn-block fork-cta", html: (fc.primary || "See my business leverage") + " &nbsp;→", onclick: function () { s.doBusiness = true; go(); } })
     ]);
   }

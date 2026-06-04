@@ -42,32 +42,62 @@ window.SNAP_CONTENT = {
   forkCopy: {
   "fork": {
     "generic": {
-      "stem": "That's where you stand. Now the part that actually pays off.",
-      "sub": "Knowing your level is the easy part. The part that changes things is seeing how much of your week is spent on work AI could already carry, and the one move that closes the most of that gap fastest. Let's find it.",
-      "primary": "Show me the move that pays off most",
+      "next": "Your work",
+      "stem": "That was you. Now the time your work is sitting on.",
+      "lead": "Same 90 seconds — this part shows you what to change, not just what to call it.",
+      "points": [
+        { "ic": "clock", "out": "The hours a week you could get back", "sub": "the work AI should already carry" },
+        { "ic": "target", "out": "Where the most time leaks", "sub": "the busywork hiding in plain sight" },
+        { "ic": "up", "out": "The one move that frees the most, fastest", "sub": "where to start now" }
+      ],
+      "primary": "Show me the move that frees the most",
       "secondary": "Not now, just my result"
     },
     "owner": {
-      "stem": "That was you. Now let's talk about the money.",
-      "sub": "You just saw where you personally stand on AI. The real number isn't your skill level. It's what your {{business}} is quietly leaving on the table every week you run it the old way. We'll show you the gap and the single highest-leverage move to close it.",
-      "primary": "Show me what my business is losing",
+      "next": "Your business",
+      "stem": "That was you. This is where your hours are hiding.",
+      "lead": "Same 90 seconds — but this part shows you what to change, not just what to call it.",
+      "points": [
+        { "ic": "clock", "out": "The hours a week you could get back", "sub": "the busywork that should run without you" },
+        { "ic": "target", "out": "Where you're still the bottleneck", "sub": "the work the business can't do unless you're in it" },
+        { "ic": "up", "out": "Your highest-leverage first move", "sub": "the one change worth the most, starting now" }
+      ],
+      "primary": "Show me where my hours are going",
       "secondary": "Not now, just my result"
     },
     "team": {
-      "stem": "That's where you stand. Now look at the people you lead.",
-      "sub": "Your own score is one thing. The bigger lever is the gap between how your team works today and how it could: the hours your people burn on work AI should already be doing. We'll map your team's real leverage gap and the one move worth the most this quarter.",
-      "primary": "Show me my team's leverage gap",
+      "next": "Your team",
+      "stem": "That was you. Now the hours buried in your team.",
+      "lead": "Your score is one person — the bigger lever is the team.",
+      "points": [
+        { "ic": "clock", "out": "The hours a week your team could get back", "sub": "work your people do that AI should" },
+        { "ic": "target", "out": "Where the team waits on you", "sub": "the approvals and answers that bottleneck everyone" },
+        { "ic": "up", "out": "The one move worth the most this quarter", "sub": "where to start with the team" }
+      ],
+      "primary": "Show me my team's hidden hours",
       "secondary": "Not now, just my result"
     },
     "ic": {
-      "stem": "That's your level. Now see what it's actually worth.",
-      "sub": "Knowing where you rank is the easy part. The part that changes things is how much of your week goes to work AI could carry, and the one shift that makes you the person who delivers twice the output without working more. Let's find it.",
-      "primary": "Show me where I'm leaving output behind",
+      "next": "Your work",
+      "stem": "That's your level. Now the output hiding in your week.",
+      "lead": "Same 90 seconds — this part shows you what to change, not just what to call it.",
+      "points": [
+        { "ic": "clock", "out": "The hours a week you could reclaim", "sub": "the busywork AI should carry for you" },
+        { "ic": "target", "out": "Where your output leaks", "sub": "the work that eats your day without moving the needle" },
+        { "ic": "up", "out": "The shift that doubles what you ship", "sub": "without working more hours" }
+      ],
+      "primary": "Show me where my output's going",
       "secondary": "Not now, just my result"
     },
     "solo": {
-      "stem": "That's you on paper. Now the part that pays.",
-      "sub": "You run the whole thing, so every hour you don't reclaim is yours. We'll show you exactly where your {{business}} is leaking time and {{customer}} attention to work AI should be handling, plus the single move that buys back the most hours fastest.",
+      "next": "Your business",
+      "stem": "That's you on paper. Now the hours you're not getting back.",
+      "lead": "You run all of it — so every hour you reclaim is yours.",
+      "points": [
+        { "ic": "clock", "out": "The hours a week you'd win back", "sub": "the work AI should already be doing for you" },
+        { "ic": "target", "out": "Where the business runs only because you do", "sub": "what breaks the week you step away" },
+        { "ic": "up", "out": "The move that buys back the most, fastest", "sub": "where to start this week" }
+      ],
       "primary": "Show me the hours I'm losing",
       "secondary": "Not now, just my result"
     }
