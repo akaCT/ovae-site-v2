@@ -11,6 +11,9 @@ export interface PRow {
   contact_title: string | null; phone: string | null; referred_by: string | null;
   next_step: string | null; next_step_due: string | null; owner: string | null; last_activity: string | null;
   proposal_url: string | null; notes: string | null; details: Record<string, string> | null;
+  invoice_status?: string | null; amount_invoiced?: number | string | null; amount_paid?: number | string | null;
+  invoice_balance?: number | string | null; invoice_ninja_client_id?: string | null; invoice_url?: string | null;
+  last_invoice_at?: string | null; ecosystem?: Record<string, unknown> | null;
 }
 
 export interface CNote {
@@ -109,17 +112,39 @@ export const DUE_COLOR: Record<DueState, string> = {
   overdue: RUST, none: RUST, today: WARN, soon: WARN, ok: ACCENT,
 };
 const OPEN_STAGES = ["qualified", "proposal", "negotiation"];
-// Does this row need a human today? Open deals that are overdue / undated / due-soon / stale,
-// plus hot leads still sitting untriaged in the inbox.
+
+// ---- ecosystem enrichment (invoicing) ----
+export function num(v: number | string | null | undefined): number {
+  const n = typeof v === "string" ? parseFloat(v) : (v ?? 0);
+  return isNaN(n) ? 0 : n;
+}
+export const INVOICE_COLOR: Record<string, string> = {
+  paid: GREEN, partial: WARN, sent: ACCENT, draft: "#9AA0A6", overdue: RUST, cancelled: "#6F6A63",
+};
+export function invoiceBadge(r: PRow): { label: string; color: string } | null {
+  if (!r.invoice_status) return null;
+  return { label: r.invoice_status.toUpperCase(), color: INVOICE_COLOR[r.invoice_status] || "#9AA0A6" };
+}
+// A paid invoice on a not-yet-won deal = ready to close (surfaced, never auto-moved).
+export function readyToWin(r: PRow): boolean {
+  return r.invoice_status === "paid" && r.stage !== "won" && r.stage !== "lost";
+}
+
+// Does this row need a human today? Paid-ready-to-win or overdue invoice (top), open deals
+// that are overdue / undated / due-soon / stale, plus hot leads still untriaged in the inbox.
 export function needsAttention(r: PRow): boolean {
+  if (readyToWin(r)) return true;
+  if (r.invoice_status === "overdue") return true;
   if (r.stage === "new") return isHot(r);
   if (!OPEN_STAGES.includes(r.stage)) return false;
   return dueInfo(r.next_step_due).state !== "ok" || isStale(r);
 }
 function todayRank(r: PRow): number {
-  if (r.stage === "new") return 5; // hot leads after deals
+  if (readyToWin(r)) return -1;             // paid → close it, top priority
+  if (r.invoice_status === "overdue") return 0;
+  if (r.stage === "new") return 6;          // hot leads after deals
   const s = dueInfo(r.next_step_due).state;
-  return s === "overdue" ? 0 : s === "none" ? 1 : s === "today" ? 2 : s === "soon" ? 3 : 4;
+  return s === "overdue" ? 1 : s === "none" ? 2 : s === "today" ? 3 : s === "soon" ? 4 : 5;
 }
 export function todayItems(rows: PRow[]): PRow[] {
   return rows.filter(needsAttention).sort((a, b) => {

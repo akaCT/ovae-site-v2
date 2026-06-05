@@ -4,8 +4,9 @@
 // ?dry=1 renders + returns the digest WITHOUT sending the email.
 // Deploy with --no-verify-jwt; invoked by a daily pg_cron job.
 import {
-  ACCENT, GREEN, esc, fmtUsd, STAGE_LABEL, STAGE_PROB,
-  dealStr, dealMid, dueInfo, DUE_COLOR, isStale, todayItems, type PRow,
+  ACCENT, GREEN, RUST, esc, fmtUsd, STAGE_LABEL, STAGE_PROB,
+  dealStr, dealMid, dueInfo, DUE_COLOR, isStale, todayItems,
+  invoiceBadge, readyToWin, num, type PRow,
 } from "../_shared/pipeline-core.ts";
 
 const json = (b: unknown, status = 200) =>
@@ -35,9 +36,14 @@ function renderDigestHTML(rows: PRow[], token: string, site: string): string {
   const item = (r: PRow): string => {
     const lead = r.stage === "new";
     const di = dueInfo(r.next_step_due);
-    const c = lead ? GREEN : DUE_COLOR[di.state];
-    const tag = lead ? "HOT LEAD" : (isStale(r) && di.state === "ok" ? "STALE" : di.label.toUpperCase());
-    const meta = lead ? `${esc(STAGE_LABEL[r.stage] || r.stage)} · triage` : `${esc(STAGE_LABEL[r.stage] || r.stage)} · ${dealStr(r)}`;
+    let c: string, tag: string;
+    if (readyToWin(r)) { c = GREEN; tag = "PAID · MARK WON"; }
+    else if (r.invoice_status === "overdue") { c = RUST; tag = "INVOICE OVERDUE"; }
+    else if (lead) { c = GREEN; tag = "HOT LEAD"; }
+    else { c = DUE_COLOR[di.state]; tag = (isStale(r) && di.state === "ok" ? "STALE" : di.label.toUpperCase()); }
+    const ib = invoiceBadge(r);
+    const invTag = !lead && ib && !readyToWin(r) && r.invoice_status !== "overdue" ? ` · invoice ${esc(ib.label.toLowerCase())}` : "";
+    const meta = lead ? `${esc(STAGE_LABEL[r.stage] || r.stage)} · triage` : `${esc(STAGE_LABEL[r.stage] || r.stage)} · ${dealStr(r)}${invTag}`;
     const url = `${site}/pipeline/c/?id=${esc(r.id)}&k=${esc(token)}`;
     return `<tr><td style="padding:12px 0;border-bottom:1px solid rgba(232,228,220,.1)">
       <span style="display:inline-block;font:600 10px monospace;letter-spacing:.04em;color:${c};border:1px solid ${c};border-radius:999px;padding:2px 8px;margin-bottom:6px">${tag}</span>

@@ -2,7 +2,7 @@ import {
   ACCENT, RUST, WARN, GREEN, esc, fmtUsd,
   STAGES, STAGE_PROB, STAGE_COLOR, STAGE_LABEL, srcMeta, SCORE_COLOR,
   dealStr, oppStr, dealMid, isStale, isHot, leadBadge, fmtDate, relDate,
-  dueInfo, DUE_COLOR, todayItems, type PRow,
+  dueInfo, DUE_COLOR, todayItems, invoiceBadge, readyToWin, num, type PRow,
 } from "./pipeline-core.ts";
 
 const BOARD_STAGES = STAGES.filter((s) => s.k !== "new"); // 'new' lives in the Inbox
@@ -42,6 +42,12 @@ function card(r: PRow, token: string): string {
     <div class="c-name">${esc(r.name)}</div>
     <div class="c-co">${esc(r.company || "—")}${viaChip(r)}</div>
     <div class="c-val">${dealStr(r)}<span class="c-val-l"> deal</span></div>
+    ${(() => {
+      const ib = invoiceBadge(r); if (!ib) return "";
+      const inv = num(r.amount_invoiced), paid = num(r.amount_paid);
+      const amt = inv ? `<span class="c-inv-amt">${paid > 0 ? fmtUsd(paid) + " / " : ""}${fmtUsd(inv)}</span>` : "";
+      return `<div class="c-inv"><span class="c-inv-bdg" style="--c:${ib.color}">⛁ ${ib.label}</span>${amt}</div>`;
+    })()}
     ${r.next_step ? `<div class="c-next">▸ ${esc(r.next_step)}</div>` : ""}
     <div class="c-links">
       ${r.proposal_url ? `<a class="c-doc" href="${esc(r.proposal_url)}" target="_blank" rel="noopener">📄 Proposal</a>` : ""}
@@ -54,9 +60,14 @@ function card(r: PRow, token: string): string {
 function todayRow(r: PRow, token: string): string {
   const lead = r.stage === "new";
   const di = dueInfo(r.next_step_due);
-  const c = lead ? GREEN : DUE_COLOR[di.state];
-  const tag = lead ? "hot lead" : (isStale(r) && di.state === "ok" ? "stale" : di.label);
-  const meta = lead ? `${esc(STAGE_LABEL[r.stage] || r.stage)} · triage` : `${esc(STAGE_LABEL[r.stage] || r.stage)} · ${dealStr(r)}`;
+  let c: string, tag: string;
+  if (readyToWin(r)) { c = GREEN; tag = "paid · mark won"; }
+  else if (r.invoice_status === "overdue") { c = RUST; tag = "invoice overdue"; }
+  else if (lead) { c = GREEN; tag = "hot lead"; }
+  else { c = DUE_COLOR[di.state]; tag = (isStale(r) && di.state === "ok" ? "stale" : di.label); }
+  const ib = invoiceBadge(r);
+  const invTag = !lead && ib && !readyToWin(r) && r.invoice_status !== "overdue" ? ` · ⛁ ${esc(ib.label.toLowerCase())}` : "";
+  const meta = lead ? `${esc(STAGE_LABEL[r.stage] || r.stage)} · triage` : `${esc(STAGE_LABEL[r.stage] || r.stage)} · ${dealStr(r)}${invTag}`;
   return `<div class="td-row">
     <a class="cover" href="/pipeline/c/?id=${esc(r.id)}&k=${esc(token)}" aria-label="Open ${esc(r.name)}"></a>
     <span class="td-flag" style="--c:${c}">${esc(tag)}</span>
@@ -75,6 +86,8 @@ export function renderPipelineHTML(rows: PRow[], token: string): string {
   const openVal = open.reduce((s, r) => s + dealMid(r), 0);
   const forecast = open.reduce((s, r) => s + dealMid(r) * (STAGE_PROB[r.stage] || 0), 0);
   const wonVal = rows.filter((r) => r.stage === "won").reduce((s, r) => s + dealMid(r), 0);
+  const invoicedOpen = open.reduce((s, r) => s + num(r.amount_invoiced), 0);
+  const collected = rows.reduce((s, r) => s + num(r.amount_paid), 0);
 
   const columns = BOARD_STAGES.map((s) => {
     const cs = rows.filter((r) => r.stage === s.k).sort((a, b) => dealMid(b) - dealMid(a));
@@ -166,6 +179,9 @@ h1{font-size:26px;font-weight:500;letter-spacing:-.02em;margin:30px 0 4px}
 .stale{font:600 9.5px "DM Mono",monospace;color:var(--warn)}
 .c-name{font-weight:600;font-size:15px;line-height:1.2}.c-co{color:var(--dim);font-size:13px;margin-top:1px}
 .c-val{font-family:"DM Mono",monospace;font-size:14px;color:var(--green);margin-top:8px}.c-val-l{color:var(--mute);font-size:11px}
+.c-inv{display:flex;align-items:center;gap:7px;margin-top:6px;flex-wrap:wrap}
+.c-inv-bdg{font:600 9px "DM Mono",monospace;letter-spacing:.04em;color:var(--c);border:1px solid var(--c);border-radius:999px;padding:2px 6px;white-space:nowrap}
+.c-inv-amt{font-family:"DM Mono",monospace;font-size:11.5px;color:var(--dim)}
 .c-next{color:var(--dim);font-size:12.5px;margin-top:7px;font-family:"DM Mono",monospace}
 .c-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:9px;position:relative;z-index:3}
 .c-doc{font:500 12px "DM Sans";color:var(--accent);text-decoration:none}.c-doc:hover{text-decoration:underline}
@@ -197,6 +213,8 @@ h1{font-size:26px;font-weight:500;letter-spacing:-.02em;margin:30px 0 4px}
   <div><div class="s-l">Open deal value</div><div class="s-v">${openVal ? fmtUsd(openVal) : "—"}</div></div>
   <div><div class="s-l">Weighted forecast</div><div class="s-v" style="color:${GREEN}">${forecast ? fmtUsd(Math.round(forecast)) : "—"}</div></div>
   <div><div class="s-l">Won</div><div class="s-v" style="color:${GREEN}">${wonVal ? fmtUsd(wonVal) : "—"}</div></div>
+  <div><div class="s-l">Invoiced</div><div class="s-v">${invoicedOpen ? fmtUsd(invoicedOpen) : "—"}</div></div>
+  <div><div class="s-l">Collected</div><div class="s-v" style="color:${GREEN}">${collected ? fmtUsd(collected) : "—"}</div></div>
 </div>
 
 ${today.length ? `<div class="today">
