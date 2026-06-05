@@ -90,3 +90,41 @@ export function relDate(iso: string | null): string {
   if (d < 365) return Math.floor(d / 30) + "mo ago";
   return Math.floor(d / 365) + "y ago";
 }
+
+// ---- Today / "needs you now" queue (shared by the board and the daily digest) ----
+export type DueState = "overdue" | "today" | "soon" | "none" | "ok";
+export function dueInfo(due: string | null): { state: DueState; label: string } {
+  if (!due) return { state: "none", label: "no follow-up set" };
+  const now = new Date();
+  const t = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const d = new Date(due + "T00:00:00");
+  if (isNaN(d.getTime())) return { state: "none", label: "no follow-up set" };
+  const diff = Math.round((d.getTime() - t.getTime()) / 86400000);
+  if (diff < 0) return { state: "overdue", label: `${-diff}d overdue` };
+  if (diff === 0) return { state: "today", label: "due today" };
+  if (diff <= 3) return { state: "soon", label: `due in ${diff}d` };
+  return { state: "ok", label: fmtDate(due) };
+}
+export const DUE_COLOR: Record<DueState, string> = {
+  overdue: RUST, none: RUST, today: WARN, soon: WARN, ok: ACCENT,
+};
+const OPEN_STAGES = ["qualified", "proposal", "negotiation"];
+// Does this row need a human today? Open deals that are overdue / undated / due-soon / stale,
+// plus hot leads still sitting untriaged in the inbox.
+export function needsAttention(r: PRow): boolean {
+  if (r.stage === "new") return isHot(r);
+  if (!OPEN_STAGES.includes(r.stage)) return false;
+  return dueInfo(r.next_step_due).state !== "ok" || isStale(r);
+}
+function todayRank(r: PRow): number {
+  if (r.stage === "new") return 5; // hot leads after deals
+  const s = dueInfo(r.next_step_due).state;
+  return s === "overdue" ? 0 : s === "none" ? 1 : s === "today" ? 2 : s === "soon" ? 3 : 4;
+}
+export function todayItems(rows: PRow[]): PRow[] {
+  return rows.filter(needsAttention).sort((a, b) => {
+    const d = todayRank(a) - todayRank(b);
+    if (d) return d;
+    return dealMid(b) - dealMid(a);
+  });
+}

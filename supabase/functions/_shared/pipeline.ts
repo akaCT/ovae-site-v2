@@ -1,7 +1,8 @@
 import {
   ACCENT, RUST, WARN, GREEN, esc, fmtUsd,
   STAGES, STAGE_PROB, STAGE_COLOR, STAGE_LABEL, srcMeta, SCORE_COLOR,
-  dealStr, oppStr, dealMid, isStale, isHot, leadBadge, fmtDate, relDate, type PRow,
+  dealStr, oppStr, dealMid, isStale, isHot, leadBadge, fmtDate, relDate,
+  dueInfo, DUE_COLOR, todayItems, type PRow,
 } from "./pipeline-core.ts";
 
 const BOARD_STAGES = STAGES.filter((s) => s.k !== "new"); // 'new' lives in the Inbox
@@ -50,8 +51,25 @@ function card(r: PRow, token: string): string {
   </div>`;
 }
 
+function todayRow(r: PRow, token: string): string {
+  const lead = r.stage === "new";
+  const di = dueInfo(r.next_step_due);
+  const c = lead ? GREEN : DUE_COLOR[di.state];
+  const tag = lead ? "hot lead" : (isStale(r) && di.state === "ok" ? "stale" : di.label);
+  const meta = lead ? `${esc(STAGE_LABEL[r.stage] || r.stage)} · triage` : `${esc(STAGE_LABEL[r.stage] || r.stage)} · ${dealStr(r)}`;
+  return `<div class="td-row">
+    <a class="cover" href="/pipeline/c/?id=${esc(r.id)}&k=${esc(token)}" aria-label="Open ${esc(r.name)}"></a>
+    <span class="td-flag" style="--c:${c}">${esc(tag)}</span>
+    <span class="td-name"><b>${esc(r.name)}</b><span class="td-co">${esc(r.company || "—")}</span></span>
+    <span class="td-meta">${meta}</span>
+    <span class="td-next">${r.next_step ? "▸ " + esc(r.next_step) : '<span class="muted">set a next step</span>'}</span>
+    <a class="td-open" href="/pipeline/c/?id=${esc(r.id)}&k=${esc(token)}">Open →</a>
+  </div>`;
+}
+
 export function renderPipelineHTML(rows: PRow[], token: string): string {
   const leads = rows.filter((r) => r.stage === "new");
+  const today = todayItems(rows);
   const openStages = ["qualified", "proposal", "negotiation"];
   const open = rows.filter((r) => openStages.includes(r.stage));
   const openVal = open.reduce((s, r) => s + dealMid(r), 0);
@@ -95,6 +113,24 @@ h1{font-size:26px;font-weight:500;letter-spacing:-.02em;margin:30px 0 4px}
 .search::placeholder{color:var(--mute)}.search:focus{outline:none;border-color:var(--accent)}
 .btn-add{font:600 13px "DM Sans";border-radius:9px;padding:9px 16px;cursor:pointer;border:none;background:var(--accent);color:#0F0C14}
 .cover{position:absolute;inset:0;z-index:2;border-radius:inherit;text-indent:-9999px;overflow:hidden}
+.muted{color:var(--mute)}
+/* today */
+.today{border:1px solid var(--rule2);border-radius:14px;background:rgba(217,178,107,.05);padding:6px 0;margin-bottom:20px}
+.today--clear{background:rgba(99,224,132,.05)}
+.today-h{display:flex;align-items:center;gap:10px;padding:12px 16px;font:600 12px "DM Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--warn)}
+.today--clear .today-h{color:var(--green)}
+.today-h .n{background:var(--warn);color:#0F0C14;border-radius:99px;padding:1px 9px;font-size:11px}
+.today-h .n--ok{background:var(--green)}
+.today-sub{margin-left:auto;font:500 10px "DM Mono",monospace;color:var(--mute);letter-spacing:.04em;text-transform:none}
+.today-body{display:flex;flex-direction:column}
+.td-row{position:relative;display:grid;grid-template-columns:120px 1.3fr 150px 1.6fr 64px;gap:14px;align-items:center;padding:11px 16px;border-top:1px solid var(--rule)}
+.td-row:hover{background:rgba(232,228,220,.02)}
+.td-flag{font:600 9.5px "DM Mono",monospace;letter-spacing:.04em;color:var(--c);border:1px solid var(--c);border-radius:999px;padding:3px 7px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;justify-self:start}
+.td-name b{font-weight:600;display:block}.td-co{color:var(--dim);font-size:13px}
+.td-meta{font-family:"DM Mono",monospace;font-size:12px;color:var(--dim)}
+.td-next{font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.td-open{font:500 12px "DM Sans";color:var(--accent);text-decoration:none;position:relative;z-index:3;justify-self:end}.td-open:hover{text-decoration:underline}
+@media(max-width:780px){.td-row{grid-template-columns:1fr auto;row-gap:6px}.td-meta,.td-next{display:none}}
 /* inbox */
 .inbox{border:1px solid var(--rule2);border-radius:14px;background:rgba(123,201,196,.04);padding:6px 0;margin-bottom:26px}
 .inbox-h{display:flex;align-items:center;gap:10px;padding:12px 16px;font:600 12px "DM Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
@@ -162,6 +198,12 @@ h1{font-size:26px;font-weight:500;letter-spacing:-.02em;margin:30px 0 4px}
   <div><div class="s-l">Weighted forecast</div><div class="s-v" style="color:${GREEN}">${forecast ? fmtUsd(Math.round(forecast)) : "—"}</div></div>
   <div><div class="s-l">Won</div><div class="s-v" style="color:${GREEN}">${wonVal ? fmtUsd(wonVal) : "—"}</div></div>
 </div>
+
+${today.length ? `<div class="today">
+  <div class="today-h">Today · needs you <span class="n">${today.length}</span><span class="today-sub">open deals to follow up + hot leads</span></div>
+  <div class="today-body">${today.map((r) => todayRow(r, token)).join("")}</div>
+</div>` : `<div class="today today--clear"><div class="today-h">Today · needs you <span class="n n--ok">0</span><span class="today-sub">nothing overdue — every open deal has a scheduled next step</span></div></div>`}
+
 <div class="toolbar">
   <div class="chips">
     <button class="chip active" data-f="all">All</button>
