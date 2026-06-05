@@ -11,6 +11,10 @@ export interface PRow {
   contact_title: string | null; phone: string | null; referred_by: string | null;
   next_step: string | null; next_step_due: string | null; owner: string | null; last_activity: string | null;
   proposal_url: string | null; notes: string | null; details: Record<string, string> | null;
+  invoice_status?: string | null; amount_invoiced?: number | string | null; amount_paid?: number | string | null;
+  invoice_balance?: number | string | null; invoice_ninja_client_id?: string | null; invoice_url?: string | null;
+  last_invoice_at?: string | null; ecosystem?: Record<string, unknown> | null;
+  next_booking_at?: string | null; last_booking_at?: string | null; booking_status?: string | null;
 }
 
 export interface CNote {
@@ -89,4 +93,82 @@ export function relDate(iso: string | null): string {
   if (d < 30) return Math.floor(d) + "d ago";
   if (d < 365) return Math.floor(d / 30) + "mo ago";
   return Math.floor(d / 365) + "y ago";
+}
+
+// ---- Today / "needs you now" queue (shared by the board and the daily digest) ----
+export type DueState = "overdue" | "today" | "soon" | "none" | "ok";
+export function dueInfo(due: string | null): { state: DueState; label: string } {
+  if (!due) return { state: "none", label: "no follow-up set" };
+  const now = new Date();
+  const t = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const d = new Date(due + "T00:00:00");
+  if (isNaN(d.getTime())) return { state: "none", label: "no follow-up set" };
+  const diff = Math.round((d.getTime() - t.getTime()) / 86400000);
+  if (diff < 0) return { state: "overdue", label: `${-diff}d overdue` };
+  if (diff === 0) return { state: "today", label: "due today" };
+  if (diff <= 3) return { state: "soon", label: `due in ${diff}d` };
+  return { state: "ok", label: fmtDate(due) };
+}
+export const DUE_COLOR: Record<DueState, string> = {
+  overdue: RUST, none: RUST, today: WARN, soon: WARN, ok: ACCENT,
+};
+const OPEN_STAGES = ["qualified", "proposal", "negotiation"];
+
+// ---- ecosystem enrichment (invoicing) ----
+export function num(v: number | string | null | undefined): number {
+  const n = typeof v === "string" ? parseFloat(v) : (v ?? 0);
+  return isNaN(n) ? 0 : n;
+}
+export const INVOICE_COLOR: Record<string, string> = {
+  paid: GREEN, partial: WARN, sent: ACCENT, draft: "#9AA0A6", overdue: RUST, cancelled: "#6F6A63",
+};
+export function invoiceBadge(r: PRow): { label: string; color: string } | null {
+  if (!r.invoice_status) return null;
+  return { label: r.invoice_status.toUpperCase(), color: INVOICE_COLOR[r.invoice_status] || "#9AA0A6" };
+}
+// A paid invoice on a not-yet-won deal = ready to close (surfaced, never auto-moved).
+export function readyToWin(r: PRow): boolean {
+  return r.invoice_status === "paid" && r.stage !== "won" && r.stage !== "lost";
+}
+
+// ---- ecosystem enrichment (booking) ----
+export function nextCallInfo(r: PRow): { state: "today" | "tomorrow" | "soon" | "none"; label: string } {
+  if (!r.next_booking_at) return { state: "none", label: "" };
+  const d = new Date(r.next_booking_at).getTime();
+  if (isNaN(d) || d < Date.now()) return { state: "none", label: "" };
+  const hrs = (d - Date.now()) / 3600000;
+  const when = new Date(r.next_booking_at).toLocaleString("en-US", { weekday: "short", hour: "numeric", minute: "2-digit", timeZone: "America/Chicago" });
+  const label = `call ${when}`;
+  if (hrs <= 24) return { state: "today", label };
+  if (hrs <= 48) return { state: "tomorrow", label };
+  return { state: "soon", label };
+}
+
+// Does this row need a human today? Paid-ready-to-win / overdue invoice / call within 48h (top),
+// open deals overdue / undated / due-soon / stale, plus hot leads still untriaged in the inbox.
+export function needsAttention(r: PRow): boolean {
+  if (readyToWin(r)) return true;
+  if (r.invoice_status === "overdue") return true;
+  const ci = nextCallInfo(r);
+  if (ci.state === "today" || ci.state === "tomorrow") return true;
+  if (r.stage === "new") return isHot(r);
+  if (!OPEN_STAGES.includes(r.stage)) return false;
+  return dueInfo(r.next_step_due).state !== "ok" || isStale(r);
+}
+function todayRank(r: PRow): number {
+  if (readyToWin(r)) return -2;             // paid → close it, top priority
+  if (r.invoice_status === "overdue") return -1;
+  const ci = nextCallInfo(r);
+  if (ci.state === "today") return 0;
+  if (ci.state === "tomorrow") return 1;
+  if (r.stage === "new") return 7;          // hot leads after deals
+  const s = dueInfo(r.next_step_due).state;
+  return s === "overdue" ? 2 : s === "none" ? 3 : s === "today" ? 4 : s === "soon" ? 5 : 6;
+}
+export function todayItems(rows: PRow[]): PRow[] {
+  return rows.filter(needsAttention).sort((a, b) => {
+    const d = todayRank(a) - todayRank(b);
+    if (d) return d;
+    return dealMid(b) - dealMid(a);
+  });
 }

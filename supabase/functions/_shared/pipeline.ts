@@ -1,7 +1,8 @@
 import {
   ACCENT, RUST, WARN, GREEN, esc, fmtUsd,
   STAGES, STAGE_PROB, STAGE_COLOR, STAGE_LABEL, srcMeta, SCORE_COLOR,
-  dealStr, oppStr, dealMid, isStale, isHot, leadBadge, fmtDate, relDate, type PRow,
+  dealStr, oppStr, dealMid, isStale, isHot, leadBadge, fmtDate, relDate,
+  dueInfo, DUE_COLOR, todayItems, invoiceBadge, readyToWin, num, nextCallInfo, type PRow,
 } from "./pipeline-core.ts";
 
 const BOARD_STAGES = STAGES.filter((s) => s.k !== "new"); // 'new' lives in the Inbox
@@ -41,6 +42,13 @@ function card(r: PRow, token: string): string {
     <div class="c-name">${esc(r.name)}</div>
     <div class="c-co">${esc(r.company || "—")}${viaChip(r)}</div>
     <div class="c-val">${dealStr(r)}<span class="c-val-l"> deal</span></div>
+    ${(() => {
+      const ib = invoiceBadge(r); if (!ib) return "";
+      const inv = num(r.amount_invoiced), paid = num(r.amount_paid);
+      const amt = inv ? `<span class="c-inv-amt">${paid > 0 ? fmtUsd(paid) + " / " : ""}${fmtUsd(inv)}</span>` : "";
+      return `<div class="c-inv"><span class="c-inv-bdg" style="--c:${ib.color}">⛁ ${ib.label}</span>${amt}</div>`;
+    })()}
+    ${(() => { const ci = nextCallInfo(r); return ci.state === "none" ? "" : `<div class="c-call">📅 ${esc(ci.label)}</div>`; })()}
     ${r.next_step ? `<div class="c-next">▸ ${esc(r.next_step)}</div>` : ""}
     <div class="c-links">
       ${r.proposal_url ? `<a class="c-doc" href="${esc(r.proposal_url)}" target="_blank" rel="noopener">📄 Proposal</a>` : ""}
@@ -50,13 +58,54 @@ function card(r: PRow, token: string): string {
   </div>`;
 }
 
-export function renderPipelineHTML(rows: PRow[], token: string): string {
+function todayRow(r: PRow, token: string): string {
+  const lead = r.stage === "new";
+  const di = dueInfo(r.next_step_due);
+  let c: string, tag: string;
+  const ci = nextCallInfo(r);
+  if (readyToWin(r)) { c = GREEN; tag = "paid · mark won"; }
+  else if (r.invoice_status === "overdue") { c = RUST; tag = "invoice overdue"; }
+  else if (ci.state === "today" || ci.state === "tomorrow") { c = ACCENT; tag = ci.label; }
+  else if (lead) { c = GREEN; tag = "hot lead"; }
+  else { c = DUE_COLOR[di.state]; tag = (isStale(r) && di.state === "ok" ? "stale" : di.label); }
+  const ib = invoiceBadge(r);
+  const invTag = !lead && ib && !readyToWin(r) && r.invoice_status !== "overdue" ? ` · ⛁ ${esc(ib.label.toLowerCase())}` : "";
+  const meta = lead ? `${esc(STAGE_LABEL[r.stage] || r.stage)} · triage` : `${esc(STAGE_LABEL[r.stage] || r.stage)} · ${dealStr(r)}${invTag}`;
+  return `<div class="td-row">
+    <a class="cover" href="/pipeline/c/?id=${esc(r.id)}&k=${esc(token)}" aria-label="Open ${esc(r.name)}"></a>
+    <span class="td-flag" style="--c:${c}">${esc(tag)}</span>
+    <span class="td-name"><b>${esc(r.name)}</b><span class="td-co">${esc(r.company || "—")}</span></span>
+    <span class="td-meta">${meta}</span>
+    <span class="td-next">${r.next_step ? "▸ " + esc(r.next_step) : '<span class="muted">set a next step</span>'}</span>
+    <a class="td-open" href="/pipeline/c/?id=${esc(r.id)}&k=${esc(token)}">Open →</a>
+  </div>`;
+}
+
+function systemsStrip(systems: any[]): string {
+  if (!systems || !systems.length) return "";
+  const dot: Record<string, string> = { connected: GREEN, error: RUST, planned: "var(--mute)", disabled: "var(--mute)" };
+  const chips = systems.map((s) => {
+    const c = dot[s.status] || "var(--mute)";
+    const sub = s.status === "connected"
+      ? (s.last_sync_at ? esc(relDate(s.last_sync_at)) : "connected")
+      : (s.status === "error" ? "error" : "planned");
+    const title = s.last_result ? ` title="${esc(s.last_result)}"` : "";
+    return `<span class="sys-chip"${title}><span class="sys-dot" style="--c:${c}"></span>${esc(s.name)}<span class="sys-sub">${sub}</span></span>`;
+  }).join("");
+  const live = systems.filter((s) => s.status === "connected").length;
+  return `<div class="systems"><div class="systems-h">Ecosystem <span class="systems-n">${live}/${systems.length} live</span></div><div class="systems-row">${chips}</div></div>`;
+}
+
+export function renderPipelineHTML(rows: PRow[], token: string, systems: any[] = []): string {
   const leads = rows.filter((r) => r.stage === "new");
+  const today = todayItems(rows);
   const openStages = ["qualified", "proposal", "negotiation"];
   const open = rows.filter((r) => openStages.includes(r.stage));
   const openVal = open.reduce((s, r) => s + dealMid(r), 0);
   const forecast = open.reduce((s, r) => s + dealMid(r) * (STAGE_PROB[r.stage] || 0), 0);
   const wonVal = rows.filter((r) => r.stage === "won").reduce((s, r) => s + dealMid(r), 0);
+  const invoicedOpen = open.reduce((s, r) => s + num(r.amount_invoiced), 0);
+  const collected = rows.reduce((s, r) => s + num(r.amount_paid), 0);
 
   const columns = BOARD_STAGES.map((s) => {
     const cs = rows.filter((r) => r.stage === s.k).sort((a, b) => dealMid(b) - dealMid(a));
@@ -95,6 +144,24 @@ h1{font-size:26px;font-weight:500;letter-spacing:-.02em;margin:30px 0 4px}
 .search::placeholder{color:var(--mute)}.search:focus{outline:none;border-color:var(--accent)}
 .btn-add{font:600 13px "DM Sans";border-radius:9px;padding:9px 16px;cursor:pointer;border:none;background:var(--accent);color:#0F0C14}
 .cover{position:absolute;inset:0;z-index:2;border-radius:inherit;text-indent:-9999px;overflow:hidden}
+.muted{color:var(--mute)}
+/* today */
+.today{border:1px solid var(--rule2);border-radius:14px;background:rgba(217,178,107,.05);padding:6px 0;margin-bottom:20px}
+.today--clear{background:rgba(99,224,132,.05)}
+.today-h{display:flex;align-items:center;gap:10px;padding:12px 16px;font:600 12px "DM Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--warn)}
+.today--clear .today-h{color:var(--green)}
+.today-h .n{background:var(--warn);color:#0F0C14;border-radius:99px;padding:1px 9px;font-size:11px}
+.today-h .n--ok{background:var(--green)}
+.today-sub{margin-left:auto;font:500 10px "DM Mono",monospace;color:var(--mute);letter-spacing:.04em;text-transform:none}
+.today-body{display:flex;flex-direction:column}
+.td-row{position:relative;display:grid;grid-template-columns:120px 1.3fr 150px 1.6fr 64px;gap:14px;align-items:center;padding:11px 16px;border-top:1px solid var(--rule)}
+.td-row:hover{background:rgba(232,228,220,.02)}
+.td-flag{font:600 9.5px "DM Mono",monospace;letter-spacing:.04em;color:var(--c);border:1px solid var(--c);border-radius:999px;padding:3px 7px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;justify-self:start}
+.td-name b{font-weight:600;display:block}.td-co{color:var(--dim);font-size:13px}
+.td-meta{font-family:"DM Mono",monospace;font-size:12px;color:var(--dim)}
+.td-next{font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.td-open{font:500 12px "DM Sans";color:var(--accent);text-decoration:none;position:relative;z-index:3;justify-self:end}.td-open:hover{text-decoration:underline}
+@media(max-width:780px){.td-row{grid-template-columns:1fr auto;row-gap:6px}.td-meta,.td-next{display:none}}
 /* inbox */
 .inbox{border:1px solid var(--rule2);border-radius:14px;background:rgba(123,201,196,.04);padding:6px 0;margin-bottom:26px}
 .inbox-h{display:flex;align-items:center;gap:10px;padding:12px 16px;font:600 12px "DM Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
@@ -130,12 +197,23 @@ h1{font-size:26px;font-weight:500;letter-spacing:-.02em;margin:30px 0 4px}
 .stale{font:600 9.5px "DM Mono",monospace;color:var(--warn)}
 .c-name{font-weight:600;font-size:15px;line-height:1.2}.c-co{color:var(--dim);font-size:13px;margin-top:1px}
 .c-val{font-family:"DM Mono",monospace;font-size:14px;color:var(--green);margin-top:8px}.c-val-l{color:var(--mute);font-size:11px}
+.c-inv{display:flex;align-items:center;gap:7px;margin-top:6px;flex-wrap:wrap}
+.c-inv-bdg{font:600 9px "DM Mono",monospace;letter-spacing:.04em;color:var(--c);border:1px solid var(--c);border-radius:999px;padding:2px 6px;white-space:nowrap}
+.c-inv-amt{font-family:"DM Mono",monospace;font-size:11.5px;color:var(--dim)}
+.c-call{font-family:"DM Mono",monospace;font-size:12px;color:var(--accent);margin-top:6px}
 .c-next{color:var(--dim);font-size:12.5px;margin-top:7px;font-family:"DM Mono",monospace}
 .c-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:9px;position:relative;z-index:3}
 .c-doc{font:500 12px "DM Sans";color:var(--accent);text-decoration:none}.c-doc:hover{text-decoration:underline}
 .c-act{margin-top:11px;padding-top:10px;border-top:1px solid var(--rule);position:relative;z-index:3}
 .c-stage{width:100%;font:500 12px "DM Sans";background:var(--soft);border:1px solid var(--rule2);border-radius:7px;padding:6px 8px;color:var(--ink);cursor:pointer}
 .c-stage:focus{outline:none;border-color:var(--accent)}
+.systems{margin-top:26px;border:1px solid var(--rule);border-radius:14px;background:rgba(26,22,34,.4);padding:14px 16px}
+.systems-h{display:flex;align-items:center;gap:10px;font:600 11px "DM Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.systems-n{font-family:"DM Mono",monospace;color:var(--mute);font-size:10.5px}
+.systems-row{display:flex;flex-wrap:wrap;gap:8px}
+.sys-chip{display:inline-flex;align-items:center;gap:7px;font:500 12px "DM Sans";color:var(--ink);background:var(--elev);border:1px solid var(--rule2);border-radius:999px;padding:6px 12px}
+.sys-dot{width:7px;height:7px;border-radius:99px;background:var(--c);flex:none}
+.sys-sub{color:var(--mute);font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.03em}
 .lfoot{margin-top:24px;padding-top:16px;border-top:1px solid var(--rule);color:var(--mute);font:500 11.5px "DM Mono",monospace;letter-spacing:.04em;text-align:center}
 /* add modal */
 .ov{position:fixed;inset:0;background:rgba(10,8,14,.7);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}
@@ -161,7 +239,15 @@ h1{font-size:26px;font-weight:500;letter-spacing:-.02em;margin:30px 0 4px}
   <div><div class="s-l">Open deal value</div><div class="s-v">${openVal ? fmtUsd(openVal) : "—"}</div></div>
   <div><div class="s-l">Weighted forecast</div><div class="s-v" style="color:${GREEN}">${forecast ? fmtUsd(Math.round(forecast)) : "—"}</div></div>
   <div><div class="s-l">Won</div><div class="s-v" style="color:${GREEN}">${wonVal ? fmtUsd(wonVal) : "—"}</div></div>
+  <div><div class="s-l">Invoiced</div><div class="s-v">${invoicedOpen ? fmtUsd(invoicedOpen) : "—"}</div></div>
+  <div><div class="s-l">Collected</div><div class="s-v" style="color:${GREEN}">${collected ? fmtUsd(collected) : "—"}</div></div>
 </div>
+
+${today.length ? `<div class="today">
+  <div class="today-h">Today · needs you <span class="n">${today.length}</span><span class="today-sub">open deals to follow up + hot leads</span></div>
+  <div class="today-body">${today.map((r) => todayRow(r, token)).join("")}</div>
+</div>` : `<div class="today today--clear"><div class="today-h">Today · needs you <span class="n n--ok">0</span><span class="today-sub">nothing overdue — every open deal has a scheduled next step</span></div></div>`}
+
 <div class="toolbar">
   <div class="chips">
     <button class="chip active" data-f="all">All</button>
@@ -183,6 +269,7 @@ ${leads.length ? `<div class="inbox" id="inbox">
 </div>` : ""}
 
 <div class="board" id="board">${columns}</div>
+${systemsStrip(systems)}
 <div class="lfoot">Open ${openVal ? fmtUsd(openVal) : "—"} · forecast ${forecast ? fmtUsd(Math.round(forecast)) : "—"} · won ${wonVal ? fmtUsd(wonVal) : "—"} · ovae.ai/pipeline</div>
 </div>
 

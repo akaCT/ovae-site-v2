@@ -12,15 +12,15 @@ function shell(msg: string): string {
 <div style="font-size:18px;color:#A39E96">${msg}</div></div></body>`;
 }
 
-async function fetchAll(): Promise<PRow[]> {
+async function pg(path: string): Promise<any[]> {
   const base = Deno.env.get("SUPABASE_URL")!;
   const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  const res = await fetch(`${base}/rest/v1/pipeline?select=*&order=created_at.desc`, {
-    headers: { apikey: key, Authorization: `Bearer ${key}` },
-  });
+  const res = await fetch(`${base}/rest/v1/${path}`, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
   if (!res.ok) throw new Error(`read failed: ${res.status} ${await res.text()}`);
-  return await res.json() as PRow[];
+  return await res.json();
 }
+const fetchAll = () => pg("pipeline?select=*&order=created_at.desc") as Promise<PRow[]>;
+const fetchSystems = () => pg("connected_systems?select=*&order=category").catch(() => [] as any[]);
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
@@ -29,7 +29,8 @@ Deno.serve(async (req) => {
     new Response(body, { status, headers: { ...CORS, "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
   if (!token || token !== Deno.env.get("ADMIN_TOKEN")) return html(shell("Not authorized."), 403);
   try {
-    return html(renderPipelineHTML(await fetchAll(), token));
+    const [rows, systems] = await Promise.all([fetchAll(), fetchSystems()]);
+    return html(renderPipelineHTML(rows, token, systems));
   } catch (e) {
     console.error("pipeline error:", e);
     return html(shell("Could not load pipeline."), 500);
