@@ -6,7 +6,7 @@
 import {
   ACCENT, GREEN, RUST, esc, fmtUsd, STAGE_LABEL, STAGE_PROB,
   dealStr, dealMid, dueInfo, DUE_COLOR, isStale, todayItems,
-  invoiceBadge, readyToWin, num, type PRow,
+  invoiceBadge, readyToWin, num, nextCallInfo, type PRow,
 } from "../_shared/pipeline-core.ts";
 
 const json = (b: unknown, status = 200) =>
@@ -36,9 +36,11 @@ function renderDigestHTML(rows: PRow[], token: string, site: string): string {
   const item = (r: PRow): string => {
     const lead = r.stage === "new";
     const di = dueInfo(r.next_step_due);
+    const ci = nextCallInfo(r);
     let c: string, tag: string;
     if (readyToWin(r)) { c = GREEN; tag = "PAID · MARK WON"; }
     else if (r.invoice_status === "overdue") { c = RUST; tag = "INVOICE OVERDUE"; }
+    else if (ci.state === "today" || ci.state === "tomorrow") { c = ACCENT; tag = ci.label.toUpperCase(); }
     else if (lead) { c = GREEN; tag = "HOT LEAD"; }
     else { c = DUE_COLOR[di.state]; tag = (isStale(r) && di.state === "ok" ? "STALE" : di.label.toUpperCase()); }
     const ib = invoiceBadge(r);

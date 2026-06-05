@@ -14,6 +14,7 @@ export interface PRow {
   invoice_status?: string | null; amount_invoiced?: number | string | null; amount_paid?: number | string | null;
   invoice_balance?: number | string | null; invoice_ninja_client_id?: string | null; invoice_url?: string | null;
   last_invoice_at?: string | null; ecosystem?: Record<string, unknown> | null;
+  next_booking_at?: string | null; last_booking_at?: string | null; booking_status?: string | null;
 }
 
 export interface CNote {
@@ -130,21 +131,39 @@ export function readyToWin(r: PRow): boolean {
   return r.invoice_status === "paid" && r.stage !== "won" && r.stage !== "lost";
 }
 
-// Does this row need a human today? Paid-ready-to-win or overdue invoice (top), open deals
-// that are overdue / undated / due-soon / stale, plus hot leads still untriaged in the inbox.
+// ---- ecosystem enrichment (booking) ----
+export function nextCallInfo(r: PRow): { state: "today" | "tomorrow" | "soon" | "none"; label: string } {
+  if (!r.next_booking_at) return { state: "none", label: "" };
+  const d = new Date(r.next_booking_at).getTime();
+  if (isNaN(d) || d < Date.now()) return { state: "none", label: "" };
+  const hrs = (d - Date.now()) / 3600000;
+  const when = new Date(r.next_booking_at).toLocaleString("en-US", { weekday: "short", hour: "numeric", minute: "2-digit", timeZone: "America/Chicago" });
+  const label = `call ${when}`;
+  if (hrs <= 24) return { state: "today", label };
+  if (hrs <= 48) return { state: "tomorrow", label };
+  return { state: "soon", label };
+}
+
+// Does this row need a human today? Paid-ready-to-win / overdue invoice / call within 48h (top),
+// open deals overdue / undated / due-soon / stale, plus hot leads still untriaged in the inbox.
 export function needsAttention(r: PRow): boolean {
   if (readyToWin(r)) return true;
   if (r.invoice_status === "overdue") return true;
+  const ci = nextCallInfo(r);
+  if (ci.state === "today" || ci.state === "tomorrow") return true;
   if (r.stage === "new") return isHot(r);
   if (!OPEN_STAGES.includes(r.stage)) return false;
   return dueInfo(r.next_step_due).state !== "ok" || isStale(r);
 }
 function todayRank(r: PRow): number {
-  if (readyToWin(r)) return -1;             // paid → close it, top priority
-  if (r.invoice_status === "overdue") return 0;
-  if (r.stage === "new") return 6;          // hot leads after deals
+  if (readyToWin(r)) return -2;             // paid → close it, top priority
+  if (r.invoice_status === "overdue") return -1;
+  const ci = nextCallInfo(r);
+  if (ci.state === "today") return 0;
+  if (ci.state === "tomorrow") return 1;
+  if (r.stage === "new") return 7;          // hot leads after deals
   const s = dueInfo(r.next_step_due).state;
-  return s === "overdue" ? 1 : s === "none" ? 2 : s === "today" ? 3 : s === "soon" ? 4 : 5;
+  return s === "overdue" ? 2 : s === "none" ? 3 : s === "today" ? 4 : s === "soon" ? 5 : 6;
 }
 export function todayItems(rows: PRow[]): PRow[] {
   return rows.filter(needsAttention).sort((a, b) => {

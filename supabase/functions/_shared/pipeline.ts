@@ -2,7 +2,7 @@ import {
   ACCENT, RUST, WARN, GREEN, esc, fmtUsd,
   STAGES, STAGE_PROB, STAGE_COLOR, STAGE_LABEL, srcMeta, SCORE_COLOR,
   dealStr, oppStr, dealMid, isStale, isHot, leadBadge, fmtDate, relDate,
-  dueInfo, DUE_COLOR, todayItems, invoiceBadge, readyToWin, num, type PRow,
+  dueInfo, DUE_COLOR, todayItems, invoiceBadge, readyToWin, num, nextCallInfo, type PRow,
 } from "./pipeline-core.ts";
 
 const BOARD_STAGES = STAGES.filter((s) => s.k !== "new"); // 'new' lives in the Inbox
@@ -48,6 +48,7 @@ function card(r: PRow, token: string): string {
       const amt = inv ? `<span class="c-inv-amt">${paid > 0 ? fmtUsd(paid) + " / " : ""}${fmtUsd(inv)}</span>` : "";
       return `<div class="c-inv"><span class="c-inv-bdg" style="--c:${ib.color}">⛁ ${ib.label}</span>${amt}</div>`;
     })()}
+    ${(() => { const ci = nextCallInfo(r); return ci.state === "none" ? "" : `<div class="c-call">📅 ${esc(ci.label)}</div>`; })()}
     ${r.next_step ? `<div class="c-next">▸ ${esc(r.next_step)}</div>` : ""}
     <div class="c-links">
       ${r.proposal_url ? `<a class="c-doc" href="${esc(r.proposal_url)}" target="_blank" rel="noopener">📄 Proposal</a>` : ""}
@@ -61,8 +62,10 @@ function todayRow(r: PRow, token: string): string {
   const lead = r.stage === "new";
   const di = dueInfo(r.next_step_due);
   let c: string, tag: string;
+  const ci = nextCallInfo(r);
   if (readyToWin(r)) { c = GREEN; tag = "paid · mark won"; }
   else if (r.invoice_status === "overdue") { c = RUST; tag = "invoice overdue"; }
+  else if (ci.state === "today" || ci.state === "tomorrow") { c = ACCENT; tag = ci.label; }
   else if (lead) { c = GREEN; tag = "hot lead"; }
   else { c = DUE_COLOR[di.state]; tag = (isStale(r) && di.state === "ok" ? "stale" : di.label); }
   const ib = invoiceBadge(r);
@@ -182,6 +185,7 @@ h1{font-size:26px;font-weight:500;letter-spacing:-.02em;margin:30px 0 4px}
 .c-inv{display:flex;align-items:center;gap:7px;margin-top:6px;flex-wrap:wrap}
 .c-inv-bdg{font:600 9px "DM Mono",monospace;letter-spacing:.04em;color:var(--c);border:1px solid var(--c);border-radius:999px;padding:2px 6px;white-space:nowrap}
 .c-inv-amt{font-family:"DM Mono",monospace;font-size:11.5px;color:var(--dim)}
+.c-call{font-family:"DM Mono",monospace;font-size:12px;color:var(--accent);margin-top:6px}
 .c-next{color:var(--dim);font-size:12.5px;margin-top:7px;font-family:"DM Mono",monospace}
 .c-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:9px;position:relative;z-index:3}
 .c-doc{font:500 12px "DM Sans";color:var(--accent);text-decoration:none}.c-doc:hover{text-decoration:underline}
