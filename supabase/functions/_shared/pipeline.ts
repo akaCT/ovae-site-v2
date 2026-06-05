@@ -81,7 +81,22 @@ function todayRow(r: PRow, token: string): string {
   </div>`;
 }
 
-export function renderPipelineHTML(rows: PRow[], token: string): string {
+function systemsStrip(systems: any[]): string {
+  if (!systems || !systems.length) return "";
+  const dot: Record<string, string> = { connected: GREEN, error: RUST, planned: "var(--mute)", disabled: "var(--mute)" };
+  const chips = systems.map((s) => {
+    const c = dot[s.status] || "var(--mute)";
+    const sub = s.status === "connected"
+      ? (s.last_sync_at ? esc(relDate(s.last_sync_at)) : "connected")
+      : (s.status === "error" ? "error" : "planned");
+    const title = s.last_result ? ` title="${esc(s.last_result)}"` : "";
+    return `<span class="sys-chip"${title}><span class="sys-dot" style="--c:${c}"></span>${esc(s.name)}<span class="sys-sub">${sub}</span></span>`;
+  }).join("");
+  const live = systems.filter((s) => s.status === "connected").length;
+  return `<div class="systems"><div class="systems-h">Ecosystem <span class="systems-n">${live}/${systems.length} live</span></div><div class="systems-row">${chips}</div></div>`;
+}
+
+export function renderPipelineHTML(rows: PRow[], token: string, systems: any[] = []): string {
   const leads = rows.filter((r) => r.stage === "new");
   const today = todayItems(rows);
   const openStages = ["qualified", "proposal", "negotiation"];
@@ -192,6 +207,13 @@ h1{font-size:26px;font-weight:500;letter-spacing:-.02em;margin:30px 0 4px}
 .c-act{margin-top:11px;padding-top:10px;border-top:1px solid var(--rule);position:relative;z-index:3}
 .c-stage{width:100%;font:500 12px "DM Sans";background:var(--soft);border:1px solid var(--rule2);border-radius:7px;padding:6px 8px;color:var(--ink);cursor:pointer}
 .c-stage:focus{outline:none;border-color:var(--accent)}
+.systems{margin-top:26px;border:1px solid var(--rule);border-radius:14px;background:rgba(26,22,34,.4);padding:14px 16px}
+.systems-h{display:flex;align-items:center;gap:10px;font:600 11px "DM Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.systems-n{font-family:"DM Mono",monospace;color:var(--mute);font-size:10.5px}
+.systems-row{display:flex;flex-wrap:wrap;gap:8px}
+.sys-chip{display:inline-flex;align-items:center;gap:7px;font:500 12px "DM Sans";color:var(--ink);background:var(--elev);border:1px solid var(--rule2);border-radius:999px;padding:6px 12px}
+.sys-dot{width:7px;height:7px;border-radius:99px;background:var(--c);flex:none}
+.sys-sub{color:var(--mute);font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.03em}
 .lfoot{margin-top:24px;padding-top:16px;border-top:1px solid var(--rule);color:var(--mute);font:500 11.5px "DM Mono",monospace;letter-spacing:.04em;text-align:center}
 /* add modal */
 .ov{position:fixed;inset:0;background:rgba(10,8,14,.7);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}
@@ -247,6 +269,7 @@ ${leads.length ? `<div class="inbox" id="inbox">
 </div>` : ""}
 
 <div class="board" id="board">${columns}</div>
+${systemsStrip(systems)}
 <div class="lfoot">Open ${openVal ? fmtUsd(openVal) : "—"} · forecast ${forecast ? fmtUsd(Math.round(forecast)) : "—"} · won ${wonVal ? fmtUsd(wonVal) : "—"} · ovae.ai/pipeline</div>
 </div>
 
