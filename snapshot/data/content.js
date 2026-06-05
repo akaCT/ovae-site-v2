@@ -113,7 +113,7 @@ window.SNAP_CONTENT = {
   // Cold-open hook (LOCKED). Lead with LEVEL; style is the bonus reveal.
   hook: {
     headline: "AI has 6 levels. Which one are you?",
-    sub: "90 seconds. Find your level, your AI type, and the one habit that gets you to the next.",
+    sub: "Find your level, your AI type, and the one habit that gets you to the next.",
     cta: "Find my level"
   },
 
