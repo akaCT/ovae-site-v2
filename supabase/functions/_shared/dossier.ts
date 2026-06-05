@@ -8,6 +8,21 @@ import { DIM_META, flagMeta } from "./readiness.ts";
 const KIND = { note: "Note", call: "Call", email: "Email", artifact: "Artifact" };
 const KIND_COLOR: Record<string, string> = { note: "#A39E96", call: "#7BC9C4", email: "#8FB8FF", artifact: "#B89CFF" };
 
+// Plain-English translation for the profile view — mirrors snapshot-submit's email
+// maps so the dossier reads like the confirmation email. DB stays raw; we translate
+// on render only. Enum tokens are unique across fields, so one value map is safe.
+const STYLE_T: Record<string, string> = { centaur: "Delegator", cyborg: "Collaborator", self: "Automator" };
+const PERSONA_T: Record<string, string> = { bottlenecked_builder: "Bottlenecked", next_at_wheel: "Coasting", ground_floor: "Untapped", ai_native: "Compounding" };
+const ROLE_T: Record<string, string> = { owner: "Owner / founder", solo: "Solo operator", team: "Team lead", ic: "Individual contributor" };
+const APPETITE_T: Record<string, string> = { build_now: "Ready to build now", want_help: "Wants help doing it", convince: "Needs convincing", curious: "Just curious" };
+const INDUSTRY_T: Record<string, string> = { generic: "Business", "home-services": "Home Services", dtc: "DTC / E-commerce", agency: "Agency", course: "Course / Creator", services: "Professional Services", "b2b-saas": "B2B SaaS" };
+const DIM_T: Record<string, string> = { BI: "Business Intelligence", KPD: "Key-Person Dependency", AUTO: "Workflow Automation", DATA: "Data Infrastructure", TEAM: "Team Leverage", REV: "Revenue Engine" };
+const VALUE_T: Record<string, string> = { ...STYLE_T, ...PERSONA_T, ...ROLE_T, ...APPETITE_T, ...INDUSTRY_T, ...DIM_T };
+const LABEL_T: Record<string, string> = { "AI rung": "AI level", "Style": "AI style" };
+const prettyLabel = (k: string) => LABEL_T[k] || k;
+const prettyVal = (v: unknown) => VALUE_T[String(v)] ?? String(v);
+const prettyDim = (v: string | null) => (v ? (DIM_T[v] || v) : "—");
+
 export function renderClientHTML(row: PRow, readiness: any | null, notes: CNote[], token: string): string {
   const fm = row.flag ? flagMeta(row.flag) : null;
   const sm = srcMeta(row.source);
@@ -20,7 +35,7 @@ export function renderClientHTML(row: PRow, readiness: any | null, notes: CNote[
   const stageOpts = STAGES.map((s) => `<option value="${s.k}"${s.k === row.stage ? " selected" : ""}>${s.label}</option>`).join("");
 
   const factRows = factKeys.length
-    ? factKeys.map((k) => `<div class="fact"><div class="fact-k">${esc(k)}</div><div class="fact-v">${esc(details[k])}</div><button class="fact-x" data-key="${esc(k)}" title="Remove">×</button></div>`).join("")
+    ? factKeys.map((k) => `<div class="fact"><div class="fact-k">${esc(prettyLabel(k))}</div><div class="fact-v">${esc(prettyVal(details[k]))}</div><button class="fact-x" data-key="${esc(k)}" title="Remove">×</button></div>`).join("")
     : '<div class="muted">No facts yet — add what you know about this client.</div>';
 
   // diagnostic (readiness)
@@ -37,13 +52,13 @@ export function renderClientHTML(row: PRow, readiness: any | null, notes: CNote[
       <div class="diag-top">
         <div class="diag-score" style="color:${SCORE_COLOR(row.readiness_score || 0)}">${row.readiness_score}<span>/100</span></div>
         <div><div class="muted">Band</div><b>${esc(readiness.band || "—")}</b></div>
-        <div><div class="muted">Constraint</div><b style="color:${RUST}">${esc(row.constraint_dim || "—")}</b></div>
+        <div><div class="muted">Constraint</div><b style="color:${RUST}">${esc(prettyDim(row.constraint_dim))}</b></div>
         <a class="btn-ghost" href="/readiness/r/?id=${esc(row.readiness_id || "")}&k=${esc(token)}">Open full report →</a>
       </div>${bars}</section>`;
   } else if (row.readiness_score != null) {
     diag = `<section class="sec"><h2>Diagnostic</h2><div class="diag-top">
       <div class="diag-score" style="color:${SCORE_COLOR(row.readiness_score)}">${row.readiness_score}<span>/100</span></div>
-      <div><div class="muted">Constraint</div><b style="color:${RUST}">${esc(row.constraint_dim || "—")}</b></div></div></section>`;
+      <div><div class="muted">Constraint</div><b style="color:${RUST}">${esc(prettyDim(row.constraint_dim))}</b></div></div></section>`;
   }
 
   const noteRow = (n: CNote) => `<div class="note" data-id="${esc(n.id)}">

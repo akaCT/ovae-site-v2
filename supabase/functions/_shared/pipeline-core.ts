@@ -3,7 +3,7 @@ export { ACCENT, RUST, WARN, GREEN, esc, fmtUsd, flagMeta };
 
 export interface PRow {
   id: string; created_at: string; updated_at: string; name: string; company: string | null; email: string | null;
-  stage: string; source: string; lead_type: string | null;
+  stage: string; source: string; source_table: string | null; source_id: string | null; lead_type: string | null;
   readiness_id: string | null; readiness_score: number | null; flag: string | null; constraint_dim: string | null;
   value_low: number | null; value_high: number | null;
   deal_value_low: number | null; deal_value_high: number | null;
