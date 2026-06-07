@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ovae — Sprint Command Center</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0b0d;--bg-1:#101216;--bg-2:#16181d;--bg-3:#1d2026;
+    --border:#262a31;--border-2:#333842;
+    --text:#e9e7e2;--dim:#a6a39a;--faint:#6e6c66;
+    --gold:#d4a94f;--gold-2:#e6bd63;
+    --green:#5fb98a;--green-bg:rgba(95,185,138,.09);--green-bd:rgba(95,185,138,.34);
+    --blue:#6ea8d8;--blue-bg:rgba(110,168,216,.09);--blue-bd:rgba(110,168,216,.32);
+    --amber:#dca844;--amber-bg:rgba(220,168,68,.08);--amber-bd:rgba(220,168,68,.3);
+    --red:#e16a52;--red-bg:rgba(225,106,82,.08);
+  }
+  *{box-sizing:border-box}html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;font-size:16.5px;line-height:1.58;-webkit-font-smoothing:antialiased}
+  ::selection{background:rgba(212,169,79,.25)}.mono{font-family:'DM Mono',monospace}
+  .wrap{display:grid;grid-template-columns:250px 1fr;max-width:1240px;margin:0 auto}
+  nav.side{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;padding:34px 18px 34px 26px;border-right:1px solid var(--border)}
+  nav .brand{font-weight:700;font-size:1.35rem;margin-bottom:3px}nav .brand span{color:var(--gold)}
+  nav .doc{font-size:.72rem;color:var(--dim);margin-bottom:22px;border-bottom:1px solid var(--border);padding-bottom:16px;line-height:1.4}
+  nav a{display:block;color:var(--dim);text-decoration:none;font-size:.84rem;padding:6px 11px;border-radius:7px;margin:1px 0;border:1px solid transparent;transition:.15s}
+  nav a .n{font-family:'DM Mono',monospace;color:var(--faint);font-size:.74rem;margin-right:8px}
+  nav a:hover{background:var(--bg-2);color:var(--text)}
+  nav a.active{background:var(--bg-2);color:var(--gold);border-color:var(--border-2)}nav a.active .n{color:var(--gold)}
+  main{padding:52px clamp(22px,5vw,72px);min-width:0;max-width:calc(900px + 144px)}
+  .hero{margin-bottom:48px;padding-bottom:34px;border-bottom:1px solid var(--border)}
+  .hero .kick{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+  .hero h1{font-size:clamp(2rem,4.4vw,3rem);line-height:1.05;letter-spacing:-.027em;font-weight:700;margin:0 0 14px}
+  .hero .meta{font-family:'DM Mono',monospace;font-size:.78rem;color:var(--faint);margin-bottom:26px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .stat{background:var(--bg-1);padding:17px 18px}
+  .stat .v{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;color:var(--gold-2);font-family:'DM Mono',monospace}
+  .stat .l{font-size:.7rem;color:var(--faint);margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
+  section{margin:0 0 56px;scroll-margin-top:24px}
+  h2.sec{font-size:1.5rem;letter-spacing:-.018em;font-weight:700;margin:0 0 6px;display:flex;align-items:baseline;gap:13px}
+  h2.sec .num{font-family:'DM Mono',monospace;font-size:.92rem;color:var(--gold);font-weight:500}
+  .sub{color:var(--dim);font-size:.92rem;margin:0 0 22px;padding-bottom:13px;border-bottom:1px solid var(--border)}
+  h3{font-size:1.05rem;font-weight:600;margin:26px 0 10px}
+  h4{font-size:.74rem;font-family:'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:22px 0 10px;font-weight:500}
+  p{margin:0 0 13px}strong{color:#fff;font-weight:600}em{color:var(--text)}
+  ul{margin:0 0 14px;padding-left:2px}li{margin:0 0 9px;list-style:none;position:relative;padding-left:23px}
+  ul li::before{content:"";position:absolute;left:5px;top:10px;width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.7}
+  .tw{overflow-x:auto;margin:18px 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.85rem;min-width:560px}
+  th{background:var(--bg-2);text-align:left;padding:11px 14px;font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;color:var(--gold);font-weight:500;border-bottom:1px solid var(--border-2)}
+  td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--dim);line-height:1.45}
+  tr:last-child td{border-bottom:none}td strong{color:var(--text)}
+  .amt{font-family:'DM Mono',monospace;color:var(--green);font-weight:500;white-space:nowrap}
+  .pill{display:inline-block;font-family:'DM Mono',monospace;font-size:.66rem;padding:2px 8px;border-radius:20px;font-weight:500;white-space:nowrap}
+  .pill.go{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)}
+  .pill.warm{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)}
+  .pill.icp{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bd)}
+  .pill.lite{background:var(--bg-3);color:var(--faint);border:1px solid var(--border-2)}
+  .callout{border-radius:12px;padding:18px 22px;margin:20px 0;border:1px solid var(--border-2);background:var(--bg-1)}
+  .callout .lbl{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;font-weight:500}
+  .callout p:last-child{margin:0}
+  .callout.go{background:var(--green-bg);border-color:var(--green-bd)}.callout.go .lbl{color:var(--green)}
+  .callout.amber{background:var(--amber-bg);border-color:var(--amber-bd)}.callout.amber .lbl{color:var(--amber)}
+  .callout.gold{background:linear-gradient(180deg,rgba(212,169,79,.07),rgba(212,169,79,.02));border-color:rgba(212,169,79,.34)}.callout.gold .lbl{color:var(--gold)}
+  /* day cards */
+  .day{border:1px solid var(--border);border-radius:12px;margin:11px 0;overflow:hidden;background:var(--bg-1)}
+  .day .dh{display:flex;align-items:center;gap:12px;padding:12px 18px;background:var(--bg-2);border-bottom:1px solid var(--border)}
+  .day .dh .dd{font-family:'DM Mono',monospace;font-weight:500;color:var(--gold-2);font-size:.9rem}
+  .day .dh .dt{font-size:.82rem;color:var(--faint)}
+  .day .db{padding:13px 18px}.day .db li{margin:0 0 8px;font-size:.92rem}
+  .day.big .dh{background:linear-gradient(90deg,rgba(212,169,79,.14),transparent)}
+  /* week cards */
+  .wk{border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:18px 22px;margin:13px 0;background:var(--bg-1)}
+  .wk .wl{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;flex-wrap:wrap;gap:6px}
+  .wk .wt{font-weight:600;color:var(--gold-2)}.wk .wg{font-family:'DM Mono',monospace;font-size:.78rem;color:var(--green)}
+  .roster{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:18px 0}
+  .rc{background:var(--bg-1);border:1px solid var(--border);border-radius:11px;padding:15px 17px}
+  .rc .rn{font-weight:600;margin-bottom:3px}.rc .rr{font-size:.74rem;font-family:'DM Mono',monospace;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+  .rc p{font-size:.85rem;color:var(--dim);margin:0}
+  footer{margin-top:54px;padding-top:22px;border-top:1px solid var(--border);color:var(--faint);font-size:.76rem;font-family:'DM Mono',monospace;line-height:1.6}
+  .mobnav{display:none}
+  @media(max-width:880px){.wrap{grid-template-columns:1fr}nav.side{display:none}main{padding:30px 20px 56px}
+    .mobnav{display:block;position:sticky;top:0;z-index:20;background:rgba(10,11,13,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:13px 20px;font-weight:700}.mobnav span{color:var(--gold)}}
+</style>
+</head>
+<body>
+<div class="mobnav">Ovae <span>·</span> Sprint Command Center</div>
+<div class="wrap">
+<nav class="side">
+  <div class="brand">Ovae<span>.</span></div>
+  <div class="doc">Sprint Command Center · 30-day · from 6/7 Isaiah call</div>
+  <a href="#cash"><span class="n">$</span>Cash Board</a>
+  <a href="#summary"><span class="n">01</span>Call Decisions</a>
+  <a href="#week"><span class="n">02</span>This Week · Daily</a>
+  <a href="#thirty"><span class="n">03</span>30-Day Map</a>
+  <a href="#deliver"><span class="n">04</span>Delivery Model</a>
+  <a href="#funnel"><span class="n">05</span>Top of Funnel</a>
+  <a href="#logistics"><span class="n">06</span>Logistics</a>
+  <a href="#people"><span class="n">07</span>People</a>
+</nav>
+<main>
+  <div class="hero">
+    <div class="kick">Ovae × Orectic · Operating Plan</div>
+    <h1>Sprint Command Center</h1>
+    <div class="meta">Built from the 6/7 call · week of Jun 8 · 23 days to July 1 · close cash, deliver, build the funnel</div>
+    <div class="stats">
+      <div class="stat"><div class="v">~$40K</div><div class="l">Target this week</div></div>
+      <div class="stat"><div class="v">~$90K</div><div class="l">In play, 30 days</div></div>
+      <div class="stat"><div class="v">3</div><div class="l">Close-now deals</div></div>
+      <div class="stat"><div class="v">$15K ea</div><div class="l">Personal draw · Jul 1</div></div>
+    </div>
+  </div>
+
+  <!-- CASH BOARD -->
+  <section id="cash">
+    <h2 class="sec"><span class="num">$</span>The Cash Board</h2>
+    <p class="sub">Every deal turned into "first dollars in the door." Top 3 are the focus; Chris/Kevin are light-touch; Meridian is a Wed call.</p>
+    <div class="tw"><table>
+      <tr><th>Deal</th><th>Status</th><th>This week</th><th>Then</th><th>Owner</th></tr>
+      <tr><td><strong>Foresight</strong> · paving<br><span style="color:var(--faint);font-size:.92em">Kyle / Scott referral</span></td><td><span class="pill go">Go-ahead</span></td><td class="amt">$7,500</td><td class="amt">+$10,000</td><td>Isaiah inv · both kickoff Wed</td></tr>
+      <tr><td><strong>Tommy</strong> · Mighty Plumbing<br><span style="color:var(--faint);font-size:.92em">+ partner Brian (CA)</span></td><td><span class="pill icp">ICP · committed ×2</span></td><td class="amt">$17,500</td><td class="amt">+$15–20K ph.2</td><td>CT leads · Isaiah on system</td></tr>
+      <tr><td><strong>Dash</strong> · MyFOH<br><span style="color:var(--faint);font-size:.92em">agentic app build</span></td><td><span class="pill warm">Rewarm → commit Fri</span></td><td class="amt">$15–20K</td><td class="amt">+$20–25K</td><td>Isaiah builds · CT spec/UX</td></tr>
+      <tr><td><strong>Chris Ulmer</strong> · Crystal Coast</td><td><span class="pill lite">Light touch</span></td><td class="amt">$5K (if easy)</td><td>$1,750/mo</td><td>Isaiah check-in</td></tr>
+      <tr><td><strong>Kevin</strong> · UNITS</td><td><span class="pill lite">Light touch</span></td><td>—</td><td>$7.5–12K + $1K/mo</td><td>Isaiah check-in</td></tr>
+      <tr><td><strong>Meridian</strong> · Brandon Bozart</td><td><span class="pill icp">Call Wed 1pm</span></td><td>—</td><td>$15–17.5K</td><td>Both · co-founder on call</td></tr>
+      <tr><td><strong>ProCare</strong> · Phillip</td><td><span class="pill warm">Disco Jun 16</span></td><td>—</td><td>TBD (qualify)</td><td>CT · Justin intro</td></tr>
+    </table></div>
+    <div class="callout go">
+      <div class="lbl">The number to hit</div>
+      <p><strong>By Friday 6/13: ~$30–40K collected.</strong> Best case = Foresight $7.5K deposit + Tommy $17.5K + Dash $15K = <strong>$40K</strong>. Conservative floor = Foresight $7.5K + Tommy $17.5K = <strong>$25K</strong>. Then ~$50K total before end of month with Foresight's $10K balance + Dash execution. Goal: <strong>each draw $15K July 1</strong>, ramp both to $25K/mo.</p>
+    </div>
+  </section>
+
+  <!-- CALL DECISIONS -->
+  <section id="summary">
+    <h2 class="sec"><span class="num">01</span>Call Decisions (6/7)</h2>
+    <p class="sub">What the 2hr 16min call actually settled.</p>
+    <ul>
+      <li><strong>Top 3 = Foresight, Tommy, Dash.</strong> Close + collect this week. Everything else is secondary.</li>
+      <li><strong>Foresight is $17.5K</strong> (not $13K — pipeline corrected), same package as Tommy. $7.5K deposit + $10K on completion; kickoff Wed 6/10.</li>
+      <li><strong>Dash: push the full $40K</strong>, not just the $15K spec. Frame the $15K as the deposit on the $40K, 50% down, deliver an alpha in ~30 days. Isaiah builds on his system; CT co-builds the spec + owns UX. Commit target: Friday.</li>
+      <li><strong>Chris & Kevin: light touch.</strong> Both underpriced retainer plays ($1,750 + $1,000/mo) and emotional time-sinks. Keep warm, collect if easy — but don't trade a $17.5K HVAC/plumbing slot for them. Revisit when an FTE (Micah ~$3.5K) can run the simple builds.</li>
+      <li><strong>Meridian:</strong> Brandon's call is already booked Wed 6/10 1pm with his co-founder + funding. Add Isaiah. NDA + repo → feasibility audit → ~$15–17.5K company brain.</li>
+      <li><strong>Work as a unit:</strong> do the first audits together (recorded), 1-hour daily debrief, shared repo, unify workflows. CT → audits + dashboards/UX + top-of-funnel; Isaiah → Brain deploy + builds.</li>
+      <li><strong>Keep it simple on structure:</strong> run on Isaiah's existing business systems for continuity now; light revenue-split memo on these deals; full entity later. "Don't get lost in the soft stuff."</li>
+    </ul>
+  </section>
+
+  <!-- THIS WEEK -->
+  <section id="week">
+    <h2 class="sec"><span class="num">02</span>This Week — Daily Focus</h2>
+    <p class="sub">Week of Jun 8. One rule: collecting cash &gt; new funnel. Each day has a money action.</p>
+
+    <div class="day"><div class="dh"><span class="dd">SUN 6/7</span><span class="dt">· tonight, light</span></div><div class="db"><ul>
+      <li>Text Dash to rewarm → book the call for Mon.</li>
+      <li>Ping Tommy: "let's grab a few min + loop Brian in this week."</li>
+      <li>Confirm Foresight $7.5K deposit invoice is ready to send.</li>
+    </ul></div></div>
+
+    <div class="day"><div class="dh"><span class="dd">MON 6/8</span><span class="dt">· open the week with money</span></div><div class="db"><ul>
+      <li><strong>Send Foresight $7.5K deposit invoice</strong> to Kyle; confirm Wed kickoff.</li>
+      <li><strong>Call Dash</strong> → push full $40K commit (15K = deposit), aim to close by Fri.</li>
+      <li><strong>Book Tommy + Brian call.</strong></li>
+      <li>Follow up <strong>Justin</strong> (back from Nashville Mon) — his handoff deals.</li>
+      <li>Set up CT's <strong>OVAE email</strong> (Isaiah) → route Meridian invite.</li>
+      <li>Kick off <strong>Austin HVAC/plumbing lead scrape</strong> (Closer OS) — background.</li>
+    </ul></div></div>
+
+    <div class="day"><div class="dh"><span class="dd">TUE 6/9</span><span class="dt">· close conversations</span></div><div class="db"><ul>
+      <li><strong>Tommy + Brian call</strong> → send $17.5K invoice, schedule audit.</li>
+      <li><strong>Dash</strong> → lock commitment + Sprint Zero deposit.</li>
+      <li>Light-touch <strong>Chris</strong> check-in (Isaiah).</li>
+      <li>Prep Meridian (review Brandon's context, NDA flow).</li>
+      <li><span style="color:var(--faint)">6–7pm — Alchemy of Joy coaching call (personal, on calendar).</span></li>
+    </ul></div></div>
+
+    <div class="day big"><div class="dh"><span class="dd">WED 6/10</span><span class="dt">· GO TO ISAIAH'S — the big day</span></div><div class="db"><ul>
+      <li><strong>Set up the 2-desk office</strong> (move desk, 2nd monitor/TV, Herman Miller chair). Arrive late morning.</li>
+      <li><strong>Foresight kickoff</strong> — first audit interview; collect the deposit.</li>
+      <li><strong>Meridian call 1pm</strong> with Brandon + co-founder (both of you).</li>
+      <li>Start the <strong>daily debrief rhythm</strong> + set up the shared repo.</li>
+    </ul></div></div>
+
+    <div class="day"><div class="dh"><span class="dd">THU 6/11</span><span class="dt">· deliver + prep funnel</span></div><div class="db"><ul>
+      <li>Foresight audit interviews (with Isaiah, recorded — you learn the motion).</li>
+      <li>Dash: co-build the architecture spec.</li>
+      <li>Light-touch <strong>Kevin</strong> check-in.</li>
+      <li>CT: build the <strong>Austin lead list</strong> (scrape/enrich); talk to Eric about sourcing a caller / dialer for next week.</li>
+    </ul></div></div>
+
+    <div class="day"><div class="dh"><span class="dd">FRI 6/12</span><span class="dt">· tally + set up next week</span></div><div class="db"><ul>
+      <li><strong>Dash commit + deposit</strong> (deadline) · chase any unpaid invoice (Tommy/Foresight).</li>
+      <li>Tally the week's cash; set Week 2 targets.</li>
+      <li>Line up a setter/caller for Week 2–3 outbound (Eric's referral or a hire).</li>
+    </ul></div></div>
+
+    <div class="day"><div class="dh"><span class="dd">SAT 6/13</span><span class="dt">· buffer</span></div><div class="db"><ul>
+      <li>Chris–Conrad call if it fits (Isaiah); otherwise rest/buffer + plan Week 2.</li>
+    </ul></div></div>
+  </section>
+
+  <!-- 30 DAY -->
+  <section id="thirty">
+    <h2 class="sec"><span class="num">03</span>30-Day Map</h2>
+    <p class="sub">Close → deliver → fill July → ramp the funnel. The point of Weeks 1–2 is to free Week 3–4 for cold demand.</p>
+    <div class="wk"><div class="wl"><span class="wt">Week 1 · Jun 8–14 — CLOSE &amp; COLLECT</span><span class="wg">→ $25–40K</span></div>
+      <p style="margin:0;color:var(--dim);font-size:.92rem">Foresight deposit + kickoff; Tommy/Brian close; Dash commit by Fri; Meridian call; light-touch Chris/Kevin. Stand up the office, shared repo, daily debrief, CT's OVAE email. Seed the Austin lead list.</p></div>
+    <div class="wk"><div class="wl"><span class="wt">Week 2 · Jun 15–21 — DELIVER AUDITS</span><span class="wg">→ +$10K (Foresight bal.)</span></div>
+      <p style="margin:0;color:var(--dim);font-size:.92rem">Foresight + Tommy audits (5–7hr interviews each) → Brain V1 deploys. Dash spec → build starts. ProCare disco (Jun 16). CT builds + enriches the lead list and lines up a setter (Eric's referral or a hire). Audits done together &amp; recorded = CT learns the motion.</p></div>
+    <div class="wk"><div class="wl"><span class="wt">Week 3 · Jun 22–28 — EXECUTE + SCALE FUNNEL</span><span class="wg">→ +$20–25K (Dash)</span></div>
+      <p style="margin:0;color:var(--dim);font-size:.92rem">Dash MVP build. Foresight/Tommy brains in use → scope copilot/automations (CT dashboards). First real cold-call batch run by the setter (50–100 Austin HVAC/plumbing) off CT's list. Justin handoff deals (Nashville $50K, ~$40K). Adam marketing assets begin.</p></div>
+    <div class="wk"><div class="wl"><span class="wt">Week 4 · Jun 29–Jul 5 — COLLECT JULY + LOCK RECURRING</span><span class="wg">→ $15K each draw</span></div>
+      <p style="margin:0;color:var(--dim);font-size:.92rem">Dash delivery milestone. Tommy phase-2 invoice. Chris/Kevin recurring live (if light-touch closed). Close 1–2 new cold "Tommys" to fill July's calendar. EBI $97 funnel test. Each pull $15K July 1; set the $25K/mo base.</p></div>
+  </section>
+
+  <!-- DELIVERY -->
+  <section id="deliver">
+    <h2 class="sec"><span class="num">04</span>Delivery Model — Who Does What, What It Costs</h2>
+    <p class="sub">The clarity you wanted: the journey, the time, the "build materials."</p>
+    <h4>The ascension ladder (every client)</h4>
+    <ul>
+      <li><strong>Audit</strong> — consulting; identify automatable bottlenecks. <span class="mono" style="color:var(--gold)">~10 days calendar / 5–7 hrs founder interviews.</span> Trust-building.</li>
+      <li><strong>Company Brain V1</strong> — MCP-driven chatbot they talk to their business through (Claude app, or Telegram bot for non-technical like Tommy). <span class="mono" style="color:var(--gold)">~1 day in terminal (Isaiah).</span></li>
+      <li><strong>Copilot</strong> — tool connectors + manual invoke (estimate → invoice → reminder; permit research). Paid automations.</li>
+      <li><strong>Autopilot</strong> — bid comes in, everything runs automatically. Top of the ladder.</li>
+    </ul>
+    <h4>Division of labor</h4>
+    <div class="tw"><table>
+      <tr><th>CT</th><th>Isaiah</th></tr>
+      <tr><td>Leads <strong>audits</strong> (right questions, what's buildable), <strong>dashboards/UX</strong>, workflow scoping, the <strong>relationship/close</strong> (Tommy, Brian), <strong>lead-finding</strong> (builds the list; not dialing)</td><td><strong>Brain deploy</strong> + <strong>builds/execution</strong> on his platform (fast, governed), Dash MVP, the technical/system pitch</td></tr>
+    </table></div>
+    <h4>Hard costs (the margin picture)</h4>
+    <ul>
+      <li>Mostly <strong>founder time + tokens</strong> (~$200 Claude Max per heavy build). Platform is ~70% automated → pushing 80–90%.</li>
+      <li><strong>First FTE lever:</strong> Micah ~$3.5K (or $75/hr; ~20hrs ≈ $2K) to knock out simple deployments → capture the recurring asset, free Isaiah.</li>
+      <li><strong>Capacity:</strong> ~2–3 of these $5–20M service-co deals per month at current setup.</li>
+    </ul>
+    <div class="callout gold">
+      <div class="lbl">Capacity &amp; scaling</div>
+      <p>Builds run on Isaiah's platform. To take on more than ~2–3 deals/month, stand up a builder (<strong>Micah ~$3.5K</strong>) for the simple deployments. <strong>CT owns audits + dashboards/UX + lead-finding</strong> so Isaiah stays focused on the builds — that division is what keeps delivery from bottlenecking as volume grows.</p>
+    </div>
+  </section>
+
+  <!-- FUNNEL -->
+  <section id="funnel">
+    <h2 class="sec"><span class="num">05</span>Top of Funnel — When CT Shifts To It</h2>
+    <p class="sub">Week 1 = seed only. CT ramps demand in Weeks 2–4 once the first deals are delivering and he's learned the motion.</p>
+    <h4>Lead engine — CT builds the list, a setter dials</h4>
+    <ul>
+      <li><strong>CT's lane = finding leads, not dialing.</strong> Build + enrich the Austin HVAC/plumbing list (Closer OS): scrape Google My Business + reviews + Angie's List + Thumbtack, enrich with public records → revenue-estimate. 200–500 companies in metro, ~250 decent-size, ~50–100 worth calling, ~100 over $1M (Austin–San Antonio).</li>
+      <li><strong>Calling = a setter, TBD.</strong> Eric is busy with his own sales gig (with Sam) and isn't a this-week resource, but he may source a caller or has a dialer — some calls workable around his schedule. Likely need a dedicated setter. <strong>This is a Week 2–3 build, not this week.</strong></li>
+      <li><strong>Justin (HVAC ads partner):</strong> hands off deals (Nashville $50K company-brain, $20K web, ~$40K "basketball" build) for 10%; HVAC/plumbing intros — he's not building these himself.</li>
+      <li><strong>Adam:</strong> intros to big coaches (Emily Flecker, multi-7-fig) for commission; cinematic "dogfood our own marketing" story → future in-house agency arm.</li>
+      <li><strong>EBI $97 funnel:</strong> brand EBI under Ovae as a self-liquidating low-ticket skill funnel (plugin-gated for attribution) → into the Agentic Society. CT to run EBI on the Agent Ops Kit + share.</li>
+      <li><strong>Future vertical idea:</strong> remediation/SERVPRO inventory tracking (rented fans/dehumidifiers, insurance-paid, QR-code tracking) — genuinely unbuilt white space.</li>
+    </ul>
+    <div class="callout gold">
+      <div class="lbl">The principle</div>
+      <p>Shadowing the first Foresight/Tommy audits <em>is</em> CT's funnel prep — it's how he learns the motion well enough to brief a setter and write the cold scripts off real wins. Don't treat learning delivery and building the funnel as competing; the first feeds the second.</p>
+    </div>
+  </section>
+
+  <!-- LOGISTICS -->
+  <section id="logistics">
+    <h2 class="sec"><span class="num">06</span>Logistics &amp; Setup</h2>
+    <p class="sub">The operational glue.</p>
+    <ul>
+      <li><strong>Office day → Wednesday 6/10 at Isaiah's.</strong> Your week is open except Tue 6–7pm. Wed already anchors the Foresight kickoff + Meridian 1pm call — so go Wed: arrive ~10–11am, set up the 2-desk office (his desk to the wall, 2nd monitor/TV, Nicole's Herman Miller for your back), work the afternoon. <span style="color:var(--faint)">(Confirm against your ovae booking calendar where the 1pm sits.)</span></li>
+      <li><strong>Daily debrief:</strong> ~1 hr end-of-day share-screen — keep the cadence.</li>
+      <li><strong>CT's OVAE email</strong> → Isaiah creates it; route the Meridian invite there; start migrating.</li>
+      <li><strong>Shared repo / dev env:</strong> drop CT's tools into a shared repo; over the next couple weeks unify workflows ("a software update, not Windows→Mac"). Optional: CT watches Isaiah work a full build to decide on jumping fully to his infra.</li>
+      <li><strong>Structure:</strong> run on Isaiah's existing business systems now for continuity; one-paragraph revenue-split memo on these deals; full entity later.</li>
+      <li><strong>Recording discipline:</strong> record every client call + audit (the Foresight 30-min call that went unrecorded was the one miss).</li>
+    </ul>
+  </section>
+
+  <!-- PEOPLE -->
+  <section id="people">
+    <h2 class="sec"><span class="num">07</span>People &amp; Partners</h2>
+    <p class="sub">The roster around the two of you.</p>
+    <div class="roster">
+      <div class="rc"><div class="rn">Justin</div><div class="rr">Funnel partner</div><p>HVAC ad funnels (Austin). Hands off deals (Nashville $50K, ~$40K) for 10%. HVAC/plumbing intros. Follow up Mon.</p></div>
+      <div class="rc"><div class="rn">Scott Requiza</div><div class="rr">Sales — large end</div><p>Foresight referral; wants full-time larger-deal sales, 10% deal flow. Connected (Hard Rock, wealthy owners).</p></div>
+      <div class="rc"><div class="rn">Eric</div><div class="rr">Calling — limited</div><p>Busy with his own sales gig (with Sam) — not a this-week resource. May source a caller or provide a dialer; some calls workable around his schedule. We still need a dedicated setter.</p></div>
+      <div class="rc"><div class="rn">Adam Schlender</div><div class="rr">Brand / creative</div><p>Marketing, cinematic story, coach intros (Emily Flecker). Commission + future in-house agency arm. Cash situation uncertain — keep warm.</p></div>
+      <div class="rc"><div class="rn">Micah</div><div class="rr">First builder (FTE)</div><p>~$3.5K or $75/hr to run simple deployments (~20hrs) → capture recurring, free Isaiah. Stand up when volume warrants.</p></div>
+      <div class="rc"><div class="rn">Conrad</div><div class="rr">Client-side (Chris Ulmer)</div><p>Hobbyist builder on Hermes; self-serves builds, Isaiah supports under retainer. Admin accounts ready.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    Ovae × Orectic · Sprint Command Center · from the 6/7 call · internal — not for distribution<br>
+    Pairs with: ovae-working-session.html (share w/ Isaiah) · ovae-gtm-strategy.html (private war-room)
+  </footer>
+</main>
+</div>
+<script>
+  const links=[...document.querySelectorAll('nav.side a')];
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const obs=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));const a=map.get(e.target.id);if(a)a.classList.add('active')}})},{rootMargin:'-12% 0px -75% 0px'});
+  document.querySelectorAll('section[id]').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
