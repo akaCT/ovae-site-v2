@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#14101A">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%2314101A'/%3E%3Cpath d='M47 10C30 14 13 33 13 55C13 79 30 94 51 94C73 94 88 78 88 55C88 41 82 28 72 21C77 30 79 42 79 55C79 70 67 82 51 82C37 82 26 70 26 55C26 39 34 21 47 10Z' fill='%237BC9C4'/%3E%3C/svg%3E">
+<title>Ovae — Brand Identity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14101A; --bg-elev:#1A1622; --bg-soft:#1F1A28;
+    --ink:#E8E4DC; --ink-dim:#A39E96; --ink-mute:#6F6A63;
+    --rule:rgba(232,228,220,.08); --rule-strong:rgba(232,228,220,.16);
+    --accent:#7BC9C4; --accent-dim:rgba(123,201,196,.18); --accent-soft:rgba(123,201,196,.06); --on-accent:#0c1414;
+    --rust:#C97D5C; --rust-dim:rgba(201,125,92,.16);
+    --warn:#D9B26B; --green:#63E084;
+    --cyborg:#C9A77B;
+    --r:16px; --r-sm:12px;
+    --ease:cubic-bezier(.4,0,.2,1); --ease-out:cubic-bezier(.16,1,.3,1); --ease-spring:cubic-bezier(.34,1.56,.64,1);
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth; scroll-padding-top:30px}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'DM Sans',system-ui,sans-serif; font-weight:400; line-height:1.55; font-size:17px;
+    font-feature-settings:"ss01","cv11"; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  /* ambient + grain */
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(800px 600px at 82% -8%,rgba(123,201,196,.07),transparent 60%),radial-gradient(900px 700px at -10% 108%,rgba(201,125,92,.045),transparent 60%);}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.04;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+  .mono{font-family:'DM Mono',monospace}
+  em{font-style:italic;color:var(--accent);font-weight:300}
+  ::selection{background:var(--accent-dim);color:var(--ink)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+  a{color:var(--accent);text-decoration:none}
+  .content{position:relative;z-index:2}
+
+  /* layout */
+  .wrap{display:grid;grid-template-columns:232px 1fr;max-width:1340px;margin:0 auto}
+  nav.side{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;padding:40px 18px 40px 30px;border-right:1px solid var(--rule)}
+  nav .brandrow{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  nav .doc{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mute);margin:0 0 26px 0;padding-bottom:18px;border-bottom:1px solid var(--rule);line-height:1.5}
+  nav a{display:block;color:var(--ink-dim);text-decoration:none;font-size:.83rem;padding:6px 11px;border-radius:8px;margin:1px 0;border:1px solid transparent;transition:all .15s var(--ease)}
+  nav a .n{font-family:'DM Mono',monospace;color:var(--ink-mute);font-size:.74rem;margin-right:9px}
+  nav a:hover{background:var(--bg-elev);color:var(--ink)}
+  nav a.active{background:var(--bg-elev);color:var(--accent);border-color:var(--rule-strong)}
+  nav a.active .n{color:var(--accent)}
+  main{padding:0 clamp(24px,6vw,88px);min-width:0;max-width:calc(var(--maxw) + 176px)}
+
+  section{padding:88px 0;border-bottom:1px solid var(--rule);scroll-margin-top:20px}
+  section:last-of-type{border-bottom:none}
+  .eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--accent);opacity:.5}
+  h2{font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:300;letter-spacing:-.026em;line-height:1.08;margin:0 0 18px}
+  h3{font-size:1.15rem;font-weight:600;letter-spacing:-.01em;margin:38px 0 14px}
+  h4{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:28px 0 12px;font-weight:500}
+  p{margin:0 0 16px;max-width:62ch}
+  p.lede{font-size:clamp(1.05rem,1.6vw,1.3rem);font-weight:300;line-height:1.55;color:var(--ink);max-width:54ch}
+  .dim{color:var(--ink-dim)}
+  strong{color:#fff;font-weight:600}
+  ul{margin:0 0 16px;padding-left:2px}
+  li{margin:0 0 10px;list-style:none;position:relative;padding-left:26px;max-width:60ch}
+  li::before{content:"";position:absolute;left:4px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.7}
+
+  /* ── COVER ── */
+  .cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--rule);padding:60px 0}
+  .cover .kick{font-family:'DM Mono',monospace;font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:40px}
+  .cover h1{font-size:clamp(4rem,15vw,11rem);font-weight:200;letter-spacing:-.04em;line-height:.9;margin:0}
+  .cover h1 .dot{color:var(--accent)}
+  .cover .essence{font-size:clamp(1.2rem,2.4vw,1.7rem);font-weight:300;color:var(--ink-dim);margin:28px 0 0;max-width:30ch}
+  .cover .essence em{font-weight:300}
+  .cover .foot{margin-top:auto;padding-top:60px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px;font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
+  .scrollcue{display:flex;align-items:center;gap:10px;color:var(--ink-mute);font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase}
+  .scrollcue .ln{width:1px;height:34px;background:linear-gradient(var(--accent),transparent);animation:cue 2.4s var(--ease) infinite}
+  @keyframes cue{0%,100%{opacity:.3;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
+
+  /* ── THE MARK SVG ── */
+  .markwrap{display:flex;gap:48px;flex-wrap:wrap;align-items:center}
+  .markstage{width:min(360px,72vw);aspect-ratio:1;border-radius:var(--r);background:linear-gradient(160deg,var(--bg-elev),var(--bg-soft));border:1px solid var(--rule-strong);display:grid;place-items:center;position:relative;overflow:hidden;flex:none}
+  .markstage svg{width:58%;height:58%;overflow:visible}
+  .markcore{transform-origin:center;animation:breathe 4.5s var(--ease) infinite}
+  .markglow{transform-origin:center;animation:glowpulse 4.5s var(--ease) infinite}
+  @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  @keyframes glowpulse{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:.6;transform:scale(1.25)}}
+  /* hero — the Ensō blooms in, then breathes */
+  #heroMark .core{transform-origin:center;animation:markIn 1s var(--ease-out) .2s both, breathe 4.5s var(--ease) 1.6s infinite}
+  #heroMark .glow{transform-origin:center;animation:haloIn 1.2s var(--ease) .4s both, glowpulse 4.5s var(--ease) 1.6s infinite}
+  @keyframes markIn{0%{transform:scale(.6) rotate(-14deg);opacity:0}100%{transform:scale(1) rotate(0deg);opacity:1}}
+  @keyframes haloIn{from{opacity:0}to{opacity:.35}}
+  /* scroll reveal (R4) */
+  .reveal{opacity:0;transform:translateY(15px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
+  .reveal.in{opacity:1;transform:none}
+  /* copy-to-clipboard (R5) */
+  .sw,.tokenblock{cursor:copy}
+  .sw{transition:border-color .18s var(--ease),transform .18s var(--ease)}
+  .sw:hover{border-color:var(--accent-dim);transform:translateY(-2px)}
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:var(--on-accent);font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;padding:10px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:all .3s var(--ease);z-index:60}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media (prefers-reduced-motion:reduce){.markcore,.markglow,.scrollcue .ln,.sweepdot,.sheenbtn::after,#heroMark .core,#heroMark .glow{animation:none!important}.reveal{opacity:1!important;transform:none!important}}
+
+  /* swatch grid */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin:24px 0}
+  .sw{border-radius:var(--r-sm);border:1px solid var(--rule);overflow:hidden;background:var(--bg-elev)}
+  .sw .chip{height:104px;display:flex;align-items:flex-end;padding:12px;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em}
+  .sw .meta{padding:12px 13px}
+  .sw .nm{font-size:.86rem;font-weight:600}
+  .sw .hex{font-family:'DM Mono',monospace;font-size:.74rem;color:var(--ink-dim);margin-top:3px;display:flex;justify-content:space-between;gap:8px}
+  .sw .role{font-size:.72rem;color:var(--ink-mute);margin-top:6px;line-height:1.4}
+
+  .propbar{display:flex;height:46px;border-radius:10px;overflow:hidden;margin:18px 0 8px;border:1px solid var(--rule)}
+  .propbar span{display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.06em}
+
+  /* type specimen */
+  .specimen{border:1px solid var(--rule);border-radius:var(--r);padding:28px;background:linear-gradient(160deg,var(--bg-elev),var(--bg-soft));margin:18px 0}
+  .glyphs{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:300;letter-spacing:-.01em;line-height:1.3;word-spacing:.1em}
+  .scale-row{display:flex;align-items:baseline;gap:20px;padding:14px 0;border-bottom:1px solid var(--rule)}
+  .scale-row:last-child{border:none}
+  .scale-row .tag{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--ink-mute);width:130px;flex:none;letter-spacing:.06em}
+
+  /* cards / demos */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+  .panel{border:1px solid var(--rule-strong);border-radius:var(--r);background:linear-gradient(160deg,var(--bg-elev),var(--bg-soft));padding:22px}
+  .panel .cap{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:14px}
+  .do{border-color:var(--accent-dim)} .dont{border-color:var(--rust-dim)}
+  .do .cap{color:var(--accent)} .dont .cap{color:var(--rust)}
+
+  /* live components */
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 24px;border-radius:12px;font-size:15px;font-weight:500;border:1px solid var(--rule-strong);background:var(--bg-elev);color:var(--ink);cursor:pointer;transition:all .2s var(--ease);font-family:inherit}
+  .btn:hover{border-color:var(--ink-dim);transform:translateY(-1px)}
+  .btn-primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600;box-shadow:0 6px 30px -10px var(--accent);position:relative;overflow:hidden}
+  .btn-primary:hover{box-shadow:0 10px 40px -10px var(--accent);transform:translateY(-2px)}
+  .sheenbtn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.28),transparent 70%);transform:translateX(-120%) skewX(-18deg);animation:sheen 5s var(--ease) 1.8s infinite}
+  @keyframes sheen{0%,55%{transform:translateX(-120%) skewX(-18deg)}80%,100%{transform:translateX(220%) skewX(-18deg)}}
+  .pill{display:inline-flex;align-items:center;padding:7px 14px;border-radius:999px;border:1px solid var(--rule-strong);background:var(--bg-elev);font-size:.82rem}
+  .badge{font-family:'DM Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.14em;padding:4px 10px;border-radius:999px;color:var(--accent);border:1px solid rgba(123,201,196,.4)}
+  .field{width:100%;padding:13px 15px;border-radius:12px;border:1px solid var(--rule-strong);background:var(--bg);color:var(--ink);font-size:15px;font-family:inherit;margin-bottom:10px}
+  .field::placeholder{color:var(--ink-mute)}
+  .field:focus-visible{border-color:var(--accent)}
+
+  .clearspace svg{width:min(300px,70vw)}
+  .reductions{display:flex;align-items:center;gap:30px;flex-wrap:wrap;margin:20px 0}
+  .reductions .rb{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .reductions .lbl{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.08em;color:var(--ink-mute)}
+
+  .mockgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:8px}
+  .mock{border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;background:var(--bg-elev)}
+  .mock .mhead{padding:10px 14px;font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);border-bottom:1px solid var(--rule)}
+  .mock .mbody{padding:24px;display:grid;place-items:center;min-height:150px}
+
+  .tokenblock{background:#0c0a10;border:1px solid var(--rule);border-radius:var(--r);padding:22px 24px;overflow-x:auto;font-family:'DM Mono',monospace;font-size:.78rem;line-height:1.7;color:var(--ink-dim)}
+  .tokenblock .c{color:var(--ink-mute)} .tokenblock .v{color:var(--accent)} .tokenblock .k{color:var(--ink)}
+
+  footer{padding:60px 0 80px;color:var(--ink-mute);font-family:'DM Mono',monospace;font-size:.74rem;letter-spacing:.06em;line-height:1.8}
+
+  .mobnav{display:none}
+  @media(max-width:920px){
+    .wrap{grid-template-columns:1fr}nav.side{display:none}
+    main{padding:0 22px;max-width:100%}
+    .mobnav{display:flex;align-items:center;gap:9px;position:sticky;top:0;z-index:30;background:rgba(20,16,26,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:13px 22px;font-weight:600}
+    section{padding:60px 0}
+  }
+</style>
+</head>
+<body>
+<div class="content">
+<div class="mobnav">
+  <svg width="20" height="20" viewBox="0 0 100 100"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg>
+  Ovae <span class="mono" style="color:var(--ink-mute);font-weight:400;font-size:.7rem;letter-spacing:.12em">BRAND</span>
+</div>
+<div class="wrap">
+
+<nav class="side">
+  <div class="brandrow">
+    <svg width="22" height="22" viewBox="0 0 100 100"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg>
+    <span style="font-weight:600;font-size:1.05rem;letter-spacing:-.01em">Ovae<span style="color:var(--accent)">.</span></span>
+  </div>
+  <div class="doc">Brand Identity<br>Guidelines v1.0</div>
+  <a href="#essence"><span class="n">01</span>Essence</a>
+  <a href="#mark"><span class="n">02</span>The Mark</a>
+  <a href="#lockups"><span class="n">03</span>Wordmark &amp; Lockups</a>
+  <a href="#misuse"><span class="n">04</span>Misuse</a>
+  <a href="#color"><span class="n">05</span>Color</a>
+  <a href="#type"><span class="n">06</span>Typography</a>
+  <a href="#icon"><span class="n">07</span>Iconography</a>
+  <a href="#motion"><span class="n">08</span>Motion</a>
+  <a href="#texture"><span class="n">09</span>Texture</a>
+  <a href="#voice"><span class="n">10</span>Voice</a>
+  <a href="#components"><span class="n">11</span>Components</a>
+  <a href="#applications"><span class="n">12</span>Applications</a>
+  <a href="#tokens"><span class="n">13</span>Tokens</a>
+  <a href="#kit"><span class="n">14</span>Brand Kit · AI</a>
+</nav>
+
+<main>
+  <!-- COVER -->
+  <header class="cover">
+    <div class="kick">Ovae · Brand Identity · v1.0 · 2026</div>
+    <div style="display:flex;align-items:center;gap:clamp(20px,4vw,52px);flex-wrap:wrap">
+      <div class="markstage" style="width:min(220px,46vw)">
+        <svg id="heroMark" viewBox="0 0 100 100" aria-label="Ovae mark — the Ensō">
+          <ellipse class="glow" cx="50" cy="52" rx="30" ry="34" fill="#7BC9C4" opacity=".35" style="filter:blur(14px)"/>
+          <path class="core" d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/>
+        </svg>
+      </div>
+      <h1>Ovae<span class="dot">.</span></h1>
+    </div>
+    <p class="essence">The owned intelligence a business grows from. <em>Origin</em>, made into a system.</p>
+    <div class="foot">
+      <div class="scrollcue"><span class="ln"></span>Scroll</div>
+      <div>Dark plum · Teal · Warm paper · Film grain</div>
+    </div>
+  </header>
+
+  <!-- 01 ESSENCE -->
+  <section id="essence">
+    <div class="eyebrow">01 — Essence</div>
+    <h2>The seed of an owned intelligence.</h2>
+    <p class="lede"><em>Ovae</em> — from the Latin <em>ova</em>: the origin, the seed, the beginning. The brand is built on a single idea: Ovae is the owned operating layer a business grows from. Not a tool it rents. A core it keeps.</p>
+    <p class="dim">Everything visual serves that idea — and serves a market saturated with loud, gradient-soaked "AI" branding by doing the opposite. Ovae is calm where others shout, owned where others rent, and quietly alive where others sit static. It should feel less like a SaaS dashboard and more like a well-set book that breathes.</p>
+
+    <h3>Personality</h3>
+    <div class="grid2" style="margin-top:6px">
+      <div class="panel"><div class="cap">Considered</div><p style="margin:0" class="dim">Editorial calm. Narrow measures, generous space, nothing rushed. Confidence shown through restraint.</p></div>
+      <div class="panel"><div class="cap">Owned</div><p style="margin:0" class="dim">Grounded, durable, plain-spoken. We don't hype — we state the real number.</p></div>
+      <div class="panel"><div class="cap">Alive</div><p style="margin:0" class="dim">A perpetual, subtle motion layer. The page breathes; it is never busy.</p></div>
+      <div class="panel"><div class="cap">Warm &amp; precise</div><p style="margin:0" class="dim">Warm paper ink and film grain against a dark, exact, teal-lit system.</p></div>
+    </div>
+
+    <h3>The north star</h3>
+    <p class="dim">A printed editorial spread fused with a calm dark instrument — <em>warm paper texture in the dark.</em> If a choice feels loud, decorative, or generic, it's wrong. One accent. One idea. Made beautifully.</p>
+  </section>
+
+  <!-- 02 THE MARK -->
+  <section id="mark">
+    <div class="eyebrow">02 — The Mark</div>
+    <h2>The Ensō.</h2>
+    <p class="lede">One tapered brushstroke forming an egg — the <em>ova</em>, the origin — open at the top. Drawn, not drafted. <em>A gesture, not a glyph.</em></p>
+    <div class="markwrap">
+      <div class="markstage">
+        <svg viewBox="0 0 100 100" aria-label="Ovae primary mark — the Ensō">
+          <ellipse class="markglow" cx="50" cy="52" rx="28" ry="32" fill="#7BC9C4" opacity=".3" style="filter:blur(12px)"/>
+          <path class="markcore" d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/>
+        </svg>
+      </div>
+      <div style="flex:1;min-width:260px">
+        <h4>What it means</h4>
+        <ul>
+          <li><strong>The egg</strong> — <em>ova</em>, the Latin root of the name: origin, the seed a business grows from. The owned core.</li>
+          <li><strong>The single stroke</strong> — one human gesture, ink loading through the base and drying at the tip. Made by hand, run by a system: exactly what Ovae sells.</li>
+          <li><strong>The opening</strong> — at the top, where the stroke begins thin and ends tapered. Room to ascend; an origin, not a closed loop.</li>
+          <li><strong>The dot is not here</strong> — by design. It lives in the wordmark, as the period of <em>Ovae.</em> One dot per composition (see §03).</li>
+        </ul>
+        <h4>Construction</h4>
+        <p class="dim" style="font-size:.92rem">A single closed path on a 100-unit grid — bounds x 13–88, y 10–94, optical center (50.5, 52). The stroke starts thin at top-left, loads to a belly of ≈13 units through the left and base, and tapers to nothing at top-right. Opening ≈ 40°, centered just right of 12 o'clock. <strong>Never redraw by eye — use the canonical path from the logo kit.</strong></p>
+      </div>
+    </div>
+
+    <h3>Clearspace &amp; reduction</h3>
+    <div class="clearspace" style="margin:16px 0 6px">
+      <svg viewBox="0 0 200 160" style="width:min(320px,72vw)">
+        <rect x="1" y="1" width="198" height="158" rx="10" fill="none" stroke="rgba(232,228,220,.16)" stroke-dasharray="4 5"/>
+        <g transform="translate(64,26)">
+          <rect x="-14" y="-12" width="100" height="110" fill="none" stroke="rgba(123,201,196,.25)" stroke-dasharray="3 4"/>
+          <g transform="scale(.72)"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></g>
+        </g>
+        <text x="100" y="150" text-anchor="middle" fill="#6F6A63" font-family="DM Mono" font-size="8" letter-spacing="1">CLEARSPACE = THE STROKE'S BELLY WIDTH, ALL SIDES</text>
+      </svg>
+    </div>
+    <div class="reductions">
+      <div class="rb">
+        <svg width="72" height="72" viewBox="0 0 100 100"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg>
+        <div class="lbl">FULL · ≥32px</div>
+      </div>
+      <div class="rb">
+        <svg width="24" height="24" viewBox="0 0 100 100"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg>
+        <div class="lbl">MIN · 16px</div>
+      </div>
+      <div class="rb">
+        <span style="font-size:1.5rem;font-weight:500;color:var(--ink)">Ovae<span style="color:var(--accent)">.</span></span>
+        <div class="lbl">SMALLEST ATOM · THE PERIOD</div>
+      </div>
+    </div>
+    <p class="dim" style="font-size:.92rem;max-width:60ch">The tapered single mass holds its character down to 16px with no simplified variant needed. Below that, don't shrink the mark — <strong>use the wordmark; its teal period is the brand's smallest atom.</strong></p>
+  </section>
+
+  <!-- 03 LOCKUPS -->
+  <section id="lockups">
+    <div class="eyebrow">03 — Wordmark &amp; Lockups</div>
+    <h2>The wordmark.</h2>
+    <p class="lede">Set in DM Sans Medium with the defining trailing period — <em>Ovae.</em> — a full stop that says: this is the system of record.</p>
+
+    <div class="grid2" style="margin-top:24px">
+      <div class="panel">
+        <div class="cap">Horizontal lockup</div>
+        <div style="display:flex;align-items:center;gap:16px;padding:18px 0">
+          <svg width="40" height="40" viewBox="0 0 100 100"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg>
+          <span style="font-size:2rem;font-weight:500;letter-spacing:-.02em">Ovae<span style="color:var(--accent)">.</span></span>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="cap">Stacked lockup</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px 0">
+          <svg width="38" height="38" viewBox="0 0 100 100"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg>
+          <span style="font-size:1.7rem;font-weight:500;letter-spacing:-.02em">Ovae<span style="color:var(--accent)">.</span></span>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="cap">Wordmark only — the period is the dot</div>
+        <div style="display:flex;align-items:center;gap:9px;padding:18px 0">
+          <span style="font-size:1.6rem;font-weight:500;letter-spacing:-.018em">Ovae<span style="color:var(--accent)">.</span></span>
+        </div>
+        <p class="dim" style="font-size:.84rem;margin:0">The Deloitte move: the brand's dot lives in the name as the teal period. Use wordmark-only in body copy, signatures, and tight UI. The legacy dot-prefix is retired.</p>
+      </div>
+      <div class="panel">
+        <div class="cap">The one-dot rule</div>
+        <p class="dim" style="font-size:.9rem;margin:0"><strong>One dot per composition.</strong> In lockups the only dot is the wordmark's period — never add one beside the mark. Spacing: gap between mark and wordmark = the stroke's belly width; the mark's optical center aligns to the wordmark's x-height.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 MISUSE -->
+  <section id="misuse">
+    <div class="eyebrow">04 — Misuse</div>
+    <h2>Protect the mark.</h2>
+    <p class="lede">The identity is strong because it's disciplined. These are not suggestions.</p>
+    <div class="mockgrid" style="margin-top:22px">
+      <div class="panel dont"><div class="cap">✕ Don't recolor</div><div style="display:grid;place-items:center;padding:14px 0"><svg width="54" height="54" viewBox="0 0 100 100"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#C97D5C"/></svg></div></div>
+      <div class="panel dont"><div class="cap">✕ Don't distort</div><div style="display:grid;place-items:center;padding:14px 0"><svg width="78" height="46" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg></div></div>
+      <div class="panel dont"><div class="cap">✕ Don't rotate</div><div style="display:grid;place-items:center;padding:14px 0"><svg width="54" height="54" viewBox="0 0 100 100" style="transform:rotate(34deg)"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg></div></div>
+      <div class="panel dont"><div class="cap">✕ Don't close the opening</div><div style="display:grid;place-items:center;padding:14px 0"><svg width="54" height="54" viewBox="0 0 100 100"><path fill-rule="evenodd" d="M50 10 C71 10 88 31 88 55 C88 79 71 94 50.5 94 C30 94 13 79 13 55 C13 31 30 10 50 10 Z M50.5 21 C36 21 25 36 25 55 C25 70 37 82 50.5 82 C64 82 77 70 77 55 C77 36 65 21 50.5 21 Z" fill="#7BC9C4"/></svg></div></div>
+      <div class="panel dont"><div class="cap">✕ Don't add effects</div><div style="display:grid;place-items:center;padding:14px 0"><svg width="54" height="54" viewBox="0 0 100 100" style="filter:drop-shadow(0 0 8px #7BC9C4) drop-shadow(0 0 14px #fff)"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg></div></div>
+      <div class="panel dont"><div class="cap">✕ Don't place on busy/low-contrast</div><div style="display:grid;place-items:center;padding:14px 0;background:linear-gradient(45deg,#7BC9C4,#C97D5C);border-radius:8px"><svg width="54" height="54" viewBox="0 0 100 100"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg></div></div>
+    </div>
+  </section>
+
+  <!-- 05 COLOR -->
+  <section id="color">
+    <div class="eyebrow">05 — Color</div>
+    <h2>Dark plum, lit by teal.</h2>
+    <p class="lede">One saturated brand color — <em>teal</em> — on a deep plum-black, with a warm off-white ink. Rust is the deliberate counter-color: capability vs. constraint.</p>
+
+    <h4>Core palette</h4>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#14101A;color:#A39E96">#14101A</div><div class="meta"><div class="nm">Plum-black</div><div class="hex"><span>--bg</span><span>20 16 26</span></div><div class="role">Base background. The brand's ground.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#7BC9C4;color:#0c1414">#7BC9C4</div><div class="meta"><div class="nm">Teal</div><div class="hex"><span>--accent</span><span>123 201 196</span></div><div class="role">The single brand accent. Capability, the lit path.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#E8E4DC;color:#14101A">#E8E4DC</div><div class="meta"><div class="nm">Warm ink</div><div class="hex"><span>--ink</span><span>232 228 220</span></div><div class="role">Primary text. Never pure white.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#C97D5C;color:#1a0f0a">#C97D5C</div><div class="meta"><div class="nm">Rust</div><div class="hex"><span>--rust</span><span>201 125 92</span></div><div class="role">Constraint / counter-color. Used sparingly.</div></div></div>
+    </div>
+
+    <h4>Surfaces &amp; ink ramp</h4>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#1A1622;color:#A39E96">#1A1622</div><div class="meta"><div class="nm">Elevated</div><div class="hex"><span>--bg-elev</span></div><div class="role">Cards, nav, controls.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#1F1A28;color:#A39E96">#1F1A28</div><div class="meta"><div class="nm">Soft inset</div><div class="hex"><span>--bg-soft</span></div><div class="role">Tracks, fields, recesses.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#A39E96;color:#14101A">#A39E96</div><div class="meta"><div class="nm">Ink dim</div><div class="hex"><span>--ink-dim</span></div><div class="role">Secondary text.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#6F6A63;color:#E8E4DC">#6F6A63</div><div class="meta"><div class="nm">Ink mute</div><div class="hex"><span>--ink-mute</span></div><div class="role">Labels, meta, placeholders.</div></div></div>
+    </div>
+
+    <h4>Semantic</h4>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#D9B26B;color:#1a1208">#D9B26B</div><div class="meta"><div class="nm">Warn</div><div class="hex"><span>--warn</span></div></div></div>
+      <div class="sw"><div class="chip" style="background:#63E084;color:#06180c">#63E084</div><div class="meta"><div class="nm">Success</div><div class="hex"><span>--green</span></div></div></div>
+      <div class="sw"><div class="chip" style="background:#C9A77B;color:#1a1208">#C9A77B</div><div class="meta"><div class="nm">Cyborg</div><div class="hex"><span>--cyborg</span></div><div class="role">Persona token (Snapshot).</div></div></div>
+      <div class="sw"><div class="chip" style="background:#0c1414;color:#7BC9C4">#0c1414</div><div class="meta"><div class="nm">On-accent</div><div class="hex"><span>--on-accent</span></div><div class="role">Text on a teal fill.</div></div></div>
+    </div>
+
+    <h4>Color proportion — how much of each</h4>
+    <div class="propbar">
+      <span style="background:#14101A;color:#A39E96;flex:62">PLUM 62%</span>
+      <span style="background:#1A1622;color:#A39E96;flex:18">SURFACE 18</span>
+      <span style="background:#E8E4DC;color:#14101A;flex:12">INK 12</span>
+      <span style="background:#7BC9C4;color:#0c1414;flex:6">TEAL 6</span>
+      <span style="background:#C97D5C;color:#1a0f0a;flex:2">RUST 2</span>
+    </div>
+    <p class="dim" style="font-size:.9rem">Teal is a <em>spice, not a sauce.</em> If a screen looks teal-heavy, it's wrong — the accent earns its impact by scarcity.</p>
+  </section>
+
+  <!-- 06 TYPE -->
+  <section id="type">
+    <div class="eyebrow">06 — Typography</div>
+    <h2>DM Sans, set like an essay.</h2>
+    <p class="lede">One typeface family does everything; <em>DM Mono</em> handles labels and data. Display runs thin. Emphasis is italic teal — never bold.</p>
+
+    <div class="specimen">
+      <div class="glyphs">AaBbCcDdEe · 0123456789<br><span style="font-weight:200">Light 200</span> <span style="font-weight:300">Regular 300</span> <span style="font-weight:500">Medium 500</span> <span style="font-weight:600">Semibold 600</span></div>
+    </div>
+
+    <h4>Type scale</h4>
+    <div class="specimen" style="padding:10px 28px">
+      <div class="scale-row"><span class="tag">DISPLAY · 200</span><span style="font-size:clamp(2.4rem,6vw,4rem);font-weight:200;letter-spacing:-.034em">128</span></div>
+      <div class="scale-row"><span class="tag">H1 · 300 · -.032em</span><span style="font-size:clamp(1.6rem,4vw,2.6rem);font-weight:300;letter-spacing:-.032em">Own the layer.</span></div>
+      <div class="scale-row"><span class="tag">H2 · 300 · -.022em</span><span style="font-size:clamp(1.3rem,3vw,1.9rem);font-weight:300;letter-spacing:-.022em">Recover the margin.</span></div>
+      <div class="scale-row"><span class="tag">BODY · 400 · 1.55</span><span style="font-size:1rem">The owned intelligence a business grows from.</span></div>
+      <div class="scale-row"><span class="tag mono">LABEL · MONO · .16em</span><span class="mono" style="font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">AI Leverage Index</span></div>
+    </div>
+
+    <h4>The signature: italic-teal emphasis</h4>
+    <div class="specimen">
+      <p style="font-size:1.2rem;font-weight:300;margin:0">Most AI projects stall. We're the ones who <em>finish</em> — we install something you <em>own</em> and keep it running.</p>
+    </div>
+    <p class="dim" style="font-size:.9rem">Emphasis uses the same light weight, set italic and teal. Never bold body copy for emphasis.</p>
+  </section>
+
+  <!-- 07 ICON -->
+  <section id="icon">
+    <div class="eyebrow">07 — Iconography</div>
+    <h2>Thin, geometric, line-drawn.</h2>
+    <p class="lede">The checkmark is the brand's recurring glyph. Icons are SVG line-work — <em>never</em> emoji, never stock.</p>
+    <div class="specimen" style="display:flex;gap:34px;flex-wrap:wrap;align-items:center;justify-content:center;padding:34px">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7BC9C4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7BC9C4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5" fill="#7BC9C4"/></svg>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7BC9C4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V9M10 18V5M16 18v-6M22 18V8"/></svg>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7BC9C4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/></svg>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7BC9C4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1018 0 9 9 0 00-18 0zM12 7v5l3 2"/></svg>
+    </div>
+    <p class="dim" style="font-size:.9rem">Stroke 2.2 at 24px, round caps and joins. Match the mark's weight family.</p>
+  </section>
+
+  <!-- 08 MOTION -->
+  <section id="motion">
+    <div class="eyebrow">08 — Motion</div>
+    <h2>Alive at rest.</h2>
+    <p class="lede">Motion is ambient, slow, and purposeful. The system breathes; it never demands attention — except the single CTA nudge.</p>
+    <div class="grid2" style="margin-top:22px">
+      <div class="panel"><div class="cap">Breathing mark</div><div style="display:grid;place-items:center;padding:18px 0;min-height:120px"><svg width="80" height="80" viewBox="0 0 100 100"><ellipse class="markglow" cx="50" cy="52" rx="28" ry="32" fill="#7BC9C4" opacity=".3" style="filter:blur(12px)"/><path class="markcore" d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg></div></div>
+      <div class="panel"><div class="cap">Button sheen</div><div style="display:grid;place-items:center;padding:30px 0"><button class="btn btn-primary sheenbtn">Start the Snapshot</button></div></div>
+    </div>
+    <h4>Easing &amp; timing</h4>
+    <div class="tokenblock" style="font-size:.74rem"><span class="c">/* standard */</span> <span class="k">--ease</span>: <span class="v">cubic-bezier(.4,0,.2,1)</span>;
+<span class="c">/* premium entrance / choreography */</span> <span class="k">--ease-out</span>: <span class="v">cubic-bezier(.16,1,.3,1)</span>;
+<span class="c">/* springy pops */</span> <span class="k">--ease-spring</span>: <span class="v">cubic-bezier(.34,1.56,.64,1)</span>;
+<span class="c">/* micro .15–.22s · state .3–.4s · fills .55s · never &gt; .7s */</span></div>
+    <p class="dim" style="font-size:.9rem">All ambient motion is gated behind <span class="mono" style="font-size:.84em">prefers-reduced-motion</span>. Numbers count up; nothing flashes.</p>
+  </section>
+
+  <!-- 09 TEXTURE -->
+  <section id="texture">
+    <div class="eyebrow">09 — Texture &amp; Imagery</div>
+    <h2>Warm paper in the dark.</h2>
+    <p class="lede">A near-invisible film grain over everything, plus faint radial glows. This is the texture that makes the dark feel <em>analog</em>, not digital.</p>
+    <div class="grid2" style="margin-top:22px">
+      <div class="panel"><div class="cap">Film grain · opacity .04 · overlay</div><p class="dim" style="font-size:.9rem;margin:0">An SVG <span class="mono" style="font-size:.84em">feTurbulence</span> fractal noise, warm-tinted, fixed over the viewport. It's on this very page. Keep it on every full surface.</p></div>
+      <div class="panel"><div class="cap">Ambient glows</div><p class="dim" style="font-size:.9rem;margin:0">Two low-alpha radials — teal top-right, rust bottom-left — imply light without color noise. Imagery stays sparse, calm, warm-in-dark; never busy stock photography.</p></div>
+    </div>
+  </section>
+
+  <!-- 10 VOICE -->
+  <section id="voice">
+    <div class="eyebrow">10 — Voice</div>
+    <h2>Calm, precise, never hyped.</h2>
+    <p class="lede">We sound like a plain-spoken expert. Short sentences. The real number, not the adjective. Accuracy <em>is</em> our differentiation.</p>
+    <div class="grid2" style="margin-top:22px">
+      <div class="panel do"><div class="cap">✓ Say</div><p style="margin:0 0 8px">"Most AI projects stall. We're the ones who finish."</p><p style="margin:0" class="dim">"You've got $1.5–3M trapped in 60–90 day receivables. We recover it."</p></div>
+      <div class="panel dont"><div class="cap">✕ Don't say</div><p style="margin:0 0 8px" class="dim">"We leverage AI to unlock transformative synergies."</p><p style="margin:0" class="dim">"Revolutionize your business with our second brain."</p></div>
+    </div>
+    <h4>Banned words</h4>
+    <p class="dim">transformation · leverage AI · unlock · revolutionize · second brain — the hype words everyone else uses. We don't.</p>
+  </section>
+
+  <!-- 11 COMPONENTS -->
+  <section id="components">
+    <div class="eyebrow">11 — Components</div>
+    <h2>The system, live.</h2>
+    <p class="lede">Every element on this page is built from the tokens. Here are the primitives.</p>
+    <div class="specimen" style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding:28px">
+      <button class="btn btn-primary sheenbtn">Primary</button>
+      <button class="btn">Secondary</button>
+      <span class="pill">Pill chip</span>
+      <span class="badge">AI Level · Conductor</span>
+      <span class="badge" style="color:var(--rust);border-color:rgba(201,125,92,.4)">Constraint</span>
+    </div>
+    <div class="specimen" style="padding:24px">
+      <input class="field" placeholder="you@company.com">
+      <div style="height:9px;border-radius:6px;background:var(--bg-soft);overflow:hidden"><div style="height:100%;width:72%;border-radius:6px;background:linear-gradient(90deg,rgba(123,201,196,.55),var(--accent))"></div></div>
+    </div>
+  </section>
+
+  <!-- 12 APPLICATIONS -->
+  <section id="applications">
+    <div class="eyebrow">12 — Applications</div>
+    <h2>In the world.</h2>
+    <p class="lede">The identity holds from a 16px favicon to a deck slide. A few canonical uses.</p>
+    <div class="mockgrid" style="margin-top:8px">
+      <div class="mock"><div class="mhead">App icon</div><div class="mbody"><div style="width:96px;height:96px;border-radius:22px;background:#14101A;border:1px solid var(--rule-strong);display:grid;place-items:center"><svg width="52" height="52" viewBox="0 0 100 100"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg></div></div></div>
+      <div class="mock"><div class="mhead">Favicon · 16 / 32</div><div class="mbody"><div style="display:flex;gap:22px;align-items:center"><svg width="16" height="16" viewBox="0 0 100 100"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg><svg width="32" height="32" viewBox="0 0 100 100"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg></div></div></div>
+      <div class="mock"><div class="mhead">Business card · front</div><div class="mbody" style="background:#14101A"><div style="display:flex;align-items:center;gap:12px"><svg width="30" height="30" viewBox="0 0 100 100"><path d="M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z" fill="#7BC9C4"/></svg><span style="font-size:1.4rem;font-weight:500;letter-spacing:-.02em">Ovae<span style="color:var(--accent)">.</span></span></div></div></div>
+      <div class="mock"><div class="mhead">Social / OG card</div><div class="mbody" style="background:linear-gradient(160deg,#1A1622,#1F1A28);text-align:center"><div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:10px">Own the layer</div><div style="font-size:1.3rem;font-weight:300;letter-spacing:-.02em">Recover the <em>margin.</em></div></div></div>
+    </div>
+  </section>
+
+  <!-- 13 TOKENS -->
+  <section id="tokens">
+    <div class="eyebrow">13 — Tokens</div>
+    <h2>Build on the system.</h2>
+    <p class="lede">Paste this into any new Ovae surface and you're on-brand by default.</p>
+    <div class="tokenblock"><span class="c">/* Ovae — core tokens (dark-only) */</span>
+<span class="k">:root</span>{
+  <span class="k">--bg</span>:<span class="v">#14101A</span>; <span class="k">--bg-elev</span>:<span class="v">#1A1622</span>; <span class="k">--bg-soft</span>:<span class="v">#1F1A28</span>;
+  <span class="k">--ink</span>:<span class="v">#E8E4DC</span>; <span class="k">--ink-dim</span>:<span class="v">#A39E96</span>; <span class="k">--ink-mute</span>:<span class="v">#6F6A63</span>;
+  <span class="k">--accent</span>:<span class="v">#7BC9C4</span>; <span class="k">--on-accent</span>:<span class="v">#0c1414</span>;
+  <span class="k">--accent-dim</span>:<span class="v">rgba(123,201,196,.18)</span>; <span class="k">--accent-soft</span>:<span class="v">rgba(123,201,196,.06)</span>;
+  <span class="k">--rust</span>:<span class="v">#C97D5C</span>; <span class="k">--warn</span>:<span class="v">#D9B26B</span>; <span class="k">--green</span>:<span class="v">#63E084</span>;
+  <span class="k">--rule</span>:<span class="v">rgba(232,228,220,.08)</span>; <span class="k">--rule-strong</span>:<span class="v">rgba(232,228,220,.16)</span>;
+  <span class="k">--r</span>:<span class="v">16px</span>; <span class="k">--r-sm</span>:<span class="v">12px</span>;
+  <span class="k">--ease-out</span>:<span class="v">cubic-bezier(.16,1,.3,1)</span>;
+}
+<span class="c">/* type: DM Sans 200–600 + DM Mono 300–500 · em{italic teal 300} */</span></div>
+    <p class="dim" style="font-size:.9rem;margin-top:18px">Full written reference: <strong>OVAE-BRAND-GUIDELINES.md</strong>. This page is the visual companion — and is itself built entirely from these tokens.</p>
+  </section>
+
+  <!-- 14 BRAND KIT & AI -->
+  <section id="kit">
+    <div class="eyebrow">14 — Brand Kit · Working with AI</div>
+    <h2>This book is the kit.</h2>
+    <p class="lede">Two ways to take the brand with you: download the assets, or hand your AI the <em>system prompt</em> below — it carries the canonical mark path, every token, and every rule inline, so an AI can produce on-brand work without fetching anything.</p>
+
+    <h3>Download assets</h3>
+    <p class="dim" style="font-size:.92rem">Generated in your browser from the canonical definitions on this page — always in sync with the book.</p>
+    <div class="specimen" style="display:flex;flex-wrap:wrap;gap:12px;padding:24px">
+      <button class="btn" data-dl="mark">↓ Mark · teal</button>
+      <button class="btn" data-dl="mark-reversed">↓ Mark · reversed</button>
+      <button class="btn" data-dl="app-icon">↓ App icon</button>
+      <button class="btn" data-dl="favicon">↓ Favicon</button>
+      <button class="btn" data-dl="lockup-horizontal">↓ Lockup · horizontal</button>
+      <button class="btn" data-dl="lockup-stacked">↓ Lockup · stacked</button>
+      <button class="btn btn-primary" data-dl="all">↓ Full kit + AI prompt (.md)</button>
+    </div>
+
+    <h3>The AI brand prompt</h3>
+    <p class="dim" style="font-size:.92rem">Click to copy. Paste it at the start of any AI session (Claude, ChatGPT, Midjourney text fields, coding agents) and everything it makes will be Ovae. If this book is deployed to a URL, you can also just link your AI here — but the prompt below works everywhere, offline, with the mark's actual geometry embedded.</p>
+    <div class="tokenblock" id="aiPrompt" style="white-space:pre-wrap;font-size:.72rem;max-height:420px;overflow-y:auto">You are working inside the Ovae brand system. Follow it exactly.
+
+IDENTITY — Ovae installs and runs the owned AI operating layer a business keeps. Feel: editorial calm, expensive restraint, quietly alive. One line: "dark plum + teal, warm paper, film grain." Never loud, never generic-AI-startup.
+
+LOGO — "the Ensō": one tapered hand-drawn brushstroke forming an egg (ova = origin), open at the top. Canonical SVG path on a 100-unit grid (NEVER redraw or approximate):
+M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z
+Fill #7BC9C4 on dark surfaces; #14101A when placed on teal/light. App icon = plum #14101A tile (radius 22%) + mark at 62%. THE DOT RULE: the dot lives ONLY in the wordmark "Ovae." as a teal period — never beside the mark. Default lockup = mark + "Ovae." (DM Sans Medium 500, tracking -0.018em, period #7BC9C4); gap = the stroke's belly width; one dot per composition. Mark minimum 16px; clearspace = belly width all sides. Never: recolor, rotate, distort, close the opening, add effects, or float a dot next to it.
+
+COLOR (dark-only; there is NO light mode): bg #14101A · elevated #1A1622 · soft #1F1A28 · ink #E8E4DC / dim #A39E96 / mute #6F6A63 · ACCENT teal #7BC9C4 (text on teal: #0c1414; tints rgba(123,201,196,.18) and .06) · rust #C97D5C (constraint counter-color only) · warn #D9B26B · success #63E084 · borders rgba(232,228,220,.08) / .16. Teal is a spice, not a sauce (~6% of any screen). No blue, no purple, no gold, no pure black or white.
+
+TYPE: DM Sans (weights 200–600; display runs THIN 200–300, body 400, UI 500–600) + DM Mono for labels/eyebrows (UPPERCASE, letter-spacing .14–.20em). Display tracking tight (-0.02 to -0.034em). EMPHASIS = italic teal at the same light weight (em{font-style:italic;color:#7BC9C4}) — never bold. Reading measure 600–640px. Big numbers render thin and count up.
+
+SHAPE & DEPTH: radius 16px (cards) / 12px (controls) / 999px (pills). 1px borders. Shadows are TEAL GLOWS (e.g. 0 6px 30px -10px #7BC9C4), never gray drop-shadows; near-black only for image lift.
+
+TEXTURE: every full page gets an SVG feTurbulence film grain (opacity .03–.04, mix-blend-mode overlay) + two faint radial glows (teal top-right rgba(123,201,196,.06), rust bottom-left rgba(201,125,92,.04)).
+
+MOTION: ambient, slow, purposeful. Standard ease cubic-bezier(.4,0,.2,1); entrances cubic-bezier(.16,1,.3,1); micro-interactions .15–.22s; nothing over .7s. The mark may bloom in (scale .6, rotate -14° → 1, ~1s) and breathe (scale 1→1.07, 4.5s loop). Gate ALL motion behind prefers-reduced-motion.
+
+VOICE: calm, plain-spoken expert. Short sentences, real numbers over adjectives; accuracy is the differentiation. BANNED WORDS: transformation, leverage AI, unlock, revolutionize, second brain.
+
+NEVER: light mode, emoji or stock icons in product UI, multi-color gradients, bold-for-emphasis, decorative clutter. When unsure, choose restraint.</div>
+    <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap">
+      <button class="btn btn-primary" id="copyPrompt">Copy the AI prompt</button>
+      <span class="dim" style="font-size:.84rem;align-self:center">…or click the block itself. Team link: deploy this page to <span class="mono" style="font-size:.9em">ovae.ai/brand/</span> and share one URL.</span>
+    </div>
+  </section>
+
+  <footer>
+    OVAE — BRAND IDENTITY · V1.0 · 2026<br>
+    DARK PLUM · TEAL · WARM PAPER · FILM GRAIN · THE ORIGIN MARK<br>
+    INTERNAL — NOT FOR DISTRIBUTION
+  </footer>
+</main>
+</div>
+</div>
+<script>
+  const links=[...document.querySelectorAll('nav.side a')];
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));const a=map.get(e.target.id);if(a)a.classList.add('active')}})},{rootMargin:'-20% 0px -72% 0px'});
+  document.querySelectorAll('section[id]').forEach(s=>obs.observe(s));
+
+  // scroll reveal (R4)
+  const rev=document.querySelectorAll('section h2, .eyebrow, .lede, .panel, .sw, .specimen, .mock, .reductions, .propbar, .tokenblock, #mark .markstage, .clearspace');
+  rev.forEach(el=>el.classList.add('reveal'));
+  const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px'});
+  rev.forEach(el=>ro.observe(el));
+
+  // click-to-copy hex / tokens (R5)
+  let tEl;
+  function toast(m){ if(!tEl){tEl=document.createElement('div');tEl.className='toast';document.body.appendChild(tEl);} tEl.textContent=m; tEl.classList.add('show'); clearTimeout(tEl._t); tEl._t=setTimeout(()=>tEl.classList.remove('show'),1400); }
+  function copy(t,label){ navigator.clipboard?.writeText(t).then(()=>toast((label||t)+' · copied')).catch(()=>toast('copy failed')); }
+  document.querySelectorAll('.sw').forEach(s=>{ const hex=s.querySelector('.chip')?.textContent.trim(); if(hex) s.addEventListener('click',()=>copy(hex)); });
+  document.querySelectorAll('.tokenblock').forEach(tb=>tb.addEventListener('click',function(){ copy(this.innerText, this.id==='aiPrompt'?'AI brand prompt':'Token block'); }));
+
+  // ── Brand kit downloads (generated client-side; always in sync with the book) ──
+  const ENSO='M47 10 C30 14 13 33 13 55 C13 79 30 94 51 94 C73 94 88 78 88 55 C88 41 82 28 72 21 C77 30 79 42 79 55 C79 70 67 82 51 82 C37 82 26 70 26 55 C26 39 34 21 47 10 Z';
+  const FONT="@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&display=swap');";
+  const ASSETS={
+    'mark':`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="#7BC9C4" d="${ENSO}"/></svg>`,
+    'mark-reversed':`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="#14101A" d="${ENSO}"/></svg>`,
+    'app-icon':`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#14101A"/><g transform="translate(50 50) scale(.62) translate(-50.5 -52)"><path fill="#7BC9C4" d="${ENSO}"/></g></svg>`,
+    'favicon':`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#14101A"/><g transform="translate(50 50) scale(.78) translate(-50.5 -52)"><path fill="#7BC9C4" d="${ENSO}"/></g></svg>`,
+    'lockup-horizontal':`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100"><style>${FONT}</style><path fill="#7BC9C4" d="${ENSO}"/><text x="106" y="71" font-family="'DM Sans',system-ui,sans-serif" font-weight="500" font-size="58" letter-spacing="-1" fill="#E8E4DC">Ovae<tspan fill="#7BC9C4">.</tspan></text></svg>`,
+    'lockup-stacked':`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 168"><style>${FONT}</style><g transform="translate(80 47) scale(.82) translate(-50.5 -52)"><path fill="#7BC9C4" d="${ENSO}"/></g><text x="80" y="142" text-anchor="middle" font-family="'DM Sans',system-ui,sans-serif" font-weight="500" font-size="40" letter-spacing="-0.7" fill="#E8E4DC">Ovae<tspan fill="#7BC9C4">.</tspan></text></svg>`
+  };
+  function dl(name, content, type){ const b=new Blob([content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); }
+  document.querySelectorAll('[data-dl]').forEach(btn=>btn.addEventListener('click',()=>{
+    const k=btn.dataset.dl;
+    if(k==='all'){
+      const prompt=document.getElementById('aiPrompt').innerText;
+      let md='# Ovae Brand Kit — the Ensō · v1.0\n\n## AI brand prompt (paste at the start of any AI session)\n\n```\n'+prompt+'\n```\n\n## Assets (save each block as the named .svg file)\n\n';
+      for(const [n,svg] of Object.entries(ASSETS)) md+='### ovae-'+n+'.svg\n```svg\n'+svg+'\n```\n\n';
+      md+='## Rules quick-sheet\n- Default = lockup (mark + "Ovae."). Mark alone: favicon/app/avatar. Wordmark alone: body copy, signatures.\n- One dot per composition — the wordmark period IS the dot. Never float a dot beside the mark.\n- Mark min 16px · clearspace = belly width · never recolor/rotate/distort/close/add effects.\n- Tokens: bg #14101A · elev #1A1622 · soft #1F1A28 · ink #E8E4DC/#A39E96/#6F6A63 · teal #7BC9C4 (on-teal #0c1414) · rust #C97D5C · warn #D9B26B · green #63E084 · radius 16/12 · DM Sans + DM Mono.\n';
+      dl('ovae-brand-kit.md', md, 'text/markdown');
+      toast('Full kit downloaded');
+    } else { dl('ovae-'+k+'.svg', ASSETS[k], 'image/svg+xml'); toast('ovae-'+k+'.svg'); }
+  }));
+  document.getElementById('copyPrompt')?.addEventListener('click',()=>copy(document.getElementById('aiPrompt').innerText,'AI brand prompt'));
+</script>
+</body>
+</html>
