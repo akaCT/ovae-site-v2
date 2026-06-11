@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Service Lion · Operations Brain — Live Demo</title>
+<meta property="og:title" content="Service Lion — Operations Brain, running live">
+<meta property="og:description" content="Close rate by tech, dead quotes ranked for callback, where the $250 leads go, the 6 AM owner text. The board, working — prepared for Tommy & Brian.">
+<meta property="og:image" content="https://ovae.ai/service-lion/demo/og-index.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ovae.ai/service-lion/demo/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/webp" href="service-lion-logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#002855;
+  --navy-deep:#061c36;
+  --navy-card:#0a2444;
+  --navy-line:#16406e;
+  --gold:#FFC72C;
+  --gold-2:#FAAA1E;
+  --white:#ffffff;
+  --ink:#eaf1fa;
+  --muted:#8fa9c8;
+  --green:#3ddc97;
+  --red:#ff6b6b;
+  --font-display:"Barlow Condensed","Countach",sans-serif;
+  --font-body:"Roboto",system-ui,sans-serif;
+  --font-mono:"Roboto Mono",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--navy-deep);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+
+/* ============ HEADER ============ */
+header{
+  background:linear-gradient(180deg,var(--navy) 0%,var(--navy-deep) 100%);
+  border-bottom:1px solid var(--navy-line);
+  padding:20px 0 0;
+  position:sticky;top:0;z-index:50;
+}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:16px}
+.brand{display:flex;align-items:center;gap:16px}
+.brand img{height:54px;background:#fff;border-radius:8px;padding:4px 10px}
+.brand-title{font-family:var(--font-display);font-weight:800;font-size:28px;letter-spacing:.04em;text-transform:uppercase;color:var(--white);line-height:1}
+.brand-title span{color:var(--gold)}
+.brand-sub{font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
+.demo-badge{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,199,44,.1);border:1px solid rgba(255,199,44,.4);
+  color:var(--gold);font-size:12px;font-weight:500;
+  padding:7px 14px;border-radius:99px;white-space:nowrap;
+}
+.demo-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* tabs */
+nav{display:flex;gap:4px;overflow-x:auto}
+nav button{
+  font-family:var(--font-display);font-size:17px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  background:none;border:none;color:var(--muted);cursor:pointer;
+  padding:12px 18px;border-bottom:3px solid transparent;white-space:nowrap;
+  transition:color .2s,border-color .2s;
+}
+nav button:hover{color:var(--ink)}
+nav button.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* ============ HERO LEDGER ============ */
+.ledger{
+  background:radial-gradient(1200px 400px at 50% -100px,rgba(255,199,44,.08),transparent),var(--navy-deep);
+  padding:40px 0 28px;text-align:center;border-bottom:1px solid var(--navy-line);
+}
+.ledger .eyebrow{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.ledger .big{
+  font-family:var(--font-display);font-weight:800;font-size:84px;line-height:1.05;
+  color:var(--gold);font-variant-numeric:tabular-nums;
+}
+.ledger .big-sub{font-size:16px;color:var(--ink);max-width:640px;margin:6px auto 0}
+.ledger .big-sub strong{color:var(--gold)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px auto 0;max-width:980px}
+.kpi{
+  background:var(--navy-card);border:1px solid var(--navy-line);border-radius:12px;
+  padding:16px 18px;text-align:left;
+}
+.kpi .k-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.kpi .k-val{font-family:var(--font-display);font-weight:700;font-size:34px;color:var(--white);margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .k-val em{font-style:normal;font-size:18px;color:var(--muted)}
+.kpi .k-note{font-size:12px;color:var(--muted);margin-top:2px}
+.kpi .k-note.bad{color:var(--red)}
+.kpi .k-note.good{color:var(--green)}
+
+/* ============ SECTIONS ============ */
+section{display:none;padding:36px 0 48px}
+section.active{display:block;animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.sec-head{margin-bottom:22px}
+.sec-head h2{font-family:var(--font-display);font-weight:700;font-size:34px;letter-spacing:.03em;text-transform:uppercase;color:var(--white)}
+.sec-head h2 span{color:var(--gold)}
+.sec-head p{color:var(--muted);max-width:720px;margin-top:4px}
+.card{
+  background:var(--navy-card);border:1px solid var(--navy-line);border-radius:14px;
+  padding:24px;margin-bottom:18px;
+}
+.card h3{font-family:var(--font-display);font-weight:600;font-size:20px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);margin-bottom:14px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+/* bars */
+.bar-row{display:grid;grid-template-columns:130px 1fr 120px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(22,64,110,.5)}
+.bar-row:last-child{border-bottom:none}
+.bar-name{font-size:14px;font-weight:500;color:var(--ink)}
+.bar-name small{display:block;color:var(--muted);font-weight:400;font-size:12px}
+.bar-track{height:22px;background:rgba(22,64,110,.4);border-radius:5px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold-2),var(--gold));transition:width 1s ease}
+.bar-fill.cool{background:linear-gradient(90deg,#1d5fa8,#3b8de0)}
+.bar-fill.bad{background:linear-gradient(90deg,#c0392b,var(--red))}
+.bar-val{font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--white);text-align:right}
+.bar-val small{display:block;font-family:var(--font-body);font-weight:400;color:var(--muted);font-size:11px}
+
+/* slider */
+.slider-card{background:linear-gradient(135deg,rgba(255,199,44,.06),transparent),var(--navy-card)}
+.slider-row{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.slider-block{flex:1;min-width:280px}
+input[type=range]{width:100%;accent-color:var(--gold);height:34px;cursor:pointer}
+.slider-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-family:var(--font-mono)}
+.slider-out{text-align:center;min-width:240px}
+.slider-out .so-num{font-family:var(--font-display);font-weight:800;font-size:52px;color:var(--gold);font-variant-numeric:tabular-nums}
+.slider-out .so-lab{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--navy-line)}
+td{padding:10px;border-bottom:1px solid rgba(22,64,110,.5);color:var(--ink);font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;font-family:var(--font-mono)}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px}
+.pill.hot{background:rgba(255,107,107,.15);color:var(--red)}
+.pill.warm{background:rgba(255,199,44,.15);color:var(--gold)}
+.pill.ok{background:rgba(61,220,151,.15);color:var(--green)}
+.row-action{font-size:12px;color:var(--gold);font-weight:500;white-space:nowrap}
+
+/* chat */
+.chat{display:grid;grid-template-columns:280px 1fr;gap:18px;min-height:420px}
+.chips{display:flex;flex-direction:column;gap:10px}
+.chip{
+  text-align:left;background:var(--navy-card);border:1px solid var(--navy-line);color:var(--ink);
+  border-radius:10px;padding:13px 15px;font-size:14px;cursor:pointer;font-family:var(--font-body);
+  transition:border-color .2s,transform .15s;
+}
+.chip:hover{border-color:var(--gold);transform:translateX(3px)}
+.chip.used{opacity:.45}
+.chat-window{background:var(--navy-card);border:1px solid var(--navy-line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;max-height:560px}
+.msg{max-width:85%;padding:12px 16px;border-radius:12px;font-size:14px;line-height:1.55}
+.msg.q{align-self:flex-end;background:var(--navy);border:1px solid var(--navy-line);color:var(--white)}
+.msg.a{align-self:flex-start;background:rgba(255,199,44,.07);border:1px solid rgba(255,199,44,.25)}
+.msg.a .src{display:block;margin-top:8px;font-size:11px;color:var(--muted);font-family:var(--font-mono)}
+.msg.a strong{color:var(--gold)}
+.typing{align-self:flex-start;color:var(--muted);font-size:13px;font-style:italic}
+
+/* 6am text mock */
+.imsg{background:rgba(6,28,54,.7);border:1px solid var(--navy-line);border-radius:14px;padding:14px}
+.imsg-hdr{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:10px}
+.imsg-bubble{
+  background:#1d3f6e;border-radius:16px;border-bottom-left-radius:5px;
+  padding:13px 15px;font-size:13.5px;line-height:1.55;max-width:95%;color:var(--ink);
+}
+.imsg-bubble b{color:var(--gold)}
+.key-hint{font-size:11px;color:var(--muted);white-space:nowrap;margin-left:8px;align-self:center}
+.bar-row.link{cursor:pointer;transition:background .15s}
+.bar-row.link:hover{background:rgba(255,199,44,.05)}
+
+/* next-leak walkthrough button */
+.next-btn{
+  display:flex;align-items:center;gap:10px;margin:26px 0 0 auto;
+  font-family:var(--font-display);font-size:18px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  background:var(--gold);color:var(--navy);border:none;border-radius:10px;
+  padding:13px 22px;cursor:pointer;transition:transform .15s,box-shadow .15s;
+  box-shadow:0 4px 18px rgba(255,199,44,.25);
+}
+.next-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(255,199,44,.35)}
+.next-btn span{font-size:20px}
+
+/* how strip */
+.how-strip{border-top:1px solid var(--navy-line);padding:34px 0 30px;background:rgba(0,40,85,.35)}
+.how-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.how-step{font-size:13.5px;color:var(--muted);line-height:1.55;background:var(--navy-card);border:1px solid var(--navy-line);border-radius:12px;padding:16px 18px}
+.how-step b{display:block;font-family:var(--font-display);font-size:19px;letter-spacing:.05em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+@media(max-width:860px){.how-row{grid-template-columns:1fr}}
+
+/* footer */
+footer{
+  border-top:1px solid var(--navy-line);background:var(--navy);
+  padding:36px 0 30px;text-align:center;
+}
+footer .f-big{font-family:var(--font-display);font-weight:700;font-size:30px;text-transform:uppercase;letter-spacing:.04em;color:var(--white)}
+footer .f-big span{color:var(--gold)}
+.f-terms{display:flex;justify-content:center;gap:34px;margin:18px 0 14px;flex-wrap:wrap}
+.f-term{font-size:14px;color:var(--ink)}
+.f-term b{display:block;font-family:var(--font-display);font-size:22px;color:var(--gold);text-transform:uppercase;letter-spacing:.04em}
+footer .f-note{font-size:12px;color:var(--muted)}
+
+@media(max-width:860px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .grid-2{grid-template-columns:1fr}
+  .chat{grid-template-columns:1fr}
+  .ledger .big{font-size:56px}
+  .brand-title{font-size:22px}
+  .brand img{height:42px}
+  .hdr-row{flex-wrap:wrap}
+  .brand-sub{display:none}
+  .key-hint{display:none}
+  .demo-badge{font-size:11px;white-space:normal;line-height:1.35;padding:6px 12px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="hdr-row">
+      <div class="brand">
+        <img src="service-lion-logo.webp" alt="Service Lion" onerror="this.src='https://callservicelion.com/wp-content/uploads/2025/07/hd-service-lion.webp'">
+        <div>
+          <div class="brand-title">Operations <span>Brain</span></div>
+          <div class="brand-sub">Plumbing · Heating · Air · Electric — Orange County, CA</div>
+        </div>
+      </div>
+      <div class="demo-badge"><span class="dot"></span> DEMO · representative data — your ServiceTitan + Rilla plug in here</div>
+    </div>
+    <nav id="tabs">
+      <button data-tab="overview" class="active">Overview</button>
+      <button data-tab="lostjobs">Lost Jobs</button>
+      <button data-tab="deadquotes">Dead Quotes</button>
+      <button data-tab="marketing">Marketing Waste</button>
+      <button data-tab="memberships">Memberships</button>
+      <button data-tab="brain">Ask the Brain</button>
+      <span class="key-hint">← → keys walk the demo</span>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ OVERVIEW ============ -->
+<section id="overview" class="active">
+  <div class="ledger">
+    <div class="wrap">
+      <div class="eyebrow">Recoverable revenue identified · annualized</div>
+      <div class="big" id="bigNumber">$0</div>
+      <div class="big-sub">Found in <strong>90 days of ServiceTitan data</strong> — money already paid for, walking out the door in four specific places. Visible from your phone, <strong>without being in the building.</strong></div>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="k-label">Close rate</div>
+          <div class="k-val">45.3<em>%</em></div>
+          <div class="k-note bad">Target 60% — gap is worth $448K/yr</div>
+        </div>
+        <div class="kpi">
+          <div class="k-label">Cost per booked call · paid</div>
+          <div class="k-val">$247</div>
+          <div class="k-note bad">Was ~$50 — every lost call now wastes 5×</div>
+        </div>
+        <div class="kpi">
+          <div class="k-label">Open quotes &gt; 14 days</div>
+          <div class="k-val">214</div>
+          <div class="k-note">$468K sitting in unanswered estimates</div>
+        </div>
+        <div class="kpi">
+          <div class="k-label">Memberships lapsing</div>
+          <div class="k-val">67</div>
+          <div class="k-note">No follow-up logged on any of them</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap" style="padding-top:32px">
+    <div class="grid-2" style="margin-bottom:18px">
+      <div class="card phone-card">
+        <h3>Your 6:00 AM text — wherever you are</h3>
+        <div class="imsg">
+          <div class="imsg-hdr">SERVICE LION BRAIN · Today 6:00 AM</div>
+          <div class="imsg-bubble">Yesterday at Service Lion: <b>41 calls booked</b> (Tue was 9 — flagged why), close rate <b>52%</b>, <b>$86,400 sold</b>.<br><br>2 things need you:<br>① Alvarez $14.2K quote — opened 3× this week, heat wave Friday<br>② 6 memberships lapse this week, renewal texts drafted for approval<br><br>Reply MORE for the full board.</div>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-top:12px">When you're not there day in and day out, you don't see it. <strong style="color:var(--gold)">Now you see it from any state you're standing in.</strong></p>
+      </div>
+      <div class="card">
+        <h3>What this does to the business you sell one day</h3>
+        <table>
+          <tbody>
+            <tr><td>Recovered revenue (this ledger)</td><td class="num">$735K/yr</td></tr>
+            <tr><td>At your 20% net</td><td class="num">≈ $147K EBITDA</td></tr>
+            <tr><td style="color:var(--gold);font-weight:700">At today's PE multiples</td><td class="num" style="color:var(--gold);font-weight:700">$1M+ enterprise value</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;color:var(--muted);margin-top:12px">Buyers pay for clean numbers and systems that run without the owner. This is both — the multiple window won't stay open forever.</p>
+      </div>
+    </div>
+    <div class="sec-head">
+      <h2>Where the money is <span>leaking</span></h2>
+      <p>Four leaks, ranked. Click any tab above to drill into the names, the jobs, and the fix.</p>
+    </div>
+    <div class="card">
+      <div class="bar-row link" data-go="lostjobs">
+        <div class="bar-name">Lost jobs<small>close-rate gap</small></div>
+        <div class="bar-track"><div class="bar-fill" style="width:0%" data-w="100"></div></div>
+        <div class="bar-val">$448K/yr<small>conservative ⅓ of gap</small></div>
+      </div>
+      <div class="bar-row link" data-go="deadquotes">
+        <div class="bar-name">Dead quotes<small>no callback made</small></div>
+        <div class="bar-track"><div class="bar-fill" style="width:0%" data-w="38"></div></div>
+        <div class="bar-val">$178K/yr<small>at 9.5% win-back</small></div>
+      </div>
+      <div class="bar-row link" data-go="marketing">
+        <div class="bar-name">Marketing waste<small>worst-source spend</small></div>
+        <div class="bar-track"><div class="bar-fill" style="width:0%" data-w="13"></div></div>
+        <div class="bar-val">$62K/yr<small>reallocation</small></div>
+      </div>
+      <div class="bar-row link" data-go="memberships">
+        <div class="bar-name">Memberships<small>silent lapses</small></div>
+        <div class="bar-track"><div class="bar-fill" style="width:0%" data-w="10"></div></div>
+        <div class="bar-val">$47K/yr<small>renewals + attach</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LOST JOBS ============ -->
+<section id="lostjobs">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Lost <span>Jobs</span></h2>
+      <p>1,121 estimates ran in 90 days. 508 closed. The other 613 cost $247 each to book — and the gap isn't random. It has names, lead sources, and job types.</p>
+    </div>
+    <div class="card slider-card">
+      <h3>What a point of close rate is worth</h3>
+      <div class="slider-row">
+        <div class="slider-block">
+          <input type="range" id="closeSlider" min="45" max="60" value="45" step="1">
+          <div class="slider-labels"><span>45% today</span><span>60% target</span></div>
+        </div>
+        <div class="slider-out">
+          <div class="so-num" id="sliderOut">$0</div>
+          <div class="so-lab">added revenue / year</div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px">Full gap value at a $2,000 average ticket — your number. The overview ledger counts only <strong style="color:var(--gold)">⅓ of this</strong> — we'd rather under-promise.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Close rate by technician</h3>
+        <div class="bar-row"><div class="bar-name">Ramirez</div><div class="bar-track"><div class="bar-fill" data-w="64" style="width:0%"></div></div><div class="bar-val">64%<small>118 ran</small></div></div>
+        <div class="bar-row"><div class="bar-name">Boyd</div><div class="bar-track"><div class="bar-fill" data-w="58" style="width:0%"></div></div><div class="bar-val">58%<small>134 ran</small></div></div>
+        <div class="bar-row"><div class="bar-name">Tran</div><div class="bar-track"><div class="bar-fill cool" data-w="47" style="width:0%"></div></div><div class="bar-val">47%<small>141 ran</small></div></div>
+        <div class="bar-row"><div class="bar-name">Okafor</div><div class="bar-track"><div class="bar-fill cool" data-w="41" style="width:0%"></div></div><div class="bar-val">41%<small>126 ran</small></div></div>
+        <div class="bar-row"><div class="bar-name">Sutton</div><div class="bar-track"><div class="bar-fill bad" data-w="31" style="width:0%"></div></div><div class="bar-val">31%<small>97 ran</small></div></div>
+        <p style="font-size:13px;color:var(--muted);margin-top:12px">If Sutton and Okafor closed at just the <em>team average</em>, that alone is <strong style="color:var(--gold)">$154K/yr</strong>. The Brain shows you the exact jobs they lost and why — like Rilla for the whole business, not just the ride-along.</p>
+      </div>
+      <div class="card">
+        <h3>Close rate by job type</h3>
+        <div class="bar-row"><div class="bar-name">Drain / sewer</div><div class="bar-track"><div class="bar-fill" data-w="61" style="width:0%"></div></div><div class="bar-val">61%</div></div>
+        <div class="bar-row"><div class="bar-name">Water heaters</div><div class="bar-track"><div class="bar-fill" data-w="54" style="width:0%"></div></div><div class="bar-val">54%</div></div>
+        <div class="bar-row"><div class="bar-name">HVAC repair</div><div class="bar-track"><div class="bar-fill cool" data-w="48" style="width:0%"></div></div><div class="bar-val">48%</div></div>
+        <div class="bar-row"><div class="bar-name">Repipes</div><div class="bar-track"><div class="bar-fill cool" data-w="38" style="width:0%"></div></div><div class="bar-val">38%</div></div>
+        <div class="bar-row"><div class="bar-name">HVAC replace</div><div class="bar-track"><div class="bar-fill bad" data-w="29" style="width:0%"></div></div><div class="bar-val">29%</div></div>
+        <p style="font-size:13px;color:var(--muted);margin-top:12px">HVAC replacements: your <em>biggest tickets, lowest close</em>. 71% of $16K-average quotes walk — nobody wants a $20,000 bill without financing in their hand. This is where the 15 points live.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEAD QUOTES ============ -->
+<section id="deadquotes">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Dead <span>Quotes</span></h2>
+      <p>$468K in open estimates older than 14 days. Nobody called them back — not because your team is lazy, because nobody can see them. The Brain ranks them by likelihood to revive, every morning.</p>
+    </div>
+    <div class="card">
+      <h3>This morning's callback queue — top 6 of 214</h3>
+      <table>
+        <thead><tr><th>Customer</th><th>Quote</th><th class="num">Value</th><th class="num">Days stale</th><th>Why the Brain ranked it</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>M. Alvarez · Orange</td><td>HVAC replacement</td><td class="num">$14,260</td><td class="num">19</td><td style="font-size:13px;color:var(--muted)">Opened the estimate email 3× this week. System is 19 yrs old.</td><td><span class="pill hot">CALL TODAY</span></td></tr>
+          <tr><td>D. Whitfield · Villa Park</td><td>Repipe (PEX)</td><td class="num">$11,840</td><td class="num">22</td><td style="font-size:13px;color:var(--muted)">2nd slab leak in 14 months. Insurance claim closed last week.</td><td><span class="pill hot">CALL TODAY</span></td></tr>
+          <tr><td>R. Nguyen · Tustin</td><td>Water heater (tankless)</td><td class="num">$6,420</td><td class="num">16</td><td style="font-size:13px;color:var(--muted)">Asked about financing on the call. Financing never sent.</td><td><span class="pill warm">THIS WEEK</span></td></tr>
+          <tr><td>K. Patterson · Anaheim</td><td>AC + furnace combo</td><td class="num">$17,980</td><td class="num">31</td><td style="font-size:13px;color:var(--muted)">Quoted before the June heat. First 95° week is forecast Friday.</td><td><span class="pill warm">THIS WEEK</span></td></tr>
+          <tr><td>S. Romero · Orange</td><td>Sewer line spot repair</td><td class="num">$4,180</td><td class="num">25</td><td style="font-size:13px;color:var(--muted)">Camera footage on file. Backed up again per CSR note Tue.</td><td><span class="pill warm">THIS WEEK</span></td></tr>
+          <tr><td>J. Mercer · Yorba Linda</td><td>Panel upgrade 200A</td><td class="num">$5,940</td><td class="num">28</td><td style="font-size:13px;color:var(--muted)">EV purchase mentioned on call. Permit window open.</td><td><span class="pill ok">QUEUE</span></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:13px;color:var(--muted);margin-top:14px">Industry win-back on a worked callback list: <strong style="color:var(--gold)">8–12%</strong>. On $468K of open quotes, that's <strong style="color:var(--gold)">$178K/yr</strong> — from calls your CSRs can make between dispatches.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARKETING ============ -->
+<section id="marketing">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Marketing <span>Waste</span></h2>
+      <p>Cost per booked call went from ~$50 to $247. The Brain doesn't just track cost per call — it tracks cost per <em>won job</em>, by source. That's the number that decides where next month's budget goes.</p>
+    </div>
+    <div class="card">
+      <h3>What a won job really costs, by lead source — last 90 days</h3>
+      <table>
+        <thead><tr><th>Source</th><th class="num">Booked calls</th><th class="num">Cost / booked call</th><th class="num">Close rate</th><th class="num">Cost / WON job</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Referrals + repeat</td><td class="num">486</td><td class="num">$31</td><td class="num">58%</td><td class="num">$53</td><td><span class="pill ok">FEED IT</span></td></tr>
+          <tr><td>Google Business Profile</td><td class="num">214</td><td class="num">$74</td><td class="num">52%</td><td class="num">$142</td><td><span class="pill ok">FEED IT</span></td></tr>
+          <tr><td>Google LSA</td><td class="num">281</td><td class="num">$215</td><td class="num">49%</td><td class="num">$439</td><td><span class="pill warm">WATCH</span></td></tr>
+          <tr><td>Google Ads</td><td class="num">163</td><td class="num">$278</td><td class="num">41%</td><td class="num">$678</td><td><span class="pill warm">WATCH</span></td></tr>
+          <tr><td>Angi / HomeAdvisor</td><td class="num">94</td><td class="num">$290</td><td class="num">26%</td><td class="num">$1,115</td><td><span class="pill hot">BLEEDING</span></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:13px;color:var(--muted);margin-top:14px">A won job from Angi costs <strong style="color:var(--red)">21× more</strong> than a referral. Shifting most of the Angi budget to GBP + the referral engine ≈ <strong style="color:var(--gold)">$62K/yr</strong> recovered — same number of jobs, conservatively assuming GBP absorbs only part of it.</p>
+    </div>
+    <div class="card">
+      <h3>Not in the ledger yet: speed-to-lead</h3>
+      <p style="font-size:14px;color:var(--ink)">31% of web-form and after-hours leads in this dataset <strong style="color:var(--red)">never got a callback</strong>. Median response on the rest: <strong style="color:var(--red)">47 minutes</strong> — at $250 a lead. Contact rates fall off a cliff after the first 5 minutes.</p>
+      <p style="font-size:13px;color:var(--muted);margin-top:8px">Phase 2 after install: the Brain hands these to an 8-second callback flow. Not counted in the $735K — we only count what the data already proves.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MEMBERSHIPS ============ -->
+<section id="memberships">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Membership <span>Leaks</span></h2>
+      <p>Members close 2.1× higher and call you first. Right now 67 plans lapsed in 90 days with zero outreach logged — they didn't cancel, they just expired in silence.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Plan health — 412 active</h3>
+        <div class="bar-row"><div class="bar-name">Healthy<small>visits current</small></div><div class="bar-track"><div class="bar-fill" data-w="62" style="width:0%"></div></div><div class="bar-val">255</div></div>
+        <div class="bar-row"><div class="bar-name">Visit overdue<small>unredeemed tune-up</small></div><div class="bar-track"><div class="bar-fill cool" data-w="22" style="width:0%"></div></div><div class="bar-val">91</div></div>
+        <div class="bar-row"><div class="bar-name">Renewal &lt; 30 days<small>no contact yet</small></div><div class="bar-track"><div class="bar-fill bad" data-w="16" style="width:0%"></div></div><div class="bar-val">66</div></div>
+        <p style="font-size:13px;color:var(--muted);margin-top:12px">Unredeemed tune-ups are your cheapest sales calls — a tech in a member's home with a 19-year-old furnace.</p>
+      </div>
+      <div class="card">
+        <h3>The silent-lapse math</h3>
+        <table>
+          <tbody>
+            <tr><td>Lapsed without outreach (90d)</td><td class="num">67 plans</td></tr>
+            <tr><td>Plan revenue lost ($199/yr)</td><td class="num">$13,333/yr</td></tr>
+            <tr><td>Lost member-job attach (2.1× close)</td><td class="num">$34,300/yr</td></tr>
+            <tr><td style="color:var(--gold);font-weight:700">Total membership leak</td><td class="num" style="color:var(--gold);font-weight:700">$47,633/yr</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;color:var(--muted);margin-top:12px">The Brain flags every plan 45 days out and drafts the renewal text for your CSR to approve. Nothing lapses silently again.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ASK THE BRAIN ============ -->
+<section id="brain">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Ask the <span>Brain</span></h2>
+      <p>Every job, quote, call note, and customer in one memory — answers in plain English, in seconds. Click a question.</p>
+    </div>
+    <div class="chat">
+      <div class="chips" id="chips"></div>
+      <div class="chat-window" id="chatWindow">
+        <div class="msg a">Good morning. Overnight I read ServiceTitan, the Rilla call recordings, and QuickBooks — 1,121 estimates, 214 open quotes, 412 membership plans, 4,108 job notes. Ask me anything. <span class="src">Synced 6:00 AM · 90-day window · Mar 13 – Jun 10 · nothing sits in your call path</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="how-strip">
+  <div class="wrap">
+    <h3 style="font-family:var(--font-display);font-weight:700;font-size:22px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);text-align:center;margin-bottom:16px">How it gets <span style="color:var(--gold)">your real numbers</span></h3>
+    <div class="how-row">
+      <div class="how-step"><b>Day 1</b>Read-only keys to ServiceTitan, Rilla &amp; QuickBooks. No workflow changes, nothing in the call path, nothing your CSRs have to learn.</div>
+      <div class="how-step"><b>Days 2–10</b>The Brain builds Service Lion's memory — every job, quote, call and plan from the last 24 months, checked against the bank numbers.</div>
+      <div class="how-step"><b>Day 14</b>This exact board, live on your data, on your phone. Then we walk the leaks together and you decide what's worth fixing first.</div>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="wrap">
+    <div class="f-big">Live on your real numbers in <span>14 days</span></div>
+    <div class="f-terms">
+      <div class="f-term"><b>Day 1–14</b>Install on your ServiceTitan</div>
+      <div class="f-term"><b>50 / 50</b>Half to start, half after 30 days live</div>
+      <div class="f-term"><b>Keep it or don't</b>Full refund if you don't want it at day 30</div>
+    </div>
+    <div class="f-note" style="margin-bottom:10px;font-size:14px;color:var(--ink)">You built these companies to create wealth — not to take back the wealth you've already created.</div>
+    <div class="f-note">No per-user fees · nothing sits in your call path · reads ServiceTitan, Rilla &amp; QuickBooks overnight<br>Demo built on representative mid-size shop data — not Service Lion records. Prepared for Tommy &amp; Brian · Ovae</div>
+  </div>
+</footer>
+
+<script>
+/* ---------- tabs ---------- */
+const TAB_ORDER=['overview','lostjobs','deadquotes','marketing','memberships','brain'];
+const tabs=document.querySelectorAll('nav button');
+const sections=document.querySelectorAll('section');
+let brainVisited=false;
+function goTab(id){
+  tabs.forEach(x=>x.classList.toggle('active',x.dataset.tab===id));
+  sections.forEach(s=>s.classList.toggle('active',s.id===id));
+  const sec=document.getElementById(id);
+  animateBars(sec);
+  if(id==='overview')countUp(document.getElementById('bigNumber'),TOTAL,1400);
+  if(id==='brain'&&!brainVisited){
+    brainVisited=true;
+    setTimeout(()=>{const c=document.querySelector('.chip');if(c&&!c.classList.contains('used'))c.click();},800);
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+tabs.forEach(b=>b.addEventListener('click',()=>goTab(b.dataset.tab)));
+document.querySelectorAll('.bar-row.link').forEach(r=>r.addEventListener('click',()=>goTab(r.dataset.go)));
+/* presenter keys: arrows step through the walkthrough */
+document.addEventListener('keydown',e=>{
+  const cur=TAB_ORDER.indexOf(document.querySelector('section.active').id);
+  if(e.key==='ArrowRight'&&cur<TAB_ORDER.length-1)goTab(TAB_ORDER[cur+1]);
+  if(e.key==='ArrowLeft'&&cur>0)goTab(TAB_ORDER[cur-1]);
+});
+/* next-leak walkthrough buttons */
+const NEXT_LABEL={overview:'Start with the biggest leak: Lost Jobs',lostjobs:'Next leak: Dead Quotes',deadquotes:'Next leak: Marketing Waste',marketing:'Next leak: Memberships',memberships:'Now ask it anything: the Brain'};
+sections.forEach(sec=>{
+  if(!NEXT_LABEL[sec.id])return;
+  const idx=TAB_ORDER.indexOf(sec.id);
+  const btn=document.createElement('button');
+  btn.className='next-btn';
+  btn.innerHTML=NEXT_LABEL[sec.id]+' <span>→</span>';
+  btn.addEventListener('click',()=>goTab(TAB_ORDER[idx+1]));
+  const host=sec.querySelector(':scope > .wrap')||sec.querySelector('.wrap');
+  host.appendChild(btn);
+});
+
+/* ---------- bar animation ---------- */
+function animateBars(scope){
+  (scope||document).querySelectorAll('.bar-fill').forEach(el=>{
+    requestAnimationFrame(()=>{el.style.width=el.dataset.w+'%';});
+  });
+}
+
+/* ---------- big number countup ---------- */
+const TOTAL=735000;
+const STILL=new URLSearchParams(location.search).has('still');
+function countUp(el,target,dur){
+  if(STILL){el.textContent='$'+target.toLocaleString();return;}
+  const t0=performance.now();
+  function tick(t){
+    const p=Math.min((t-t0)/dur,1);
+    const eased=1-Math.pow(1-p,3);
+    el.textContent='$'+Math.round(target*eased).toLocaleString();
+    if(p<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+countUp(document.getElementById('bigNumber'),TOTAL,1800);
+animateBars(document.getElementById('overview'));
+
+/* ---------- slider ---------- */
+const slider=document.getElementById('closeSlider');
+const sliderOut=document.getElementById('sliderOut');
+/* 1,121 estimates/qtr * avg $2,000 ticket -> per close-rate point/yr */
+const PER_POINT=1121*0.01*2000*4; /* ≈ $89,680/yr per point */
+function updSlider(){
+  const pts=slider.value-45;
+  sliderOut.textContent='$'+Math.round(pts*PER_POINT).toLocaleString();
+}
+slider.addEventListener('input',updSlider);
+updSlider();
+
+/* ---------- Ask the Brain ---------- */
+const QA=[
+ {q:"What happened at Service Lion yesterday?",
+  a:"<strong>41 calls booked</strong> (Daniels 11, Reyes 9, Fox 8, Avoca overflow 13 — Tuesday was 9 total, the dip traces to the LSA budget capping out at 2 PM). Close rate <strong>52%</strong> on 19 estimates ran. <strong>$86,400 sold</strong>, biggest: $17,980 Patterson combo — financing approved. 2 flags: Alvarez quote opened 3× this week (call today), 6 memberships lapse Friday — renewal texts drafted and waiting on CSR approval.",
+  src:"Source: overnight sync · ServiceTitan + Rilla + call-center log"},
+ {q:"Which tech is losing the most replacement jobs?",
+  a:"<strong>Sutton</strong> — 31% close on 97 estimates. On HVAC replacements specifically he's at <strong>22%</strong> vs Ramirez's 68%. The pattern in his lost quotes: no financing offered on 84% of them, and his average presented price is one option, not three. Pairing him with Ramirez's quote template is worth ~<strong>$118K/yr</strong>.",
+  src:"Source: 97 estimates · 312 call recordings · quote PDFs Mar–Jun"},
+ {q:"What did we quote Mrs. Alvarez in March?",
+  a:"<strong>$14,260</strong> — 4-ton Carrier system replacement, quoted March 23 by Okafor. She's opened the emailed estimate <strong>3 times this week</strong>. Her system is 19 years old, R-22. CSR note from the original call: husband wanted to 'get one more summer out of it.' First 95° week is forecast Friday — I'd call her today.",
+  src:"Source: ServiceTitan estimate #38114 · email tracking · call note 3/21"},
+ {q:"Which zip codes make us the most money?",
+  a:"<strong>92867 and 92869 (Orange)</strong> — highest revenue per job ($3,180 avg) and 61% close. You're underspending there: only 9% of paid leads target them. <strong>92805 (Anaheim)</strong> is the opposite — high volume, 31% close, lowest tickets. Shift LSA zip weighting and the same budget books better calls.",
+  src:"Source: 1,238 booked calls geocoded · 90 days"},
+ {q:"Who's due for a water heater based on age?",
+  a:"<strong>312 customers</strong> in your database have water heaters 10+ years old (from install records and tech notes). 41 are members. 28 had a tech in their home in the last 60 days who noted age or rust. That's a ready-made campaign worth ~<strong>$201K</strong> at your average tankless ticket.",
+  src:"Source: equipment records · 4,108 job notes parsed"},
+ {q:"Why did close rate drop in April?",
+  a:"Three things stacked: <strong>(1)</strong> Sutton ran 2× more estimates while Boyd was out, <strong>(2)</strong> Angi lead share rose to 14% — those close at 26%, <strong>(3)</strong> financing approvals dipped after the rate change. Fix the mix and April was a 49% month, not 43%.",
+  src:"Source: estimate log × lead source × staffing calendar"}
+];
+const chips=document.getElementById('chips');
+const win=document.getElementById('chatWindow');
+QA.forEach((item,i)=>{
+  const b=document.createElement('button');
+  b.className='chip';b.textContent=item.q;
+  b.addEventListener('click',()=>ask(item,b));
+  chips.appendChild(b);
+});
+/* deep link: open #brain etc. (after all defs so goTab's deps exist) */
+if(location.hash&&TAB_ORDER.includes(location.hash.slice(1)))goTab(location.hash.slice(1));
+function ask(item,btn){
+  btn.classList.add('used');
+  const q=document.createElement('div');q.className='msg q';q.textContent=item.q;win.appendChild(q);
+  const t=document.createElement('div');t.className='typing';t.textContent='Brain is reading the data…';win.appendChild(t);
+  win.scrollTop=win.scrollHeight;
+  setTimeout(()=>{
+    t.remove();
+    const a=document.createElement('div');a.className='msg a';
+    a.innerHTML=item.a+'<span class="src">'+item.src+'</span>';
+    win.appendChild(a);win.scrollTop=win.scrollHeight;
+  },900);
+}
+</script>
+</body>
+</html>
