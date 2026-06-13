@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Configure the Land + ladder — Ovae × Orectic</title>
+<meta name="robots" content="noindex, nofollow"/>
+<meta name="theme-color" content="#14101A"/>
+<meta name="color-scheme" content="dark"/>
+<link rel="canonical" href="https://ovae.ai/partnership/configure-v3/"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2314101A'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%237BC9C4'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%237BC9C4' stroke-opacity='0.4' stroke-width='1'/%3E%3C/svg%3E"/>
+<meta property="og:type" content="article"/>
+<meta property="og:site_name" content="Ovae"/>
+<meta property="og:title" content="Configure the Land + ladder — Ovae × Orectic"/>
+<meta property="og:description" content="An $8K Land that ships working output, a 50% credit that makes continuing the obvious move, and a three-rung retainer ladder priced to exactly what the market bears."/>
+<meta property="og:image" content="https://ovae.ai/assets/og-image.jpg"/>
+<meta property="og:url" content="https://ovae.ai/partnership/configure-v3/"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#14101A; --bg-elev:#1A1622; --bg-soft:#1F1A28;
+  --ink:#E8E4DC; --ink-dim:#A39E96; --ink-mute:#6F6A63;
+  --rule:rgba(232,228,220,0.08); --rule-strong:rgba(232,228,220,0.16);
+  --accent:#7BC9C4; --rust:#C97D5C; --warn:#D9B26B;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:'DM Sans',system-ui,sans-serif; font-weight:300; line-height:1.6; font-size:16px; -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1200px 600px at 80% -10%, rgba(123,201,196,0.06), transparent 60%), radial-gradient(900px 500px at -10% 20%, rgba(201,125,92,0.05), transparent 55%); background-attachment:fixed;}
+.wrap{max-width:1040px; margin:0 auto; padding:0 28px 110px}
+.topbar{position:sticky; top:0; z-index:10; backdrop-filter:blur(10px); background:rgba(20,16,26,0.82); border-bottom:1px solid var(--rule); margin:0 -28px 0; padding:11px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px;}
+.topbar .brand{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-dim)}
+.topbar .brand b{color:var(--accent); font-weight:500}
+.conf{font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--rust); border:1px solid rgba(201,125,92,0.4); border-radius:999px; padding:4px 11px; white-space:nowrap}
+.head{padding:42px 0 6px}
+.kicker{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:16px; display:flex; align-items:center; gap:9px}
+.kicker::before{content:""; width:22px; height:1px; background:var(--accent)}
+h1{font-size:clamp(28px,4.4vw,40px); font-weight:300; letter-spacing:-0.02em; line-height:1.1; margin:.1em 0 .4em}
+h1 em{font-style:italic; color:var(--accent)}
+.lede{color:var(--ink-dim); max-width:64ch; margin:.2em 0 0}
+.grid{display:grid; gap:22px; margin-top:30px}
+@media(min-width:880px){.grid{grid-template-columns:1fr 372px; align-items:start}}
+.panel{background:var(--bg-elev); border:1px solid var(--rule); border-radius:16px; padding:8px 4px}
+.sec-lbl{font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-mute); padding:16px 18px 6px}
+/* the Land card */
+.land{margin:6px 14px 10px; padding:18px 18px 16px; border:1px solid rgba(123,201,196,0.28); border-radius:13px; background:linear-gradient(180deg, rgba(123,201,196,0.07), transparent 70%);}
+.land .lt{display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.land .ln{font-size:17px; color:var(--ink); font-weight:500}
+.land .lp{font-family:'DM Mono',monospace; font-size:19px; color:var(--accent); font-weight:500}
+.land .lp small{font-family:'DM Sans',sans-serif; font-size:11px; color:var(--ink-mute); font-weight:300; display:block; text-align:right; letter-spacing:0}
+.land .ld{color:var(--ink-dim); font-size:12.5px; margin-top:4px}
+.land ul{margin:11px 0 0; padding:0; list-style:none; display:grid; gap:5px}
+.land li{font-size:12.5px; color:var(--ink-dim); padding-left:18px; position:relative}
+.land li::before{content:""; position:absolute; left:2px; top:8px; width:6px; height:6px; border-radius:50%; background:var(--accent); opacity:.7}
+.land li b{color:var(--ink); font-weight:500}
+.proof{margin-top:11px; font-size:11px; font-family:'DM Mono',monospace; color:var(--warn); background:rgba(217,178,107,0.07); border:1px solid rgba(217,178,107,0.25); border-radius:8px; padding:7px 10px; line-height:1.5}
+/* rung cards */
+.rungs{padding:4px 14px 8px; display:grid; gap:10px}
+.rung{border:1px solid var(--rule-strong); border-radius:12px; padding:14px 15px; background:var(--bg-soft); cursor:pointer; transition:.15s; position:relative}
+.rung:hover{border-color:rgba(123,201,196,0.5)}
+.rung.sel{border-color:var(--accent); background:rgba(123,201,196,0.06)}
+.rung .rtop{display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap}
+.rung .rname{font-size:15px; color:var(--ink); font-weight:500; display:flex; align-items:center; gap:9px}
+.dot{width:15px; height:15px; border-radius:50%; border:1.5px solid var(--rule-strong); flex:0 0 auto; transition:.15s; position:relative}
+.rung.sel .dot{border-color:var(--accent)}
+.rung.sel .dot::after{content:""; position:absolute; inset:3px; border-radius:50%; background:var(--accent)}
+.rung .rprice{font-family:'DM Mono',monospace; font-size:14px; color:var(--ink-dim)}
+.rung.sel .rprice{color:var(--accent)}
+.rung .rsub{color:var(--ink-mute); font-size:12px; margin-top:2px; padding-left:24px}
+.rung .rchg{font-family:'DM Mono',monospace; font-size:10.5px; color:var(--ink-mute); margin-top:7px; padding-left:24px; line-height:1.5}
+.rung .rchg::before{content:"⤷ "; color:var(--accent)}
+.rung .rinc{margin:9px 0 0 24px; padding:0; list-style:none; display:none; gap:4px}
+.rung.sel .rinc{display:grid}
+.rung .rinc li{font-size:12px; color:var(--ink-dim); padding-left:15px; position:relative}
+.rung .rinc li::before{content:"✓"; position:absolute; left:0; color:var(--accent); font-size:10px; top:2px}
+.recpill{font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--bg); background:var(--accent); border-radius:999px; padding:2px 8px; margin-left:8px; vertical-align:middle}
+/* slider + credit toggle (appear under selected retainer rung) */
+.tune{margin:11px 24px 2px; display:none}
+.tune.show{display:block}
+.tune .slabel{display:flex; justify-content:space-between; font-family:'DM Mono',monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-mute); margin-bottom:7px}
+.tune .slabel b{color:var(--accent); font-weight:500; font-size:13px; letter-spacing:0}
+input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:3px; border-radius:3px; background:var(--rule-strong); outline:none; margin:4px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; appearance:none; width:17px; height:17px; border-radius:50%; background:var(--accent); cursor:pointer; border:3px solid var(--bg-elev); box-shadow:0 0 0 1px var(--accent)}
+input[type=range]::-moz-range-thumb{width:14px; height:14px; border-radius:50%; background:var(--accent); cursor:pointer; border:3px solid var(--bg-elev)}
+.credit{margin:13px 24px 6px; display:none; align-items:flex-start; gap:11px; cursor:pointer; padding:11px 13px; border:1px solid rgba(123,201,196,0.28); border-radius:10px; background:rgba(123,201,196,0.05)}
+.credit.show{display:flex}
+.credit .box{width:20px; height:20px; flex:0 0 auto; border:1.5px solid var(--rule-strong); border-radius:6px; display:flex; align-items:center; justify-content:center; transition:.15s; margin-top:1px}
+.credit.on .box{background:var(--accent); border-color:var(--accent)}
+.credit .box svg{width:12px; height:12px; opacity:0; transition:.15s}
+.credit.on .box svg{opacity:1}
+.credit .ct{font-size:12.5px; color:var(--ink-dim); line-height:1.45}
+.credit .ct b{color:var(--accent); font-weight:500}
+/* summary */
+.summary{position:sticky; top:64px; background:var(--bg-elev); border:1px solid var(--rule-strong); border-radius:16px; overflow:hidden}
+.tier{padding:18px 20px; border-bottom:1px solid var(--rule); background:linear-gradient(180deg, rgba(123,201,196,0.08), transparent)}
+.tier .t-lbl{font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-mute)}
+.tier .t-name{font-size:22px; font-weight:500; color:var(--accent); margin-top:3px; letter-spacing:-0.01em}
+.tier .t-sub{font-size:12.5px; color:var(--ink-dim); margin-top:3px}
+.totals{padding:6px 20px 8px}
+.tt{display:flex; justify-content:space-between; align-items:baseline; padding:9px 0; border-top:1px solid var(--rule)}
+.tt:first-child{border-top:none}
+.tt .k{color:var(--ink-dim); font-size:13px}
+.tt .v{font-family:'DM Mono',monospace; color:var(--ink); font-size:17px; font-weight:500}
+.tt.big .v{color:var(--accent); font-size:20px}
+.tt .sub{display:block; color:var(--ink-mute); font-size:10.5px; font-family:'DM Sans',sans-serif; text-align:right; font-weight:300}
+.lines{padding:8px 20px 8px; border-top:1px solid var(--rule)}
+.lines .li{display:flex; justify-content:space-between; font-size:12px; color:var(--ink-mute); padding:3px 0; font-family:'DM Mono',monospace}
+.lines .li .cr{color:var(--accent)}
+.roi{margin:6px 20px 4px; padding:10px 12px; background:rgba(123,201,196,0.06); border:1px solid rgba(123,201,196,0.18); border-radius:10px; font-size:11.5px; color:var(--ink-dim); line-height:1.5}
+.roi b{color:var(--accent); font-weight:500}
+.note{padding:8px 20px 18px; font-size:11.5px; color:var(--ink-mute); line-height:1.5}
+.note a{color:var(--accent); text-decoration:none}
+/* why-these-numbers strip */
+.why{margin-top:34px; padding:20px 22px; background:var(--bg-elev); border:1px solid var(--rule); border-radius:14px}
+.why h3{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-mute); margin:0 0 14px; font-weight:400}
+.whygrid{display:grid; gap:14px}
+@media(min-width:680px){.whygrid{grid-template-columns:repeat(3,1fr)}}
+.whycard{border:1px solid var(--rule); border-radius:11px; padding:14px 15px; background:var(--bg-soft)}
+.whycard .wn{color:var(--ink); font-weight:500; font-size:13.5px}
+.whycard .wp{font-family:'DM Mono',monospace; color:var(--accent); font-size:12px; margin:6px 0 8px}
+.whycard .wd{color:var(--ink-mute); font-size:11.5px; line-height:1.55}
+.whycard .wd b{color:var(--ink-dim); font-weight:500}
+.foot{margin-top:48px; padding-top:22px; border-top:1px solid var(--rule); font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.04em; color:var(--ink-mute); line-height:1.7}
+.foot a{color:var(--accent); text-decoration:none}
+@media(max-width:600px){ body{font-size:15px} .wrap{padding:0 16px 70px} .topbar{margin:0 -16px} .summary{position:static} }
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} html{scroll-behavior:auto} }
+</style>
+</head><body>
+<div class="wrap">
+  <div class="topbar"><div class="brand">OVAE <b>×</b> ORECTIC</div><div class="conf">Confidential — internal</div></div>
+  <div class="head">
+    <div class="kicker">Pricing model · land + ladder</div>
+    <h1>Configure the <em>Land</em>, then the <em>ladder</em>.</h1>
+    <p class="lede">One paid entry point that ships working output — then a three-rung retainer priced to exactly what the market bears. The 50% credit makes continuing the obvious next move, not a second sell.</p>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <div class="sec-lbl">Step 1 — the Land · your entry point</div>
+      <div class="land">
+        <div class="lt"><div class="ln">The Land</div><div class="lp">$8,000<small>10-day implementation</small></div></div>
+        <div class="ld">A scoped AI implementation — not a slide deck. We map the workflows, deploy a live automation, and hand back a 90-day roadmap with the numbers attached.</div>
+        <ul>
+          <li>5 stakeholder interviews + full <b>workflow &amp; data audit</b></li>
+          <li>Opportunity scoring matrix + feasibility assessment</li>
+          <li><b>One production automation deployed</b> — proof, not promises</li>
+          <li>90-day AI roadmap + ROI projections</li>
+          <li>Executive briefing</li>
+        </ul>
+        <div class="proof">$8K holds because the Land ships a working build. Priced as an audit-only (report, no deploy), it fights the sub-$3K gravity — drop to $5K. As an implementation, it sits mid-band of the $2.5–15K AI-project range.</div>
+      </div>
+
+      <div class="sec-lbl">Step 2 — the ladder · where they go next</div>
+      <div class="rungs" id="rungs"></div>
+      <div class="tune" id="tune">
+        <div class="slabel"><span>Set the monthly</span><b id="tuneVal">$5,500/mo</b></div>
+        <input type="range" id="slider" min="5000" max="6500" step="250" value="5500"/>
+      </div>
+      <label class="credit" id="credit">
+        <span class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#14101A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="ct">Apply the <b>50% Land credit</b> (−$4,000) — unlocked because they're continuing to a retainer within 30 days.</span>
+      </label>
+    </div>
+
+    <div class="summary">
+      <div class="tier">
+        <div class="t-lbl">This engagement is</div>
+        <div class="t-name" id="tierName">Land + Grow</div>
+        <div class="t-sub" id="tierSub">Entry build, then net-new every month</div>
+      </div>
+      <div class="totals">
+        <div class="tt"><span class="k">Land (net of credit)</span><span class="v" id="vLand">$4,000</span></div>
+        <div class="tt big"><span class="k">Monthly retainer<span class="sub" id="vMoTier">Grow</span></span><span class="v" id="vMo">$5,500/mo</span></div>
+        <div class="tt"><span class="k">First-year total</span><span class="v" id="vYr">$70,000</span></div>
+      </div>
+      <div class="lines" id="lines"></div>
+      <div class="roi" id="roi"></div>
+      <div class="note">The Land credits <em>50% forward</em> ($4,000) when they continue to a retainer inside 30 days. Retainer bands are anchored to market — see below. <a href="/partnership/configure/">← the full component configurator</a></div>
+    </div>
+  </div>
+
+  <div class="why">
+    <h3>Why these numbers — anchored to what the market bears</h3>
+    <div class="whygrid">
+      <div class="whycard"><div class="wn">The $8K Land</div><div class="wp">AI projects: $2.5K–$15K</div><div class="wd">AI-implementation projects run <b>$2,500–$15,000</b>; generic audits cluster under $3K. $8K reads as a real build, mid-band — credible, not premium. <span style="opacity:.6">aibusiness.vc · digitalagencynetwork</span></div></div>
+      <div class="whycard"><div class="wn">The 50% credit</div><div class="wp">2× continuation</div><div class="wd">A paid first commitment <b>more than doubles</b> the rate of saying yes to the larger ask — <b>53% vs 22%</b>, holding weeks later. The credit makes continuing the obvious move. <span style="opacity:.6">Freedman &amp; Fraser 1966</span></div></div>
+      <div class="whycard"><div class="wn">The ladder</div><div class="wp">SMB AI retainers: $2K–$8K/mo</div><div class="wd">SMB AI-automation retainers run <b>$2,000–$8,000/mo</b>; full advisory $5–25K/mo. All three rungs sit on-market; Partner has room to push toward $12–15K. <span style="opacity:.6">aibusiness.vc · orientsoftware · lilachbullock</span></div></div>
+    </div>
+  </div>
+
+  <div class="foot">Ovae × Orectic · Configure the Land + ladder · <a href="/partnership/one-pager/">One-pager</a> · <a href="/partnership/configure/">Component configurator</a><br/>Confidential — do not distribute. Pricing anchored to verified market research, Jun 2026.</div>
+</div>
+
+<script>
+(function(){
+  var RUNGS=[
+    {k:'land', l:'Land only', lo:0, hi:0, def:0, sub:'Just the diagnostic — decide later',
+      chg:'No retainer yet · credit unlocks when they continue',
+      inc:['They keep the audit, roadmap & the deployed automation','Re-enter at any rung within 30 days to claim the 50% credit']},
+    {k:'operate', l:'Operate', lo:2500, hi:3500, def:3000, sub:'Keep it running, dialed in',
+      chg:'Baseline — maintenance posture',
+      inc:['Maintain & monitor the deployed workflows','Monthly optimization pass + performance report','Async support','Brain stays fresh — anti-decay']},
+    {k:'grow', l:'Grow', lo:5000, hi:6500, def:5500, rec:true, sub:'Net-new automation every month',
+      chg:'+1 net-new build/mo · biweekly cadence · priority support',
+      inc:['Everything in Operate','One net-new automation or build each month','Integrations as they need them','Biweekly working session + live KPI dashboard']},
+    {k:'partner', l:'Partner — Fractional AI Officer', lo:8000, hi:12000, def:10000, sub:'We own the roadmap',
+      chg:'+ dedicated strategist · weekly · multi-system · SLA',
+      inc:['Everything in Grow','Dedicated AI strategist owning the roadmap','Multi-system builds','Weekly cadence + executive reporting + SLA']}
+  ];
+  var LAND_GROSS=8000, CREDIT=4000;
+  var sel='grow', creditOn=true, monthly={};
+  RUNGS.forEach(function(r){ monthly[r.k]=r.def; });
+
+  function money(n){ var neg=n<0; n=Math.abs(Math.round(n)); return (neg?'−$':'$')+n.toLocaleString('en-US'); }
+  function rung(){ return RUNGS.filter(function(r){return r.k===sel;})[0]; }
+
+  function renderRungs(){
+    var c=document.getElementById('rungs'); c.innerHTML='';
+    RUNGS.forEach(function(r){
+      var on=r.k===sel;
+      var d=document.createElement('div'); d.className='rung'+(on?' sel':'');
+      var price = r.hi? money(r.lo)+'–'+money(r.hi)+'/mo' : 'no monthly';
+      var rec = r.rec? '<span class="recpill">Recommended</span>':'';
+      d.innerHTML='<div class="rtop"><div class="rname"><span class="dot"></span>'+r.l+rec+'</div><div class="rprice">'+price+'</div></div>'+
+        '<div class="rsub">'+r.sub+'</div>'+
+        '<div class="rchg">'+r.chg+'</div>'+
+        '<ul class="rinc">'+r.inc.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul>';
+      d.addEventListener('click',function(){ sel=r.k; compute(); });
+      c.appendChild(d);
+    });
+  }
+
+  function compute(){
+    renderRungs();
+    var r=rung(), hasRet=r.hi>0;
+
+    // slider + credit toggle visibility
+    var tune=document.getElementById('tune'), sl=document.getElementById('slider'), cr=document.getElementById('credit');
+    if(hasRet){
+      tune.classList.add('show');
+      sl.min=r.lo; sl.max=r.hi; sl.step=250; sl.value=monthly[r.k];
+      document.getElementById('tuneVal').textContent=money(monthly[r.k])+'/mo';
+      cr.classList.add('show'); cr.classList.toggle('on',creditOn);
+    } else { tune.classList.remove('show'); cr.classList.remove('show'); }
+
+    var mo = hasRet? monthly[r.k] : 0;
+    var credit = (hasRet && creditOn)? CREDIT : 0;
+    var netLand = LAND_GROSS - credit;
+    var firstYr = netLand + mo*12;
+
+    document.getElementById('vLand').textContent=money(netLand);
+    document.getElementById('vMo').textContent= mo? money(mo)+'/mo' : '—';
+    document.getElementById('vMoTier').textContent= hasRet? r.l.split(' —')[0] : 'none yet';
+    document.getElementById('vYr').textContent=money(firstYr);
+
+    // breakdown lines
+    var lines=[['The Land · 10-day implementation', money(LAND_GROSS), false]];
+    if(credit) lines.push(['50% credit — continuing within 30 days', money(-credit), true]);
+    if(hasRet) lines.push([r.l.split(' —')[0]+' retainer × 12', money(mo*12), false]);
+    var ll=document.getElementById('lines'); ll.innerHTML='';
+    lines.forEach(function(p){ var d=document.createElement('div'); d.className='li'; d.innerHTML='<span'+(p[2]?' class="cr"':'')+'>'+p[0]+'</span><span'+(p[2]?' class="cr"':'')+'>'+p[1]+'</span>'; ll.appendChild(d); });
+
+    // ROI framing
+    var roi=document.getElementById('roi');
+    if(hasRet){
+      roi.innerHTML='Anchored on recovered margin, not IT budget. At the industry-typical <b>10–25% of documented savings</b>, this pays back fast — a comparable mid-tier deployment returns <b>~$7,250/mo net (483% first-year ROI)</b>.';
+    } else {
+      roi.innerHTML='The Land alone de-risks the decision: they leave with a working automation and a costed roadmap. <b>~53% of paid-first-step clients continue</b> vs 22% cold — the credit is the nudge.';
+    }
+
+    // tier name
+    document.getElementById('tierName').textContent = hasRet? 'Land + '+r.l.split(' —')[0] : 'Land only';
+    var subs={land:'Entry build, decide on the retainer later', operate:'Entry build, then keep it running', grow:'Entry build, then net-new every month', partner:'Entry build, then full AI ownership'};
+    document.getElementById('tierSub').textContent=subs[sel];
+  }
+
+  document.getElementById('slider').addEventListener('input',function(e){ monthly[sel]=+e.target.value; document.getElementById('tuneVal').textContent=money(+e.target.value)+'/mo'; compute(); });
+  document.getElementById('credit').addEventListener('click',function(){ creditOn=!creditOn; compute(); });
+
+  compute();
+})();
+</script>
+</body></html>
